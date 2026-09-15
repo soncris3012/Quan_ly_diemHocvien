@@ -21,27 +21,27 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
     {
       issue: 'Điều kiện qua môn & Điểm liệt',
       why: 'Tài liệu chỉ nêu điểm cuối kỳ dưới 4.0 nhưng chưa nêu rõ ngưỡng điểm tổng kết tối thiểu đạt.',
-      resolution: 'Tách rõ: Ngưỡng liệt cuối kỳ (< 4.0), Ngưỡng tổng kết đạt (>= 4.0) và làm tròn 1 chữ số thập phân.'
+      resolution: 'Tách rõ: Ngưỡng liệt cuối kỳ (< 4.0), Ngưỡng tổng kết đạt (>= 4.0) và lưu trạng thái HOAN_THANH / CHUA_DAT trong KET_QUA_HOC_TAP.'
     },
     {
       issue: 'Trần điểm thi lại 6.9',
       why: 'Chưa rõ trần 6.9 áp dụng cho điểm bài thi cuối kỳ lần 2 hay áp dụng cho điểm tổng kết học phần.',
-      resolution: 'Thể hiện cả hai cách hiểu trên giao diện tương tác; giữ nguyên Điểm thi thực tế (Raw Score = 8.0) trong CSDL.'
+      resolution: 'Thể hiện cả hai cách hiểu trên giao diện tương tác; giữ nguyên Điểm thi thực tế trong bảng DIEM và áp trần khi tính KET_QUA_HOC_TAP.'
     },
     {
       issue: 'Học lại cùng khóa sau',
       why: 'Nếu chỉ có mã học viên và môn học thì không thể lưu nhiều đợt học của cùng một môn mà không đè dữ liệu.',
-      resolution: 'Bổ sung hai thực thể cốt lõi: LopHocPhan (đợt học) và LuotHoc (lượt tham gia có liên kết MaLuotHocTruoc).'
+      resolution: 'Bổ sung bảng phân công giảng dạy PHAN_CONG (R19) theo từng học kỳ và KET_QUA_HOC_TAP (R21) độc lập cho mỗi lần học.'
     },
     {
-      issue: 'Phạm vi quản lý của Chỉ huy',
-      why: 'Hệ thống có tài khoản nhưng chưa biết chỉ huy nào được xem học viên thuộc đơn vị nào.',
-      resolution: 'Bổ sung bảng quan hệ PhanCongQuanLy gắn tài khoản với đơn vị quân sự theo thời gian hiệu lực.'
+      issue: 'Giảng viên & Trách nhiệm nhập điểm',
+      why: 'Đề bài ban đầu thiếu thực thể Giảng viên nên chưa xác định được ai trực tiếp giảng dạy và ai chịu trách nhiệm nhập điểm quá trình.',
+      resolution: 'Chuẩn hóa thêm BO_MON (R15), GIANG_VIEN (R16) kế thừa NGUOI (R4), liên kết qua PHAN_CONG (R19) và lưu MaNguoiNhap trong DIEM (R22).'
     },
     {
-      issue: 'Kiểm soát sửa điểm đã khóa',
-      why: 'Một cờ khóa đơn giản không thể hiện được ai duyệt, lý do phúc khảo và hạn được sửa.',
-      resolution: 'Thiết kế quy trình hai bước: YeuCauMoKhoa (Ban Giám đốc duyệt) và NhatKyDiem (ghi nhận vết Before/After).'
+      issue: 'Bảo mật phân quyền quân sự',
+      why: 'Chỉ huy đơn vị, Giảng viên và Học viên có thẩm quyền và phạm vi dữ liệu hoàn toàn khác nhau.',
+      resolution: 'Ứng dụng mô hình RBAC (USER, ROLE, PERMISSION) kết hợp Row-Level Security theo cây đơn vị DON_VI và phân công PHAN_CONG.'
     }
   ];
 
@@ -57,7 +57,7 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
           CADET DB — Quản Lý Điểm Học Viên Quân Sự
         </h1>
         <p className="section-desc">
-          Bản báo cáo tương tác phân tích nghiệp vụ, mô hình hóa thực thể ER, chuyển đổi sang 19 bảng quan hệ chuẩn hóa và kiểm chứng bằng 6 tình huống thực tế trong môi trường đào tạo quân đội.
+          Bản báo cáo tương tác phân tích nghiệp vụ, mô hình hóa thực thể ER, chuyển đổi sang 23 bảng quan hệ chuẩn hóa (R1 - R23) tích hợp đầy đủ Giảng viên & Phân công giảng dạy, và kiểm chứng bằng 6 tình huống thực tế.
         </p>
       </div>
 

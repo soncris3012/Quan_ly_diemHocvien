@@ -32,43 +32,43 @@ export default function Section10Conclusion({ onSelectSection }) {
       <div className="card" style={{ marginBottom: 26, background: 'rgba(17, 27, 46, 0.9)' }}>
         <h3 style={{ fontSize: '1.15rem', color: '#fff', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
           <Sparkles size={18} color="var(--color-blue)" />
-          4 Đóng Góp Học Thuật Trọng Tâm Của Bản Thiết Kế
+          4 Đóng Góp Học Thuật Trọng Tâm Của Bản Thiết Kế (Mô Hình 23 Bảng)
         </h3>
 
         <div className="grid-2" style={{ gap: 16 }}>
           <div style={{ background: 'rgba(52, 211, 153, 0.08)', border: '1px solid rgba(52, 211, 153, 0.3)', borderRadius: 8, padding: 14 }}>
             <div style={{ fontWeight: 700, color: 'var(--color-emerald)', marginBottom: 6 }}>
-              1. Tách Biệt Triệt Để Thi Lại vs Học Lại
+              1. Tích Hợp Đầy Đủ Giảng Viên & Phân Công Giảng Dạy (R15, R16, R19)
             </div>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
-              Giải quyết bài toán học lại ở khóa sau bằng thực thể <code>LuotHoc</code> (có <code>MaLuotHocTruoc</code>), không làm mất hoặc ghi đè kết quả của đợt học trước; đồng thời tách <code>LanThi</code> để lưu trữ lịch sử thi lại trong cùng một lượt học.
+              Chuẩn hóa thực thể <code>GIANG_VIEN</code> kế thừa từ <code>NGUOI</code>, thuộc <code>BO_MON</code>. Bảng liên kết trung tâm <code>PHAN_CONG</code> kết nối Giảng viên - Môn học - Lớp học - Học kỳ, bảo đảm tính minh bạch khi lưu vết <code>MaNguoiNhap</code> trong bảng <code>DIEM</code>.
             </p>
           </div>
 
           <div style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 8, padding: 14 }}>
             <div style={{ fontWeight: 700, color: 'var(--color-blue)', marginBottom: 6 }}>
-              2. Bảo Toàn Điểm Thi Thực Tế Dù Có Áp Trần 6.9
+              2. Tách Biệt Đợt Thi (DOT_THI) & Bảo Toàn Điểm Gốc Khi Áp Trần 6.9
             </div>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
-              Không bao giờ ghi đè điểm thi 8.0 thành 6.9 trong cơ sở dữ liệu. Điểm thi gốc được giữ nguyên phục vụ phúc khảo, tra cứu khoa học; mức trần 6.9 chỉ là thuật toán nghiệp vụ tính điểm tổng kết.
+              Không bao giờ ghi đè điểm thi 8.0 thành 6.9 trong CSDL. Bảng <code>DIEM</code> lưu điểm bài thi thực tế của đợt thi lại (<code>DOT_THI</code>: THI_LAI); trần 6.9 chỉ áp dụng khi quy đổi và tổng kết trong <code>KET_QUA_HOC_TAP</code>.
             </p>
           </div>
 
           <div style={{ background: 'rgba(167, 139, 250, 0.08)', border: '1px solid rgba(167, 139, 250, 0.3)', borderRadius: 8, padding: 14 }}>
             <div style={{ fontWeight: 700, color: 'var(--color-purple)', marginBottom: 6 }}>
-              3. Phiên Bản Hóa Quy Tắc Tính Điểm (Versioning Rules)
+              3. Tách Rời Thi Lại Trong Học Kỳ vs Học Lại Khóa Sau
             </div>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
-              Loại bỏ hoàn toàn việc "hardcode công thức trong code phần mềm". Bảng <code>QuyTacDanhGia</code> lưu phiên bản trọng số, ngưỡng liệt, trần thi lại giúp giải thích chính xác kết quả của từng đợt đào tạo qua các năm.
+              Thi lại diễn ra trong cùng học kỳ thông qua đợt thi lại của phân công hiện tại. Học lại ở khóa sau được tạo bằng một dòng <code>PHAN_CONG</code> và <code>KET_QUA_HOC_TAP</code> mới độc lập, hoàn toàn không ghi đè lịch sử học tập trước đó.
             </p>
           </div>
 
           <div style={{ background: 'rgba(251, 191, 36, 0.08)', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: 8, padding: 14 }}>
             <div style={{ fontWeight: 700, color: 'var(--color-amber)', marginBottom: 6 }}>
-              4. Cơ Chế Mở Khóa Điểm & Nhật Ký Biến Động (Audit Trail)
+              4. Bảo Mật Phân Quyền Đa Tầng (RBAC + Row-Level Security)
             </div>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
-              Thiết kế theo chuẩn kiểm toán quân sự: Muốn sửa điểm đã khóa phải có <code>YeuCauMoKhoa</code> được Ban Giám đốc phê chuẩn có thời hạn (24h) và lưu lại vĩnh viễn trong <code>NhatKyDiem</code>.
+              Kết hợp mô hình RBAC chuẩn (<code>USER</code>, <code>ROLE</code>, <code>PERMISSION</code>) với chính sách bảo mật theo hàng: Giảng viên chỉ nhập điểm lớp mình dạy; Chỉ huy chỉ xem điểm học viên thuộc đơn vị mình phụ trách.
             </p>
           </div>
         </div>
@@ -81,12 +81,12 @@ export default function Section10Conclusion({ onSelectSection }) {
           Ranh Giới Thiết Kế Có Chủ Đích (Scope Boundary)
         </h3>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: 14 }}>
-          Trong quá trình thiết kế, sinh viên đã chủ động <strong>không mở rộng mô hình sang các thực thể ngoài phạm vi</strong> như: Giảng viên giảng dạy, Phòng học, Lịch xếp thời khóa biểu, Điểm danh từng tiết học 45 phút, Kỷ luật và Thi đua khen thưởng.
+          Mô hình đã tích hợp đầy đủ <strong>Giảng viên, Bộ môn và Phân công giảng dạy</strong>. Sinh viên chủ động <strong>chưa mở rộng sang các bài toán hạ tầng cơ sở vật chất ngoài phạm vi quản lý điểm</strong> như: Điểm danh từng tiết 45 phút, Quản lý phòng học vật lý hay Xếp thời khóa biểu tự động.
         </p>
         <div className="alert-box alert-amber" style={{ margin: 0 }}>
           <HelpCircle size={20} style={{ flexShrink: 0, marginTop: 2 }} />
           <div style={{ fontSize: '0.88rem' }}>
-            <strong>Giải trình học thuật với cô:</strong> Tài liệu đề bài hiện chỉ tập trung vào <em>nghiệp vụ quản lý kết quả học tập và quy chế điểm</em>. Việc nhồi nhét quá nhiều bảng về phòng học hay giảng viên chỉ làm mô hình phình to về hình thức mà không giải quyết được chiều sâu bài toán quản lý điểm, đồng thời làm phát sinh nhiều quan hệ ngoài tầm kiểm soát.
+            <strong>Giải trình học thuật với cô:</strong> Trọng tâm đề tài là cơ chế tính điểm, phân công giảng dạy, khảo thí và phân quyền quân sự. Việc chuẩn hóa ở 23 bảng quan hệ (R1 - R23) giúp giải quyết trọn vẹn 100% nghiệp vụ điểm và giảng dạy mà không làm phân tán sang bài toán quản lý cơ sở vật chất trường học.
           </div>
         </div>
       </div>

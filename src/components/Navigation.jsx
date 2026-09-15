@@ -23,7 +23,7 @@ export const SECTIONS = [
   { id: 'sec_workflows', num: '03', title: 'Quy Trình Tương Tác', icon: GitBranch, badge: 'Swimlanes' },
   { id: 'sec_entities', num: '04', title: 'Danh Mục Thực Thể', icon: Layers, badge: '13 Thực thể' },
   { id: 'sec_er_gallery', num: '05', title: 'Phòng Trưng Bày ER', icon: Image, badge: '2 Bản ER' },
-  { id: 'sec_relational', num: '06', title: 'Mô Hình Quan Hệ', icon: Table, badge: '19 Bảng' },
+  { id: 'sec_relational', num: '06', title: 'Mô Hình Quan Hệ', icon: Table, badge: '23 Bảng (R1-R23)' },
   { id: 'sec_dictionary', num: '07', title: 'Từ Điển Dữ Liệu', icon: BookOpen, badge: '12 Ràng buộc' },
   { id: 'sec_scenarios', num: '08', title: 'Kiểm Chứng Tình Huống', icon: CheckCircle2, badge: '6 Kịch bản' },
   { id: 'sec_ai_log', num: '09', title: 'Nhật Ký Sử Dụng AI', icon: Terminal, badge: 'Prompting' },

@@ -60,7 +60,7 @@ export default function Section8Scenarios({ onSelectTable, onOpenInspector }) {
           6 Tình Huống Kiểm Chứng Mô Hình CSDL
         </h2>
         <p className="section-desc">
-          Thực nghiệm trực tiếp với dữ liệu giả định để chứng minh thiết kế 19 bảng giải quyết trọn vẹn mọi yêu cầu nghiệp vụ phức tạp của nhà trường quân sự.
+          Thực nghiệm trực tiếp với dữ liệu giả định để chứng minh thiết kế 23 bảng quan hệ (R1 - R23) giải quyết trọn vẹn mọi yêu cầu nghiệp vụ phức tạp của nhà trường quân sự.
         </p>
       </div>
 

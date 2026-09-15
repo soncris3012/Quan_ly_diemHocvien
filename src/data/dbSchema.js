@@ -1,577 +1,568 @@
 // src/data/dbSchema.js
-// Đặc tả 19 bảng quan hệ chuẩn hóa cho CADET DB
+// Bộ 23 bảng quan hệ chuẩn mực R1 -> R23 tích hợp đầy đủ Giảng viên, Phân công và Điểm số
 
 export const SCHEMA_GROUPS = {
   org: {
     id: 'org',
-    name: 'Tổ chức & Người dùng',
+    name: 'Tổ chức, Đơn vị & Bảo mật',
     code: 'GROUP_A',
     color: 'var(--color-blue)',
     colorTag: 'tag-blue',
     hex: '#38BDF8',
-    description: 'Mô hình hóa cơ cấu tổ chức đơn vị quân đội, lớp niên chế, hồ sơ học viên, tài khoản và phân quyền quản lý'
+    description: 'Cơ cấu tổ chức quân sự, bộ môn, con người và hệ thống xác thực phân quyền RBAC'
   },
-  train: {
-    id: 'train',
-    name: 'Kế hoạch & Đào tạo',
+  personnel: {
+    id: 'personnel',
+    name: 'Quân sự & Chuyên môn',
     code: 'GROUP_B',
     color: 'var(--color-purple)',
     colorTag: 'tag-purple',
     hex: '#A78BFA',
-    description: 'Quản lý danh mục học phần, học kỳ, kế hoạch khung theo lớp, phiên bản quy tắc tính điểm và các lớp học phần thực tế'
+    description: 'Cấp bậc, chức vụ quân nhân, danh mục ngành và chuyên ngành đào tạo'
   },
-  score: {
-    id: 'score',
-    name: 'Quá trình học & Điểm',
+  teaching: {
+    id: 'teaching',
+    name: 'Đào tạo & Phân công giảng dạy',
     code: 'GROUP_C',
     color: 'var(--color-emerald)',
     colorTag: 'tag-emerald',
     hex: '#34D399',
-    description: 'Ghi nhận từng lượt học (học lần đầu vs học lại), bảng điểm tổng hợp và các lần thi cụ thể (thi lần 1 vs thi lại)'
+    description: 'Hồ sơ học viên, giảng viên, lớp học, môn học và quyết định phân công giảng dạy theo học kỳ'
   },
-  audit: {
-    id: 'audit',
-    name: 'Kiểm soát & Lịch sử',
+  grading: {
+    id: 'grading',
+    name: 'Điểm số & Khảo thí',
     code: 'GROUP_D',
     color: 'var(--color-amber)',
     colorTag: 'tag-amber',
     hex: '#FBBF24',
-    description: 'Theo dõi quy trình đề nghị mở khóa điểm được Ban Giám đốc phê duyệt và nhật ký biến động điểm số trước - sau'
+    description: 'Loại điểm, điểm thành phần, kết quả học tập tổng kết và tổ chức các đợt thi kết thúc môn'
   }
 };
 
 export const TABLES = [
   // ==========================================
-  // NHÓM A: TỔ CHỨC VÀ NGƯỜI DÙNG (9 bảng)
+  // NHÓM 1: TỔ CHỨC, ĐƠN VỊ & BẢO MẬT (R1, R4, R5, R6, R7, R8, R9, R15)
   // ==========================================
   {
-    id: 'DonVi',
-    name: 'DonVi',
+    id: 'DON_VI',
+    code: 'R1',
+    name: 'DON_VI',
     groupId: 'org',
-    title: 'Đơn Vị Quản Lý Quân Sự',
-    description: 'Lưu trữ cơ cấu tổ chức phân cấp theo cây đơn vị quân sự (Tiểu đoàn - Đại đội).',
-    justification: 'Quân đội quản lý con người theo biên chế quân sự. Cần bảng này để xác định cấp chỉ huy trực tiếp và phân quyền truy cập điểm theo phạm vi chỉ huy.',
+    title: 'Đơn Vị Quản Lý (Cây Phân Cấp)',
+    description: 'Quản lý cơ cấu đơn vị quân sự (Tiểu đoàn, Đại đội) và đơn vị hành chính.',
+    justification: 'Xác định cấp quản lý quân nhân và ranh giới chỉ huy trong môi trường quân đội.',
     columns: [
-      { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã định danh đơn vị', domain: 'Duy nhất', example: 'd1_c1' },
-      { name: 'TenDonVi', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên phiên hiệu đơn vị', domain: 'Văn bản', example: 'Đại đội 1' },
-      { name: 'LoaiDonVi', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Cấp đơn vị quân sự', domain: 'TIEU_DOAN, DAI_DOI', example: 'DAI_DOI' },
-      { name: 'MaDonViCha', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Tham chiếu đơn vị cấp trên (Quan hệ đệ quy)', domain: 'Tham chiếu DonVi', example: 'd1', ref: { table: 'DonVi', column: 'MaDonVi' } },
-      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Trạng thái hoạt động', domain: 'HOAT_DONG, DANG_GIAI_THE', example: 'HOAT_DONG' }
+      { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã định danh đơn vị', domain: 'Duy nhất', example: 'DV_D1' },
+      { name: 'TenDonVi', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên phiên hiệu đơn vị', domain: 'Văn bản', example: 'Tiểu đoàn 1' },
+      { name: 'LoaiDonVi', type: 'VARCHAR(30)', key: null, nullable: false, description: 'Cấp bậc đơn vị', domain: 'TIEU_DOAN, DAI_DOI, KHOA', example: 'TIEU_DOAN' },
+      { name: 'MaDonViCha', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Đơn vị cấp trên (Quan hệ đệ quy)', domain: 'Tham chiếu DON_VI', example: null, ref: { table: 'DON_VI', column: 'MaDonVi' } }
     ],
-    constraints: [
-      'PK: MaDonVi',
-      'FK: MaDonViCha trỏ về DonVi(MaDonVi)',
-      'CHECK: MaDonViCha <> MaDonVi (Không tự làm cha của chính mình)',
-      'Ràng buộc phi chu trình (Acyclic tree hierarchy)'
-    ]
+    constraints: ['PK: MaDonVi', 'FK: MaDonViCha -> DON_VI(MaDonVi)', 'CHECK: MaDonViCha <> MaDonVi']
   },
   {
-    id: 'NganhDaoTao',
-    name: 'NganhDaoTao',
+    id: 'BO_MON',
+    code: 'R15',
+    name: 'BO_MON',
     groupId: 'org',
-    title: 'Ngành Đào Tạo',
-    description: 'Danh mục các chuyên ngành kỹ thuật và nghiệp vụ quân sự.',
-    justification: 'Tránh lặp lại tên ngành ở nhiều lớp, chuẩn hóa chuẩn đầu ra theo ngành.',
+    title: 'Bộ Môn Chuyên Môn',
+    description: 'Các bộ môn chuyên ngành trực thuộc Khoa/Đơn vị quản lý giảng viên.',
+    justification: 'Quản lý tổ chức học thuật chuyên môn, phân bổ môn học cho giảng viên trực thuộc.',
     columns: [
-      { name: 'MaNganh', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã ngành đào tạo', domain: 'Duy nhất', example: 'CNTT' },
-      { name: 'TenNganh', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên đầy đủ của ngành', domain: 'Văn bản', example: 'Công nghệ thông tin Quân sự' },
-      { name: 'MoTa', type: 'NVARCHAR(255)', key: null, nullable: true, description: 'Mô tả tóm tắt mục tiêu', domain: 'Văn bản', example: 'Đào tạo kỹ sư an toàn thông tin & tác chiến mạng' }
+      { name: 'MaBoMon', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã bộ môn', domain: 'Duy nhất', example: 'BM_CSDL' },
+      { name: 'TenBoMon', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên bộ môn', domain: 'Văn bản', example: 'Bộ môn Cơ sở dữ liệu & HTTT' },
+      { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Đơn vị quản lý (Khoa)', domain: 'Tham chiếu DON_VI', example: 'DV_KHOA_CNTT', ref: { table: 'DON_VI', column: 'MaDonVi' } }
+    ],
+    constraints: ['PK: MaBoMon', 'FK: MaDonVi -> DON_VI(MaDonVi)']
+  },
+  {
+    id: 'NGUOI',
+    code: 'R4',
+    name: 'NGUOI',
+    groupId: 'org',
+    title: 'Hồ Sơ Nhân Sự Cơ Bản (Thực Thể Cha)',
+    description: 'Lưu trữ thông tin lý lịch cá nhân dùng chung cho cả Học viên, Giảng viên và Cán bộ.',
+    justification: 'Chuẩn hóa mô hình kế thừa (Generalization/Specialization): Tránh trùng lặp các thuộc tính Họ tên, Ngày sinh, Quê quán giữa Học viên và Giảng viên.',
+    columns: [
+      { name: 'MaNguoi', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã định danh cá nhân', domain: 'Duy nhất', example: 'NG_001' },
+      { name: 'HoTen', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Họ và tên đầy đủ', domain: 'Văn bản', example: 'Nguyễn Văn An' },
+      { name: 'NgaySinh', type: 'DATE', key: null, nullable: false, description: 'Ngày tháng năm sinh', domain: 'Date', example: '2004-05-12' },
+      { name: 'GioiTinh', type: 'NVARCHAR(10)', key: null, nullable: false, description: 'Giới tính', domain: 'Nam, Nữ', example: 'Nam' },
+      { name: 'QueQuan', type: 'NVARCHAR(200)', key: null, nullable: true, description: 'Quê quán', domain: 'Địa chỉ', example: 'Hà Nội' },
+      { name: 'SoDienThoai', type: 'VARCHAR(15)', key: null, nullable: true, description: 'Số điện thoại liên lạc', domain: 'Số điện thoại', example: '0987654321' },
+      { name: 'Email', type: 'VARCHAR(100)', key: null, nullable: true, description: 'Hòm thư điện tử quân sự', domain: 'Email', example: 'an.nv@mta.edu.vn' }
+    ],
+    constraints: ['PK: MaNguoi']
+  },
+  {
+    id: 'USER',
+    code: 'R5',
+    name: 'USER',
+    groupId: 'org',
+    title: 'Tài Khoản Xác Thực Hệ Thống',
+    description: 'Chứa thông tin tài khoản đăng nhập gắn liền với hồ sơ cá nhân.',
+    justification: 'Tách cơ chế bảo mật đăng nhập độc lập khỏi thông tin nhân thân.',
+    columns: [
+      { name: 'MaUser', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã tài khoản', domain: 'Duy nhất', example: 'USR_001' },
+      { name: 'TenDangNhap', type: 'VARCHAR(50)', key: 'UQ', nullable: false, description: 'Tên đăng nhập hệ thống', domain: 'Duy nhất', example: 'gv_lethang' },
+      { name: 'MatKhau', type: 'VARCHAR(255)', key: null, nullable: false, description: 'Mật khẩu đã mã hóa', domain: 'Mã băm bcrypt/argon2', example: '$2a$12$e8...' },
+      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tình trạng tài khoản', domain: 'HOAT_DONG, KHOA', example: 'HOAT_DONG' },
+      { name: 'MaNguoi', type: 'VARCHAR(20)', key: 'FK, UQ', nullable: false, description: 'Gắn liền với 1 người', domain: 'Tham chiếu NGUOI', example: 'NG_001', ref: { table: 'NGUOI', column: 'MaNguoi' } }
+    ],
+    constraints: ['PK: MaUser', 'UQ: TenDangNhap', 'FK: MaNguoi -> NGUOI(MaNguoi)']
+  },
+  {
+    id: 'ROLE',
+    code: 'R6',
+    name: 'ROLE',
+    groupId: 'org',
+    title: 'Vai Trò Hệ Thống (RBAC)',
+    description: 'Các nhóm vai trò: Học viên, Giảng viên, Chỉ huy đơn vị, Phòng Đào tạo, Ban Giám đốc.',
+    justification: 'Thiết lập mô hình phân quyền Role-Based Access Control tiêu chuẩn.',
+    columns: [
+      { name: 'MaRole', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã vai trò', domain: 'Duy nhất', example: 'ROLE_GV' },
+      { name: 'TenRole', type: 'NVARCHAR(50)', key: 'UQ', nullable: false, description: 'Tên vai trò', domain: 'Văn bản', example: 'Giảng viên giảng dạy' },
+      { name: 'MoTa', type: 'NVARCHAR(255)', key: null, nullable: true, description: 'Mô tả quyền hạn vai trò', domain: 'Văn bản', example: 'Nhập điểm thành phần các lớp được phân công' }
+    ],
+    constraints: ['PK: MaRole', 'UQ: TenRole']
+  },
+  {
+    id: 'USER_ROLE',
+    code: 'R7',
+    name: 'USER_ROLE',
+    groupId: 'org',
+    title: 'Gán Vai Trò Cho Người Dùng (N-N)',
+    description: 'Bảng liên kết nhiều-nhiều giữa Tài khoản và Vai trò.',
+    justification: 'Một quân nhân/cán bộ có thể kiêm nhiệm nhiều vai trò (ví dụ vừa là Giảng viên vừa là Chỉ huy Bộ môn).',
+    columns: [
+      { name: 'MaUser', type: 'VARCHAR(20)', key: 'PK, FK', nullable: false, description: 'Tài khoản', domain: 'Tham chiếu USER', example: 'USR_001', ref: { table: 'USER', column: 'MaUser' } },
+      { name: 'MaRole', type: 'VARCHAR(20)', key: 'PK, FK', nullable: false, description: 'Vai trò', domain: 'Tham chiếu ROLE', example: 'ROLE_GV', ref: { table: 'ROLE', column: 'MaRole' } }
+    ],
+    constraints: ['PK: (MaUser, MaRole)', 'FK: MaUser -> USER(MaUser)', 'FK: MaRole -> ROLE(MaRole)']
+  },
+  {
+    id: 'PERMISSION',
+    code: 'R8',
+    name: 'PERMISSION',
+    groupId: 'org',
+    title: 'Danh Mục Quyền Thao Tác',
+    description: 'Định nghĩa chi tiết các quyền hạn nguyên tử trong hệ thống.',
+    justification: 'Phân quyền chi tiết (Granular Permissions): XEM_DIEM, NHAP_DIEM_CC_TX, CHOT_DIEM, MO_KHOA...',
+    columns: [
+      { name: 'MaPermission', type: 'VARCHAR(50)', key: 'PK', nullable: false, description: 'Mã quyền nguyên tử', domain: 'Duy nhất', example: 'PERM_GRADE_INPUT' },
+      { name: 'TenPermission', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên quyền', domain: 'Văn bản', example: 'Nhập điểm thường xuyên' },
+      { name: 'MoTa', type: 'NVARCHAR(255)', key: null, nullable: true, description: 'Mô tả thao tác được phép', domain: 'Văn bản', example: 'Quyền ghi điểm CC và TX cho nhóm học' }
+    ],
+    constraints: ['PK: MaPermission']
+  },
+  {
+    id: 'ROLE_PERMISSION',
+    code: 'R9',
+    name: 'ROLE_PERMISSION',
+    groupId: 'org',
+    title: 'Gán Quyền Cho Vai Trò (N-N)',
+    description: 'Bảng liên kết giải quyết quyền hạn chi tiết gắn liền với từng vai trò.',
+    justification: 'Đảm bảo sự linh hoạt tối đa khi thay đổi chính sách bảo mật mà không sửa code.',
+    columns: [
+      { name: 'MaRole', type: 'VARCHAR(20)', key: 'PK, FK', nullable: false, description: 'Vai trò', domain: 'Tham chiếu ROLE', example: 'ROLE_GV', ref: { table: 'ROLE', column: 'MaRole' } },
+      { name: 'MaPermission', type: 'VARCHAR(50)', key: 'PK, FK', nullable: false, description: 'Quyền hạn', domain: 'Tham chiếu PERMISSION', example: 'PERM_GRADE_INPUT', ref: { table: 'PERMISSION', column: 'MaPermission' } }
+    ],
+    constraints: ['PK: (MaRole, MaPermission)', 'FK: MaRole -> ROLE(MaRole)', 'FK: MaPermission -> PERMISSION(MaPermission)']
+  },
+
+  // ==========================================
+  // NHÓM 2: QUÂN SỰ & CHUYÊN MÔN (R10, R11, R12, R13)
+  // ==========================================
+  {
+    id: 'NGANH',
+    code: 'R10',
+    name: 'NGANH',
+    groupId: 'personnel',
+    title: 'Ngành Đào Tạo',
+    description: 'Khung ngành đào tạo cấp trường (CNTT, Điện tử, Tác chiến...).',
+    justification: 'Tránh dư thừa dữ liệu tên ngành tại các lớp học.',
+    columns: [
+      { name: 'MaNganh', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã ngành', domain: 'Duy nhất', example: 'NG_CNTT' },
+      { name: 'TenNganh', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên ngành đào tạo', domain: 'Văn bản', example: 'Công nghệ thông tin' }
     ],
     constraints: ['PK: MaNganh']
   },
   {
-    id: 'KhoaHoc',
-    name: 'KhoaHoc',
-    groupId: 'org',
-    title: 'Khóa Đào Tạo',
-    description: 'Quản lý khóa tuyển sinh và niên khóa đào tạo.',
-    justification: 'Học viên quân sự đào tạo theo khóa niên chế tập trung; phân biệt khung chương trình theo từng khóa.',
+    id: 'CHUYEN_NGANH',
+    code: 'R11',
+    name: 'CHUYEN_NGANH',
+    groupId: 'personnel',
+    title: 'Chuyên Ngành Đào Tạo',
+    description: 'Phân ngành sâu trực thuộc một Ngành đào tạo chính.',
+    justification: 'Học viên quân sự học theo chuyên ngành hẹp ở các giai đoạn chuyên môn hóa.',
     columns: [
-      { name: 'MaKhoa', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã khóa học', domain: 'Duy nhất', example: 'K58' },
-      { name: 'TenKhoa', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên gọi khóa', domain: 'Văn bản', example: 'Khóa 58 Đại học Quân sự' },
-      { name: 'NamNhapHoc', type: 'INT', key: null, nullable: false, description: 'Năm tuyển sinh nhập ngũ', domain: '> 1950', example: '2023' },
-      { name: 'NamKetThucDuKien', type: 'INT', key: null, nullable: false, description: 'Năm tốt nghiệp dự kiến', domain: '>= NamNhapHoc', example: '2028' }
+      { name: 'MaChuyenNganh', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã chuyên ngành', domain: 'Duy nhất', example: 'CN_ATTT' },
+      { name: 'TenChuyenNganh', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên chuyên ngành', domain: 'Văn bản', example: 'An toàn thông tin & Tác chiến mạng' },
+      { name: 'MaNganh', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Thuộc ngành đào tạo', domain: 'Tham chiếu NGANH', example: 'NG_CNTT', ref: { table: 'NGANH', column: 'MaNganh' } }
     ],
-    constraints: [
-      'PK: MaKhoa',
-      'CHECK: NamKetThucDuKien >= NamNhapHoc'
-    ]
+    constraints: ['PK: MaChuyenNganh', 'FK: MaNganh -> NGANH(MaNganh)']
   },
   {
-    id: 'LopHoc',
-    name: 'LopHoc',
-    groupId: 'org',
+    id: 'CAP_BAC',
+    code: 'R12',
+    name: 'CAP_BAC',
+    groupId: 'personnel',
+    title: 'Cấp Bậc Quân Hàm Quân Đội',
+    description: 'Danh mục cấp bậc quân sự (Hạ sĩ, Trung sĩ, Thượng sĩ, Thiếu úy...).',
+    justification: 'Đặc thù quân đội: Mọi quân nhân đều có cấp bậc; thứ tự cấp bậc dùng để xếp hạng phân cấp.',
+    columns: [
+      { name: 'MaCapBac', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã cấp bậc', domain: 'Duy nhất', example: 'CB_TS' },
+      { name: 'TenCapBac', type: 'NVARCHAR(50)', key: null, nullable: false, description: 'Tên quân hàm', domain: 'Văn bản', example: 'Thượng sĩ' },
+      { name: 'ThuTu', type: 'INT', key: null, nullable: false, description: 'Thứ tự cấp bậc', domain: 'Số nguyên tăng dần', example: '3' }
+    ],
+    constraints: ['PK: MaCapBac']
+  },
+  {
+    id: 'CHUC_VU',
+    code: 'R13',
+    name: 'CHUC_VU',
+    groupId: 'personnel',
+    title: 'Chức Vụ Quân Sự / Quản Lý',
+    description: 'Chức vụ của học viên hoặc cán bộ trong đơn vị (Lớp trưởng, Tiểu đội trưởng, Bí thư chi đoàn...).',
+    justification: 'Phản ánh cơ cấu quản lý nội bộ tổ chức của lớp học viên quân sự.',
+    columns: [
+      { name: 'MaChucVu', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã chức vụ', domain: 'Duy nhất', example: 'CV_LT' },
+      { name: 'TenChucVu', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên chức vụ', domain: 'Văn bản', example: 'Lớp trưởng' },
+      { name: 'MoTa', type: 'NVARCHAR(255)', key: null, nullable: true, description: 'Mô tả nhiệm vụ chức trách', domain: 'Văn bản', example: 'Quản lý học tập và sinh hoạt lớp' }
+    ],
+    constraints: ['PK: MaChucVu']
+  },
+
+  // ==========================================
+  // NHÓM 3: ĐÀO TẠO & PHÂN CÔNG GIẢNG DẠY (R2, R3, R14, R16, R17, R18, R19)
+  // ==========================================
+  {
+    id: 'KHOA_DAO_TAO',
+    code: 'R2',
+    name: 'KHOA_DAO_TAO',
+    groupId: 'teaching',
+    title: 'Khóa Tuyển Sinh Đào Tạo',
+    description: 'Khóa đào tạo theo năm nhập học và niên hạn kết thúc.',
+    justification: 'Quản lý sinh viên và kế hoạch theo niên khóa.',
+    columns: [
+      { name: 'MaKhoaDT', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã khóa học', domain: 'Duy nhất', example: 'K58' },
+      { name: 'TenKhoaDT', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên khóa đào tạo', domain: 'Văn bản', example: 'Khóa 58 Đại học Quân sự' },
+      { name: 'NamBatDau', type: 'INT', key: null, nullable: false, description: 'Năm nhập học', domain: '> 1950', example: '2023' },
+      { name: 'NamKetThuc', type: 'INT', key: null, nullable: false, description: 'Năm tốt nghiệp dự kiến', domain: '>= NamBatDau', example: '2028' }
+    ],
+    constraints: ['PK: MaKhoaDT', 'CHECK: NamKetThuc >= NamBatDau']
+  },
+  {
+    id: 'LOP_HOC',
+    code: 'R3',
+    name: 'LOP_HOC',
+    groupId: 'teaching',
     title: 'Lớp Niên Chế (Lớp Hành Chính)',
-    description: 'Lớp học truyền thống gắn liền với một ngành, một khóa và thuộc biên chế một đại đội.',
-    justification: 'Trong quân đội, học viên sinh hoạt theo lớp niên chế thuộc một đơn vị quân sự cụ thể.',
+    description: 'Lớp học viên quản lý theo đơn vị đại đội và thuộc khóa đào tạo.',
+    justification: 'Môi trường quân sự quản lý học viên theo lớp hành chính trực thuộc đơn vị cơ sở.',
     columns: [
-      { name: 'MaLop', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã lớp hành chính', domain: 'Duy nhất', example: 'CNTT2-K58' },
-      { name: 'TenLop', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên lớp', domain: 'Văn bản', example: 'Lớp Công nghệ thông tin 2' },
-      { name: 'MaNganh', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Thuộc ngành đào tạo', domain: 'Tham chiếu NganhDaoTao', example: 'CNTT', ref: { table: 'NganhDaoTao', column: 'MaNganh' } },
-      { name: 'MaKhoa', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Thuộc khóa học', domain: 'Tham chiếu KhoaHoc', example: 'K58', ref: { table: 'KhoaHoc', column: 'MaKhoa' } },
-      { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Đại đội biên chế quản lý', domain: 'Tham chiếu DonVi', example: 'd1_c1', ref: { table: 'DonVi', column: 'MaDonVi' } },
-      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tình trạng lớp', domain: 'DANG_HOC, DA_TOT_NGHIEP', example: 'DANG_HOC' }
+      { name: 'MaLop', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã lớp hành chính', domain: 'Duy nhất', example: 'CNTT2_K58' },
+      { name: 'TenLop', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên lớp', domain: 'Văn bản', example: 'Lớp Công nghệ thông tin 2 - K58' },
+      { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Đại đội quản lý', domain: 'Tham chiếu DON_VI', example: 'DV_C1', ref: { table: 'DON_VI', column: 'MaDonVi' } },
+      { name: 'MaKhoaDT', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Thuộc khóa học', domain: 'Tham chiếu KHOA_DAO_TAO', example: 'K58', ref: { table: 'KHOA_DAO_TAO', column: 'MaKhoaDT' } }
     ],
-    constraints: [
-      'PK: MaLop',
-      'FK: MaNganh -> NganhDaoTao(MaNganh)',
-      'FK: MaKhoa -> KhoaHoc(MaKhoa)',
-      'FK: MaDonVi -> DonVi(MaDonVi)'
-    ]
+    constraints: ['PK: MaLop', 'FK: MaDonVi -> DON_VI(MaDonVi)', 'FK: MaKhoaDT -> KHOA_DAO_TAO(MaKhoaDT)']
   },
   {
-    id: 'HocVien',
-    name: 'HocVien',
-    groupId: 'org',
+    id: 'HOC_VIEN',
+    code: 'R14',
+    name: 'HOC_VIEN',
+    groupId: 'teaching',
     title: 'Hồ Sơ Học Viên Quân Sự',
-    description: 'Lưu lý lịch học viên, lớp niên chế hiện tại và tài khoản liên kết.',
-    justification: 'Thực thể trung tâm chịu sự quản lý của đơn vị và là chủ thể của kết quả học tập.',
+    description: 'Chuyên biệt hóa từ NGUOI: Bổ sung lớp học, chuyên ngành, cấp bậc, chức vụ quân sự.',
+    justification: 'Thực thể trung tâm chịu sự quản lý của đơn vị và là chủ thể của toàn bộ kết quả điểm số.',
     columns: [
-      { name: 'MaHV', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã học viên (Số hiệu quân nhân)', domain: 'Duy nhất', example: 'HV001' },
-      { name: 'HoTen', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Họ và tên học viên', domain: 'Văn bản', example: 'Nguyễn Văn An' },
-      { name: 'NgaySinh', type: 'DATE', key: null, nullable: false, description: 'Ngày tháng năm sinh', domain: 'Date', example: '2004-05-12' },
-      { name: 'MaLop', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Lớp niên chế hiện tại', domain: 'Tham chiếu LopHoc', example: 'CNTT2-K58', ref: { table: 'LopHoc', column: 'MaLop' } },
-      { name: 'MaTaiKhoan', type: 'VARCHAR(20)', key: 'FK, UQ', nullable: true, description: 'Tài khoản đăng nhập hệ thống', domain: 'Tham chiếu TaiKhoan (Duy nhất nếu có)', example: 'TK001', ref: { table: 'TaiKhoan', column: 'MaTaiKhoan' } },
-      { name: 'TrangThaiHocTap', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tình trạng học tập', domain: 'DANG_HOC, THOI_HOC, BAO_LUU', example: 'DANG_HOC' }
+      { name: 'MaHV', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã định danh học viên', domain: 'Duy nhất', example: 'HV001' },
+      { name: 'MaNguoi', type: 'VARCHAR(20)', key: 'FK, UQ', nullable: false, description: 'Tham chiếu hồ sơ nhân sự NGUOI', domain: 'Tham chiếu NGUOI', example: 'NG_001', ref: { table: 'NGUOI', column: 'MaNguoi' } },
+      { name: 'MaLop', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Lớp niên chế đang học', domain: 'Tham chiếu LOP_HOC', example: 'CNTT2_K58', ref: { table: 'LOP_HOC', column: 'MaLop' } },
+      { name: 'MaChuyenNganh', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Chuyên ngành học tập', domain: 'Tham chiếu CHUYEN_NGANH', example: 'CN_ATTT', ref: { table: 'CHUYEN_NGANH', column: 'MaChuyenNganh' } },
+      { name: 'MaCapBac', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Quân hàm hiện tại', domain: 'Tham chiếu CAP_BAC', example: 'CB_TS', ref: { table: 'CAP_BAC', column: 'MaCapBac' } },
+      { name: 'MaChucVu', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Chức trách trong lớp', domain: 'Tham chiếu CHUC_VU', example: 'CV_LT', ref: { table: 'CHUC_VU', column: 'MaChucVu' } },
+      { name: 'NgayNhapHoc', type: 'DATE', key: null, nullable: false, description: 'Ngày nhập ngũ/nhập học', domain: 'Date', example: '2023-09-05' },
+      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tình trạng học vụ', domain: 'DANG_HOC, BAO_LUU, TOT_NGHIEP', example: 'DANG_HOC' }
     ],
     constraints: [
       'PK: MaHV',
-      'FK: MaLop -> LopHoc(MaLop)',
-      'FK: MaTaiKhoan -> TaiKhoan(MaTaiKhoan)',
-      'UQ: MaTaiKhoan (Một tài khoản chỉ gắn với tối đa 1 học viên)'
+      'UQ: MaNguoi',
+      'FK: MaNguoi -> NGUOI(MaNguoi)',
+      'FK: MaLop -> LOP_HOC(MaLop)',
+      'FK: MaChuyenNganh -> CHUYEN_NGANH(MaChuyenNganh)',
+      'FK: MaCapBac -> CAP_BAC(MaCapBac)',
+      'FK: MaChucVu -> CHUC_VU(MaChucVu)'
     ]
   },
   {
-    id: 'TaiKhoan',
-    name: 'TaiKhoan',
-    groupId: 'org',
-    title: 'Tài Khoản Xác Thực',
-    description: 'Chứa thông tin đăng nhập dùng chung cho cả cán bộ, chỉ huy và học viên.',
-    justification: 'Tách riêng cơ chế xác thực khỏi thông tin con người, hỗ trợ nhiều loại người dùng đồng nhất.',
+    id: 'GIANG_VIEN',
+    code: 'R16',
+    name: 'GIANG_VIEN',
+    groupId: 'teaching',
+    title: 'Hồ Sơ Giảng Viên Quân Sự (Yếu Tố Trọng Tâm Mới)',
+    description: 'Chuyên biệt hóa từ NGUOI: Lưu thông tin bộ môn công tác, học vị, chuyên môn giảng dạy.',
+    justification: 'ĐÁP ỨNG TRỌN VẸN YÊU CẦU ĐỀ BÀI: Giảng viên là người trực tiếp tham gia giảng dạy theo phân công và nhập điểm thành phần.',
     columns: [
-      { name: 'MaTaiKhoan', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã tài khoản', domain: 'Duy nhất', example: 'TK_CH_C1' },
-      { name: 'TenDangNhap', type: 'VARCHAR(50)', key: 'UQ', nullable: false, description: 'Username đăng nhập', domain: 'Duy nhất', example: 'chihuy_c1' },
-      { name: 'MatKhauHash', type: 'VARCHAR(255)', key: null, nullable: false, description: 'Mã băm mật khẩu', domain: 'Mã băm an toàn (demo không lộ)', example: '$2a$12$...' },
-      { name: 'TenHienThi', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên hiển thị trên hệ thống', domain: 'Văn bản', example: 'Đại úy Trần Văn Bình - Ctr C1' },
-      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Trạng thái tài khoản', domain: 'KICH_HOAT, TAM_KHOA', example: 'KICH_HOAT' }
+      { name: 'MaGV', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã giảng viên', domain: 'Duy nhất', example: 'GV001' },
+      { name: 'MaNguoi', type: 'VARCHAR(20)', key: 'FK, UQ', nullable: false, description: 'Tham chiếu hồ sơ nhân sự NGUOI', domain: 'Tham chiếu NGUOI', example: 'NG_002', ref: { table: 'NGUOI', column: 'MaNguoi' } },
+      { name: 'MaBoMon', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Bộ môn trực thuộc', domain: 'Tham chiếu BO_MON', example: 'BM_CSDL', ref: { table: 'BO_MON', column: 'MaBoMon' } },
+      { name: 'HocVi', type: 'NVARCHAR(50)', key: null, nullable: false, description: 'Học vị chuyên môn', domain: 'Thạc sĩ, Tiến sĩ, PGS, GS', example: 'Tiến sĩ' },
+      { name: 'ChuyenMon', type: 'NVARCHAR(150)', key: null, nullable: false, description: 'Lĩnh vực nghiên cứu/giảng dạy', domain: 'Văn bản', example: 'Hệ thống cơ sở dữ liệu lớn' },
+      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tình trạng công tác', domain: 'DANG_CONG_TAC, NGHI_CHE_DO', example: 'DANG_CONG_TAC' }
     ],
     constraints: [
-      'PK: MaTaiKhoan',
-      'UQ: TenDangNhap'
+      'PK: MaGV',
+      'UQ: MaNguoi',
+      'FK: MaNguoi -> NGUOI(MaNguoi)',
+      'FK: MaBoMon -> BO_MON(MaBoMon)'
     ]
   },
   {
-    id: 'VaiTro',
-    name: 'VaiTro',
-    groupId: 'org',
-    title: 'Danh Mục Vai Trò Hệ Thống',
-    description: 'Định nghĩa các nhóm quyền: Học viên, Chỉ huy đơn vị, Phòng Đào tạo, Ban Giám đốc.',
-    justification: 'Áp dụng mô hình kiểm soát truy cập dựa trên vai trò (RBAC - Role-Based Access Control).',
+    id: 'MON_HOC',
+    code: 'R17',
+    name: 'MON_HOC',
+    groupId: 'teaching',
+    title: 'Danh Mục Môn Học (Học Phần)',
+    description: 'Chương trình môn học chuẩn với số tín chỉ, số tiết lý thuyết/thực hành.',
+    justification: 'Chuẩn hóa danh mục môn học, dùng chung cho kế hoạch và phân công giảng dạy.',
     columns: [
-      { name: 'MaVaiTro', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã vai trò', domain: 'Duy nhất', example: 'ROLE_CH' },
-      { name: 'TenVaiTro', type: 'NVARCHAR(50)', key: 'UQ', nullable: false, description: 'Tên vai trò', domain: 'Văn bản', example: 'Chỉ huy đơn vị' },
-      { name: 'MoTa', type: 'NVARCHAR(255)', key: null, nullable: true, description: 'Mô tả quyền hạn', domain: 'Văn bản', example: 'Xem và giám sát kết quả học viên thuộc đơn vị mình phụ trách' }
+      { name: 'MaMonHoc', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã môn học', domain: 'Duy nhất', example: 'CSDL101' },
+      { name: 'TenMonHoc', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên môn học', domain: 'Văn bản', example: 'Cơ sở dữ liệu' },
+      { name: 'SoTinChi', type: 'INT', key: null, nullable: false, description: 'Số tín chỉ', domain: '> 0', example: '3' },
+      { name: 'SoTiet', type: 'INT', key: null, nullable: false, description: 'Tổng số tiết học', domain: '> 0', example: '45' },
+      { name: 'LoaiMonHoc', type: 'NVARCHAR(50)', key: null, nullable: false, description: 'Tính chất môn', domain: 'Bắt buộc, Tự chọn', example: 'Bắt buộc' }
     ],
-    constraints: [
-      'PK: MaVaiTro',
-      'UQ: TenVaiTro'
-    ]
+    constraints: ['PK: MaMonHoc', 'CHECK: SoTinChi > 0 AND SoTiet > 0']
   },
   {
-    id: 'TaiKhoanVaiTro',
-    name: 'TaiKhoanVaiTro',
-    groupId: 'org',
-    title: 'Gán Vai Trò Cho Tài Khoản (N-N)',
-    description: 'Bảng liên kết giải quyết quan hệ nhiều-nhiều giữa tài khoản và vai trò.',
-    justification: 'Một tài khoản cán bộ có thể kiêm nhiệm nhiều vai trò.',
+    id: 'HOC_KY',
+    code: 'R18',
+    name: 'HOC_KY',
+    groupId: 'teaching',
+    title: 'Học Kỳ Đào Tạo',
+    description: 'Khung thời gian giảng dạy và đánh giá trong năm học.',
+    justification: 'Căn cứ thời gian để lập phân công giảng dạy và khóa sổ điểm học kỳ.',
     columns: [
-      { name: 'MaTaiKhoan', type: 'VARCHAR(20)', key: 'PK, FK', nullable: false, description: 'Tài khoản', domain: 'Tham chiếu TaiKhoan', example: 'TK_CH_C1', ref: { table: 'TaiKhoan', column: 'MaTaiKhoan' } },
-      { name: 'MaVaiTro', type: 'VARCHAR(20)', key: 'PK, FK', nullable: false, description: 'Vai trò được gán', domain: 'Tham chiếu VaiTro', example: 'ROLE_CH', ref: { table: 'VaiTro', column: 'MaVaiTro' } }
+      { name: 'MaHocKy', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã học kỳ', domain: 'Duy nhất', example: 'HK1_2025' },
+      { name: 'TenHocKy', type: 'NVARCHAR(50)', key: null, nullable: false, description: 'Tên học kỳ', domain: 'Văn bản', example: 'Học kỳ 1 năm học 2025-2026' },
+      { name: 'NamHoc', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Năm học', domain: 'YYYY-YYYY', example: '2025-2026' },
+      { name: 'NgayBatDau', type: 'DATE', key: null, nullable: false, description: 'Ngày bắt đầu học kỳ', domain: 'Date', example: '2025-09-01' },
+      { name: 'NgayKetThuc', type: 'DATE', key: null, nullable: false, description: 'Ngày bế mạc học kỳ', domain: '>= NgayBatDau', example: '2026-01-15' }
     ],
-    constraints: [
-      'PK: (MaTaiKhoan, MaVaiTro)',
-      'FK: MaTaiKhoan -> TaiKhoan(MaTaiKhoan)',
-      'FK: MaVaiTro -> VaiTro(MaVaiTro)'
-    ]
+    constraints: ['PK: MaHocKy', 'CHECK: NgayKetThuc >= NgayBatDau']
   },
   {
-    id: 'PhanCongQuanLy',
-    name: 'PhanCongQuanLy',
-    groupId: 'org',
-    title: 'Phân Công Phạm Vi Quản Lý Của Chỉ Huy',
-    description: 'Gắn tài khoản chỉ huy với đơn vị quân sự cụ thể theo khoảng thời gian hiệu lực.',
-    justification: 'Làm rõ yêu cầu: Chỉ huy chỉ được xem điểm học viên thuộc đại đội/tiểu đoàn mình phụ trách; có thể luân chuyển công tác theo thời gian.',
+    id: 'PHAN_CONG',
+    code: 'R19',
+    name: 'PHAN_CONG',
+    groupId: 'teaching',
+    title: 'Phân Công Giảng Dạy (Khóa Trung Tâm Đào Tạo)',
+    description: 'Quyết định phân công Giảng viên giảng dạy Môn học cho một Lớp trong Học kỳ cụ thể.',
+    justification: 'KẾT NỐI TRỌNG TÂM: Liên kết 4 thực thể Giảng viên (GIANG_VIEN), Môn học (MON_HOC), Lớp học (LOP_HOC) và Học kỳ (HOC_KY) thành một nhóm lớp học cụ thể.',
     columns: [
-      { name: 'MaPhanCong', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã quyết định phân công', domain: 'Duy nhất', example: 'PC001' },
-      { name: 'MaTaiKhoan', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Tài khoản chỉ huy', domain: 'Tham chiếu TaiKhoan', example: 'TK_CH_C1', ref: { table: 'TaiKhoan', column: 'MaTaiKhoan' } },
-      { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Đơn vị được giao quản lý', domain: 'Tham chiếu DonVi', example: 'd1_c1', ref: { table: 'DonVi', column: 'MaDonVi' } },
-      { name: 'ChucVu', type: 'NVARCHAR(50)', key: null, nullable: false, description: 'Chức vụ quân sự', domain: 'Đại đội trưởng, Chính trị viên...', example: 'Đại đội trưởng' },
-      { name: 'TuNgay', type: 'DATE', key: null, nullable: false, description: 'Ngày bắt đầu phụ trách', domain: 'Date', example: '2025-01-01' },
-      { name: 'DenNgay', type: 'DATE', key: null, nullable: true, description: 'Ngày kết thúc (NULL nếu đang công tác)', domain: '>= TuNgay hoặc NULL', example: null }
+      { name: 'MaPhanCong', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã dòng phân công', domain: 'Duy nhất', example: 'PC_CSDL_01' },
+      { name: 'MaGV', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Giảng viên phụ trách', domain: 'Tham chiếu GIANG_VIEN', example: 'GV001', ref: { table: 'GIANG_VIEN', column: 'MaGV' } },
+      { name: 'MaMonHoc', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Môn học được giảng dạy', domain: 'Tham chiếu MON_HOC', example: 'CSDL101', ref: { table: 'MON_HOC', column: 'MaMonHoc' } },
+      { name: 'MaLop', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Lớp sinh viên tham gia', domain: 'Tham chiếu LOP_HOC', example: 'CNTT2_K58', ref: { table: 'LOP_HOC', column: 'MaLop' } },
+      { name: 'MaHocKy', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Học kỳ triển khai', domain: 'Tham chiếu HOC_KY', example: 'HK1_2025', ref: { table: 'HOC_KY', column: 'MaHocKy' } },
+      { name: 'NhomHoc', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Mã phân nhóm (nhóm 1, nhóm 2)', domain: 'Văn bản', example: 'Nhóm 01' },
+      { name: 'SoTiet', type: 'INT', key: null, nullable: false, description: 'Số tiết được giao giảng dạy', domain: '> 0', example: '45' }
     ],
     constraints: [
       'PK: MaPhanCong',
-      'FK: MaTaiKhoan -> TaiKhoan(MaTaiKhoan)',
-      'FK: MaDonVi -> DonVi(MaDonVi)',
-      'CHECK: DenNgay IS NULL OR DenNgay >= TuNgay'
+      'UQ: (MaMonHoc, MaLop, MaHocKy, NhomHoc)',
+      'FK: MaGV -> GIANG_VIEN(MaGV)',
+      'FK: MaMonHoc -> MON_HOC(MaMonHoc)',
+      'FK: MaLop -> LOP_HOC(MaLop)',
+      'FK: MaHocKy -> HOC_KY(MaHocKy)'
     ]
   },
 
   // ==========================================
-  // NHÓM B: KẾ HOẠCH VÀ ĐÀO TẠO (5 bảng)
+  // NHÓM 4: ĐIỂM SỐ & KHẢO THÍ (R20, R21, R22, R23)
   // ==========================================
   {
-    id: 'HocPhan',
-    name: 'HocPhan',
-    groupId: 'train',
-    title: 'Danh Mục Học Phần (Môn Học)',
-    description: 'Chứa thông tin các môn học trong chương trình đào tạo chuẩn.',
-    justification: 'Chuẩn hóa số tín chỉ, tiết lý thuyết, thực hành; tránh lặp lại tên môn.',
+    id: 'LOAI_DIEM',
+    code: 'R20',
+    name: 'LOAI_DIEM',
+    groupId: 'grading',
+    title: 'Danh Mục Loại Điểm & Trọng Số',
+    description: 'Cấu hình linh hoạt các thành phần điểm: Chuyên cần (0.1), Thường xuyên (0.3), Cuối kỳ (0.6)...',
+    justification: 'ĐỘNG HÓA CÔNG THỨC: Không hardcode các loại điểm cố định; cho phép nhà trường thêm bớt các loại điểm (bài tập lớn, thực hành, thi) và điều chỉnh trọng số linh hoạt.',
     columns: [
-      { name: 'MaHP', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã học phần', domain: 'Duy nhất', example: 'CSDL101' },
-      { name: 'TenHP', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên học phần', domain: 'Văn bản', example: 'Cơ sở dữ liệu' },
-      { name: 'SoTinChi', type: 'INT', key: null, nullable: false, description: 'Số tín chỉ', domain: '> 0', example: '3' },
-      { name: 'SoTietLyThuyet', type: 'INT', key: null, nullable: false, description: 'Số tiết lý thuyết', domain: '>= 0', example: '30' },
-      { name: 'SoTietThucHanh', type: 'INT', key: null, nullable: false, description: 'Số tiết thực hành', domain: '>= 0', example: '15' },
-      { name: 'MoTa', type: 'NVARCHAR(255)', key: null, nullable: true, description: 'Mô tả nội dung', domain: 'Văn bản', example: 'Mô hình dữ liệu quan hệ, SQL và chuẩn hóa' }
+      { name: 'MaLoaiDiem', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã loại điểm', domain: 'Duy nhất', example: 'LD_CC' },
+      { name: 'TenLoaiDiem', type: 'NVARCHAR(50)', key: null, nullable: false, description: 'Tên cột điểm', domain: 'Chuyên cần, Thường xuyên, Cuối kỳ', example: 'Chuyên cần' },
+      { name: 'TrongSo', type: 'DECIMAL(3,2)', key: null, nullable: false, description: 'Tỷ lệ trọng số (0.0 - 1.0)', domain: '0.0 - 1.0', example: '0.10' }
+    ],
+    constraints: ['PK: MaLoaiDiem', 'CHECK: TrongSo >= 0 AND TrongSo <= 1']
+  },
+  {
+    id: 'KET_QUA_HOC_TAP',
+    code: 'R21',
+    name: 'KET_QUA_HOC_TAP',
+    groupId: 'grading',
+    title: 'Kết Quả Học Tập Tổng Hợp Của Học Viên',
+    description: 'Ghi nhận kết quả của một Học viên trong một Phân công giảng dạy (Điểm tổng kết, Xếp loại, Đạt/Không đạt).',
+    justification: 'Giải quyết quan hệ N-N giữa Học viên (HOC_VIEN) và Đợt phân công (PHAN_CONG); lưu trữ kết quả cuối cùng sau khi tổng hợp các đầu điểm.',
+    columns: [
+      { name: 'MaKQ', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã kết quả học tập', domain: 'Duy nhất', example: 'KQ_001' },
+      { name: 'MaHV', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Học viên', domain: 'Tham chiếu HOC_VIEN', example: 'HV001', ref: { table: 'HOC_VIEN', column: 'MaHV' } },
+      { name: 'MaPhanCong', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Phân công lớp giảng dạy', domain: 'Tham chiếu PHAN_CONG', example: 'PC_CSDL_01', ref: { table: 'PHAN_CONG', column: 'MaPhanCong' } },
+      { name: 'DiemTongKet', type: 'DECIMAL(3,1)', key: null, nullable: true, description: 'Điểm tổng kết chính thức (0.0 - 10.0)', domain: '0.0 - 10.0 hoặc NULL', example: '7.4' },
+      { name: 'XepLoai', type: 'NVARCHAR(20)', key: null, nullable: true, description: 'Xếp loại học lực', domain: 'Xuat sac, Gioi, Kha, TB, Yeu', example: 'Khá' },
+      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Trạng thái học phần', domain: 'DANG_HOC, HOAN_THANH, HOC_LAI', example: 'HOAN_THANH' }
     ],
     constraints: [
-      'PK: MaHP',
-      'CHECK: SoTinChi > 0',
-      'CHECK: SoTietLyThuyet >= 0 AND SoTietThucHanh >= 0'
+      'PK: MaKQ',
+      'UQ: (MaHV, MaPhanCong) (Một học viên chỉ có 1 kết quả trong cùng 1 phân công)',
+      'FK: MaHV -> HOC_VIEN(MaHV)',
+      'FK: MaPhanCong -> PHAN_CONG(MaPhanCong)'
     ]
   },
   {
-    id: 'HocKy',
-    name: 'HocKy',
-    groupId: 'train',
-    title: 'Học Kỳ Đào Tạo',
-    description: 'Xác định các khoảng thời gian học tập trong năm học.',
-    justification: 'Mốc thời gian tổ chức kế hoạch giảng dạy, thi kết thúc học phần và tính điểm trung bình học kỳ.',
+    id: 'DIEM',
+    code: 'R22',
+    name: 'DIEM',
+    groupId: 'grading',
+    title: 'Chi Tiết Từng Đầu Điểm Thành Phần',
+    description: 'Lưu từng con điểm cụ thể gắn với kết quả học tập, loại điểm, ngày nhập và người nhập.',
+    justification: 'CHUẨN HÓA CẤP ĐỘ CAO: Giảng viên nhập điểm Chuyên cần, Thường xuyên sẽ được ghi vào đây kèm mã người nhập MaNguoiNhap (chính là MaGV hoặc Cán bộ).',
     columns: [
-      { name: 'MaHK', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã học kỳ', domain: 'Duy nhất', example: '2025_HK1' },
-      { name: 'TenHK', type: 'NVARCHAR(50)', key: null, nullable: false, description: 'Tên học kỳ', domain: 'Văn bản', example: 'Học kỳ 1 năm học 2025-2026' },
-      { name: 'NamHoc', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Năm học', domain: 'YYYY-YYYY', example: '2025-2026' },
-      { name: 'NgayBatDau', type: 'DATE', key: null, nullable: false, description: 'Ngày bắt đầu học kỳ', domain: 'Date', example: '2025-09-01' },
-      { name: 'NgayKetThuc', type: 'DATE', key: null, nullable: false, description: 'Ngày kết thúc học kỳ', domain: '>= NgayBatDau', example: '2026-01-15' }
+      { name: 'MaDiem', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã điểm chi tiết', domain: 'Duy nhất', example: 'D_001' },
+      { name: 'MaKQ', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Gắn liền với Kết quả học tập', domain: 'Tham chiếu KET_QUA_HOC_TAP', example: 'KQ_001', ref: { table: 'KET_QUA_HOC_TAP', column: 'MaKQ' } },
+      { name: 'MaLoaiDiem', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Loại điểm (CC, TX, Thi...)', domain: 'Tham chiếu LOAI_DIEM', example: 'LD_CC', ref: { table: 'LOAI_DIEM', column: 'MaLoaiDiem' } },
+      { name: 'Diem', type: 'DECIMAL(3,1)', key: null, nullable: false, description: 'Giá trị điểm số (0.0 - 10.0)', domain: '0.0 - 10.0', example: '8.5' },
+      { name: 'NgayNhap', type: 'DATETIME', key: null, nullable: false, description: 'Thời điểm nhập điểm', domain: 'DateTime', example: '2025-11-20 14:30:00' },
+      { name: 'MaNguoiNhap', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Người thực hiện nhập (Giảng viên / Đào tạo)', domain: 'Tham chiếu NGUOI', example: 'NG_002', ref: { table: 'NGUOI', column: 'MaNguoi' } }
     ],
     constraints: [
-      'PK: MaHK',
-      'CHECK: NgayKetThuc >= NgayBatDau'
+      'PK: MaDiem',
+      'FK: MaKQ -> KET_QUA_HOC_TAP(MaKQ)',
+      'FK: MaLoaiDiem -> LOAI_DIEM(MaLoaiDiem)',
+      'FK: MaNguoiNhap -> NGUOI(MaNguoi)',
+      'CHECK: Diem BETWEEN 0.0 AND 10.0'
     ]
   },
   {
-    id: 'KeHoachDaoTao',
-    name: 'KeHoachDaoTao',
-    groupId: 'train',
-    title: 'Kế Hoạch Khung Theo Lớp Niên Chế',
-    description: 'Quy định một lớp niên chế được bố trí học môn nào trong học kỳ nào.',
-    justification: 'Trong đào tạo quân sự, việc học được tổ chức theo kế hoạch khung định sẵn cho cả khóa/lớp chứ không đăng ký tự do.',
+    id: 'DOT_THI',
+    code: 'R23',
+    name: 'DOT_THI',
+    groupId: 'grading',
+    title: 'Đợt Thi Kết Thúc Học Phần (Khảo Thí)',
+    description: 'Quản lý lịch thi lần 1, thi lại lần 2 cho từng phân công giảng dạy.',
+    justification: 'Tách riêng tổ chức khảo thí khỏi điểm quá trình; hỗ trợ thi lại, thi bổ sung cho học viên.',
     columns: [
-      { name: 'MaKeHoach', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã dòng kế hoạch', domain: 'Duy nhất', example: 'KH_CNTT2_CSDL' },
-      { name: 'MaLop', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Lớp niên chế được phân công', domain: 'Tham chiếu LopHoc', example: 'CNTT2-K58', ref: { table: 'LopHoc', column: 'MaLop' } },
-      { name: 'MaHP', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Học phần được bố trí', domain: 'Tham chiếu HocPhan', example: 'CSDL101', ref: { table: 'HocPhan', column: 'MaHP' } },
-      { name: 'MaHK', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Học kỳ triển khai', domain: 'Tham chiếu HocKy', example: '2025_HK1', ref: { table: 'HocKy', column: 'MaHK' } },
-      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Trạng thái triển khai', domain: 'DU_KIEN, DANG_DAY, HOAN_THANH', example: 'DANG_DAY' },
-      { name: 'GhiChu', type: 'NVARCHAR(255)', key: null, nullable: true, description: 'Ghi chú chỉ đạo', domain: 'Văn bản', example: 'Kế hoạch chuẩn theo khung K58' }
+      { name: 'MaDotThi', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã đợt thi', domain: 'Duy nhất', example: 'DT_001' },
+      { name: 'MaPhanCong', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Thuộc phân công môn học', domain: 'Tham chiếu PHAN_CONG', example: 'PC_CSDL_01', ref: { table: 'PHAN_CONG', column: 'MaPhanCong' } },
+      { name: 'TenDotThi', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên đợt thi', domain: 'Văn bản', example: 'Thi kết thúc học phần Lần 1' },
+      { name: 'LoaiDotThi', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tính chất đợt thi', domain: 'LAN_1, THI_LAI, THI_PHU', example: 'LAN_1' },
+      { name: 'NgayThi', type: 'DATE', key: null, nullable: false, description: 'Ngày tổ chức thi', domain: 'Date', example: '2025-12-25' }
     ],
     constraints: [
-      'PK: MaKeHoach',
-      'UQ: (MaLop, MaHP, MaHK) (Mỗi môn chỉ lập kế hoạch 1 lần cho lớp trong 1 kỳ)',
-      'FK: MaLop -> LopHoc(MaLop)',
-      'FK: MaHP -> HocPhan(MaHP)',
-      'FK: MaHK -> HocKy(MaHK)'
-    ]
-  },
-  {
-    id: 'QuyTacDanhGia',
-    name: 'QuyTacDanhGia',
-    groupId: 'train',
-    title: 'Phiên Bản Quy Tắc Đánh Giá Điểm',
-    description: 'Lưu cấu hình trọng số, ngưỡng đạt, trần thi lại và thuật toán làm tròn.',
-    justification: 'Không hardcode công thức trong code phần mềm! Quy chế đào tạo có thể thay đổi qua các năm; bảng này cho phép giải thích chính xác kết quả của từng đợt học theo quy tắc tại thời điểm đó.',
-    columns: [
-      { name: 'MaQuyTac', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã bộ quy tắc', domain: 'Duy nhất', example: 'QT_QS_2025' },
-      { name: 'TenQuyTac', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên bộ quy tắc', domain: 'Văn bản', example: 'Quy tắc điểm chuẩn Quân sự 2025' },
-      { name: 'PhienBan', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Phiên bản áp dụng', domain: 'v1.0, v1.1...', example: 'v1.0' },
-      { name: 'TrongSoCC', type: 'DECIMAL(3,2)', key: null, nullable: false, description: 'Trọng số điểm chuyên cần', domain: '0.0 - 1.0', example: '0.10' },
-      { name: 'TrongSoTX', type: 'DECIMAL(3,2)', key: null, nullable: false, description: 'Trọng số điểm thường xuyên', domain: '0.0 - 1.0', example: '0.30' },
-      { name: 'TrongSoCK', type: 'DECIMAL(3,2)', key: null, nullable: false, description: 'Trọng số điểm cuối kỳ', domain: '0.0 - 1.0', example: '0.60' },
-      { name: 'NguongCK', type: 'DECIMAL(3,1)', key: null, nullable: false, description: 'Điểm liệt cuối kỳ', domain: 'Mặc định: 4.0', example: '4.0' },
-      { name: 'NguongTongKet', type: 'DECIMAL(3,1)', key: null, nullable: false, description: 'Ngưỡng tổng kết đạt môn', domain: 'Mặc định: 4.0 hoặc 5.0', example: '4.0' },
-      { name: 'TranDiemThiLai', type: 'DECIMAL(3,1)', key: null, nullable: false, description: 'Mức trần công nhận khi thi lại', domain: 'Mặc định: 6.9', example: '6.9' },
-      { name: 'PhamViApDungTran', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Trần áp dụng cho điểm thi hay tổng kết', domain: 'DIEM_THI, DIEM_TONG_KET', example: 'DIEM_THI' },
-      { name: 'SoLanThiToiDa', type: 'INT', key: null, nullable: false, description: 'Số lần thi tối đa trong một lượt học', domain: '1 hoặc 2', example: '2' },
-      { name: 'SoChuSoLamTron', type: 'INT', key: null, nullable: false, description: 'Số chữ số thập phân làm tròn', domain: '1 hoặc 2', example: '1' }
-    ],
-    constraints: [
-      'PK: MaQuyTac',
-      'CHECK: TrongSoCC + TrongSoTX + TrongSoCK = 1.00',
-      'CHECK: TrongSoCC >= 0 AND TrongSoTX >= 0 AND TrongSoCK >= 0'
-    ]
-  },
-  {
-    id: 'LopHocPhan',
-    name: 'LopHocPhan',
-    groupId: 'train',
-    title: 'Lớp Học Phần Thực Tế',
-    description: 'Đợt mở lớp học cụ thể để giảng dạy một kế hoạch, gắn với một quy tắc đánh giá.',
-    justification: 'Phân biệt KeHoachDaoTao (chủ trương kế hoạch) với LopHocPhan (đợt tổ chức lớp thực tế). Một kế hoạch có thể chia làm nhiều lớp học phần nếu quân số đông.',
-    columns: [
-      { name: 'MaLHP', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã lớp học phần', domain: 'Duy nhất', example: 'LHP_CSDL_01' },
-      { name: 'MaKeHoach', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Thuộc dòng kế hoạch', domain: 'Tham chiếu KeHoachDaoTao', example: 'KH_CNTT2_CSDL', ref: { table: 'KeHoachDaoTao', column: 'MaKeHoach' } },
-      { name: 'MaQuyTac', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Áp dụng bộ quy tắc tính điểm', domain: 'Tham chiếu QuyTacDanhGia', example: 'QT_QS_2025', ref: { table: 'QuyTacDanhGia', column: 'MaQuyTac' } },
-      { name: 'TenLHP', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên lớp học phần', domain: 'Văn bản', example: 'Cơ sở dữ liệu - Nhóm 1' },
-      { name: 'NgayBatDau', type: 'DATE', key: null, nullable: false, description: 'Ngày khai giảng đợt học', domain: 'Date', example: '2025-09-05' },
-      { name: 'NgayKetThuc', type: 'DATE', key: null, nullable: false, description: 'Ngày kết thúc đợt học', domain: '>= NgayBatDau', example: '2025-12-30' },
-      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tình trạng lớp học phần', domain: 'DANG_HOC, DA_THI, DA_CHOT_DIEM', example: 'DA_CHOT_DIEM' }
-    ],
-    constraints: [
-      'PK: MaLHP',
-      'FK: MaKeHoach -> KeHoachDaoTao(MaKeHoach)',
-      'FK: MaQuyTac -> QuyTacDanhGia(MaQuyTac)'
-    ]
-  },
-
-  // ==========================================
-  // NHÓM C: QUÁ TRÌNH HỌC VÀ ĐIỂM (3 bảng)
-  // ==========================================
-  {
-    id: 'LuotHoc',
-    name: 'LuotHoc',
-    groupId: 'score',
-    title: 'Lượt Học Của Học Viên (Study Enrollment)',
-    description: 'Ghi nhận một học viên cụ thể tham gia vào một lớp học phần.',
-    justification: 'CỰC KỲ QUAN TRỌNG: Phân biệt học lần đầu và học lại! Nếu học viên trượt sau thi lại, kỳ sau học viên sẽ có một LuotHoc MỚI với MaLuotHocTruoc trỏ về lượt cũ để truy vết lịch sử đào tạo.',
-    columns: [
-      { name: 'MaLuotHoc', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã lượt học', domain: 'Duy nhất', example: 'LH001' },
-      { name: 'MaHV', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Học viên tham gia', domain: 'Tham chiếu HocVien', example: 'HV001', ref: { table: 'HocVien', column: 'MaHV' } },
-      { name: 'MaLHP', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Lớp học phần tham gia', domain: 'Tham chiếu LopHocPhan', example: 'LHP_CSDL_01', ref: { table: 'LopHocPhan', column: 'MaLHP' } },
-      { name: 'LoaiLuotHoc', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tính chất lượt học', domain: 'HOC_LAN_DAU, HOC_LAI, HOC_CAI_THIEN', example: 'HOC_LAN_DAU' },
-      { name: 'MaLuotHocTruoc', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Lượt học trước đó nếu là học lại (Quan hệ đệ quy)', domain: 'Tham chiếu LuotHoc', example: null, ref: { table: 'LuotHoc', column: 'MaLuotHoc' } },
-      { name: 'NgayPhanCong', type: 'DATE', key: null, nullable: false, description: 'Ngày xếp vào lớp học phần', domain: 'Date', example: '2025-09-02' },
-      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Trạng thái lượt học', domain: 'DANG_HOC, HOAN_THANH, HUY', example: 'HOAN_THANH' }
-    ],
-    constraints: [
-      'PK: MaLuotHoc',
-      'UQ: (MaHV, MaLHP) (Một học viên không thể có 2 lượt học trong cùng 1 lớp học phần)',
-      'FK: MaHV -> HocVien(MaHV)',
-      'FK: MaLHP -> LopHocPhan(MaLHP)',
-      'FK: MaLuotHocTruoc -> LuotHoc(MaLuotHoc)'
-    ]
-  },
-  {
-    id: 'BangDiem',
-    name: 'BangDiem',
-    groupId: 'score',
-    title: 'Bảng Điểm Tổng Hợp Cho Lượt Học',
-    description: 'Lưu điểm thành phần quá trình (CC, TX), điểm tổng kết sau khi chốt và cờ khóa bảo mật.',
-    justification: 'Một lượt học có duy nhất một bảng điểm tổng hợp. Khi chốt điểm, trạng thái khóa kích hoạt ngăn chặn sửa đổi trực tiếp.',
-    columns: [
-      { name: 'MaBangDiem', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã bảng điểm', domain: 'Duy nhất', example: 'BD001' },
-      { name: 'MaLuotHoc', type: 'VARCHAR(20)', key: 'FK, UQ', nullable: false, description: 'Gắn liền với lượt học', domain: 'Tham chiếu LuotHoc (Duy nhất)', example: 'LH001', ref: { table: 'LuotHoc', column: 'MaLuotHoc' } },
-      { name: 'DiemCC', type: 'DECIMAL(3,1)', key: null, nullable: true, description: 'Điểm chuyên cần (0.0 - 10.0)', domain: '0.0 - 10.0 hoặc NULL nếu chưa nhập', example: '8.0' },
-      { name: 'DiemTX', type: 'DECIMAL(3,1)', key: null, nullable: true, description: 'Điểm kiểm tra thường xuyên', domain: '0.0 - 10.0 hoặc NULL nếu chưa nhập', example: '7.0' },
-      { name: 'DiemTongKetChot', type: 'DECIMAL(3,1)', key: null, nullable: true, description: 'Điểm tổng kết chính thức được chốt', domain: '0.0 - 10.0 hoặc NULL', example: '6.5' },
-      { name: 'KetQuaChot', type: 'VARCHAR(20)', key: null, nullable: true, description: 'Đánh giá kết quả', domain: 'DAT, KHONG_DAT, CHUA_XET', example: 'DAT' },
-      { name: 'TrangThaiKhoa', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Trạng thái khóa bảng điểm', domain: 'DANG_MO, DA_KHOA, MO_KHOA_TAM', example: 'DA_KHOA' },
-      { name: 'NguoiChot', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Cán bộ thực hiện chốt điểm', domain: 'Tham chiếu TaiKhoan', example: 'TK_DAO_TAO', ref: { table: 'TaiKhoan', column: 'MaTaiKhoan' } },
-      { name: 'ThoiDiemChot', type: 'DATETIME', key: null, nullable: true, description: 'Thời điểm đóng sổ điểm', domain: 'DateTime', example: '2026-01-10 16:30:00' }
-    ],
-    constraints: [
-      'PK: MaBangDiem',
-      'UQ: MaLuotHoc (Quan hệ 1-1 giữa LuotHoc và BangDiem)',
-      'FK: MaLuotHoc -> LuotHoc(MaLuotHoc)',
-      'FK: NguoiChot -> TaiKhoan(MaTaiKhoan)',
-      'CHECK: DiemCC BETWEEN 0 AND 10 OR DiemCC IS NULL',
-      'CHECK: DiemTX BETWEEN 0 AND 10 OR DiemTX IS NULL',
-      'CHECK: DiemTongKetChot BETWEEN 0 AND 10 OR DiemTongKetChot IS NULL'
-    ]
-  },
-  {
-    id: 'LanThi',
-    name: 'LanThi',
-    groupId: 'score',
-    title: 'Chi Tiết Lần Thi Kết Thúc Học Phần',
-    description: 'Tách riêng từng lần thi (Lần 1, Lần 2 thi lại) cho một bảng điểm.',
-    justification: 'RẤT QUAN TRỌNG: Không dồn mọi lần thi vào 1 dòng bảng điểm! Giữ nguyên Điểm thi thực tế (DiemThiThucTe = 8.0) kể cả khi có trần 6.9; ghi nhận rõ số lần thi và tình trạng dự thi (Vắng mặt, Đình chỉ).',
-    columns: [
-      { name: 'MaLanThi', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã lần thi', domain: 'Duy nhất', example: 'LT001' },
-      { name: 'MaBangDiem', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Bảng điểm liên kết', domain: 'Tham chiếu BangDiem', example: 'BD001', ref: { table: 'BangDiem', column: 'MaBangDiem' } },
-      { name: 'SoLanThi', type: 'INT', key: null, nullable: false, description: 'Thứ tự lần thi', domain: '1 (Lần đầu), 2 (Thi lại)', example: '1' },
-      { name: 'NgayThi', type: 'DATE', key: null, nullable: true, description: 'Ngày thi thực tế', domain: 'Date', example: '2025-12-25' },
-      { name: 'DiemThiThucTe', type: 'DECIMAL(3,1)', key: null, nullable: true, description: 'Điểm chấm thực tế của bài thi', domain: '0.0 - 10.0 hoặc NULL nếu chưa thi', example: '6.0' },
-      { name: 'TrangThaiDuThi', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tình trạng dự thi', domain: 'DA_THI, VANG_CO_PHEP, VANG_KHONG_PHEP, DINH_CHI', example: 'DA_THI' },
-      { name: 'NguoiNhap', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Cán bộ nhập điểm bài thi', domain: 'Tham chiếu TaiKhoan', example: 'TK_DAO_TAO', ref: { table: 'TaiKhoan', column: 'MaTaiKhoan' } },
-      { name: 'ThoiDiemNhap', type: 'DATETIME', key: null, nullable: true, description: 'Thời điểm lưu điểm thi', domain: 'DateTime', example: '2025-12-26 09:00:00' }
-    ],
-    constraints: [
-      'PK: MaLanThi',
-      'UQ: (MaBangDiem, SoLanThi) (Trong 1 bảng điểm, không có 2 bản ghi cùng số lần thi)',
-      'FK: MaBangDiem -> BangDiem(MaBangDiem)',
-      'FK: NguoiNhap -> TaiKhoan(MaTaiKhoan)',
-      'CHECK: SoLanThi IN (1, 2)',
-      'CHECK: DiemThiThucTe BETWEEN 0 AND 10 OR DiemThiThucTe IS NULL'
-    ]
-  },
-
-  // ==========================================
-  // NHÓM D: KIỂM SOÁT VÀ LỊCH SỬ (2 bảng)
-  // ==========================================
-  {
-    id: 'YeuCauMoKhoa',
-    name: 'YeuCauMoKhoa',
-    groupId: 'audit',
-    title: 'Yêu Cầu Phê Duyệt Mở Khóa Điểm',
-    description: 'Quy trình đề xuất xin mở khóa điểm đã chốt để sửa sai sót, do Ban Giám đốc phê duyệt.',
-    justification: 'Một cờ khóa đơn giản không thể hiện được trách nhiệm giải trình. Bảng này lưu lý do sửa, người ký duyệt, số văn bản và thời hạn mở quyền (ví dụ chỉ được sửa trong 24h).',
-    columns: [
-      { name: 'MaYeuCau', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã yêu cầu mở khóa', domain: 'Duy nhất', example: 'YC_2026_001' },
-      { name: 'MaBangDiem', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Bảng điểm cần can thiệp', domain: 'Tham chiếu BangDiem', example: 'BD001', ref: { table: 'BangDiem', column: 'MaBangDiem' } },
-      { name: 'NguoiYeuCau', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Cán bộ làm đơn đề nghị', domain: 'Tham chiếu TaiKhoan', example: 'TK_DAO_TAO', ref: { table: 'TaiKhoan', column: 'MaTaiKhoan' } },
-      { name: 'ThoiDiemYeuCau', type: 'DATETIME', key: null, nullable: false, description: 'Thời điểm tạo yêu cầu', domain: 'DateTime', example: '2026-01-12 08:30:00' },
-      { name: 'LyDo', type: 'NVARCHAR(255)', key: null, nullable: false, description: 'Lý do xin mở khóa', domain: 'Văn bản giải trình', example: 'Chấm phúc khảo bài thi cuối kỳ của học viên' },
-      { name: 'MaVanBan', type: 'VARCHAR(50)', key: null, nullable: true, description: 'Số công văn / tờ trình', domain: 'Văn bản hành chính', example: 'TTr-DT-2026/04' },
-      { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Trạng thái xét duyệt', domain: 'CHO_DUYET, DA_DUYET, TU_CHOI, HET_HAN', example: 'DA_DUYET' },
-      { name: 'NguoiDuyet', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Thành viên Ban Giám đốc duyệt', domain: 'Tham chiếu TaiKhoan', example: 'TK_GIAM_DOC', ref: { table: 'TaiKhoan', column: 'MaTaiKhoan' } },
-      { name: 'ThoiDiemDuyet', type: 'DATETIME', key: null, nullable: true, description: 'Thời điểm chuẩn y', domain: 'DateTime', example: '2026-01-12 10:00:00' },
-      { name: 'HanDuocSua', type: 'DATETIME', key: null, nullable: true, description: 'Hạn chót quyền sửa có hiệu lực', domain: 'DateTime', example: '2026-01-13 10:00:00' },
-      { name: 'LyDoTuChoi', type: 'NVARCHAR(255)', key: null, nullable: true, description: 'Lý do không chấp thuận (nếu có)', domain: 'Văn bản', example: null }
-    ],
-    constraints: [
-      'PK: MaYeuCau',
-      'FK: MaBangDiem -> BangDiem(MaBangDiem)',
-      'FK: NguoiYeuCau -> TaiKhoan(MaTaiKhoan)',
-      'FK: NguoiDuyet -> TaiKhoan(MaTaiKhoan)'
-    ]
-  },
-  {
-    id: 'NhatKyDiem',
-    name: 'NhatKyDiem',
-    groupId: 'audit',
-    title: 'Nhật Ký Biến Động Điểm (Audit Trail)',
-    description: 'Lưu vết lịch sử mọi thao tác: Chốt điểm, Sửa điểm, Mở khóa, Tái khóa.',
-    justification: 'Ngăn chặn tiêu cực sửa điểm ngầm. Mỗi lần sửa điểm phải liên kết với Mã yêu cầu mở khóa, ghi rõ tên trường, giá trị cũ -> giá trị mới, người thực hiện và mốc thời gian.',
-    columns: [
-      { name: 'MaNhatKy', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã bản ghi nhật ký', domain: 'Duy nhất', example: 'LOG_001' },
-      { name: 'MaBangDiem', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Bảng điểm bị tác động', domain: 'Tham chiếu BangDiem', example: 'BD001', ref: { table: 'BangDiem', column: 'MaBangDiem' } },
-      { name: 'MaLanThi', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Lần thi bị sửa (nếu sửa điểm thi)', domain: 'Tham chiếu LanThi', example: 'LT001', ref: { table: 'LanThi', column: 'MaLanThi' } },
-      { name: 'MaYeuCau', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Căn cứ theo yêu cầu mở khóa nào', domain: 'Tham chiếu YeuCauMoKhoa', example: 'YC_2026_001', ref: { table: 'YeuCauMoKhoa', column: 'MaYeuCau' } },
-      { name: 'LoaiThaoTac', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Hành động thực hiện', domain: 'NHAP_DIEM, CHOT_DIEM, MO_KHOA, SUA_DIEM, TAI_KHOA', example: 'SUA_DIEM' },
-      { name: 'TenTruong', type: 'VARCHAR(50)', key: null, nullable: true, description: 'Tên cột dữ liệu bị thay đổi', domain: 'DiemCC, DiemTX, DiemThiThucTe...', example: 'DiemThiThucTe' },
-      { name: 'GiaTriCu', type: 'VARCHAR(50)', key: null, nullable: true, description: 'Giá trị ban đầu trước khi sửa', domain: 'Văn bản', example: '3.0' },
-      { name: 'GiaTriMoi', type: 'VARCHAR(50)', key: null, nullable: true, description: 'Giá trị mới được cập nhật', domain: 'Văn bản', example: '5.5' },
-      { name: 'NguoiThucHien', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Người thực hiện thao tác', domain: 'Tham chiếu TaiKhoan', example: 'TK_DAO_TAO', ref: { table: 'TaiKhoan', column: 'MaTaiKhoan' } },
-      { name: 'ThoiDiem', type: 'DATETIME', key: null, nullable: false, description: 'Thời điểm ghi nhận', domain: 'DateTime', example: '2026-01-12 10:15:00' },
-      { name: 'LyDo', type: 'NVARCHAR(255)', key: null, nullable: true, description: 'Giải trình chi tiết của người sửa', domain: 'Văn bản', example: 'Cập nhật điểm phúc khảo theo quyết định Hội đồng' }
-    ],
-    constraints: [
-      'PK: MaNhatKy',
-      'FK: MaBangDiem -> BangDiem(MaBangDiem)',
-      'FK: MaLanThi -> LanThi(MaLanThi)',
-      'FK: MaYeuCau -> YeuCauMoKhoa(MaYeuCau)',
-      'FK: NguoiThucHien -> TaiKhoan(MaTaiKhoan)',
-      'Ràng buộc bất biến: Bảng nhật ký chỉ cho INSERT, cấm UPDATE/DELETE trong nghiệp vụ thường'
+      'PK: MaDotThi',
+      'FK: MaPhanCong -> PHAN_CONG(MaPhanCong)'
     ]
   }
 ];
 
-// Ràng buộc toàn vẹn cốt lõi cần giải thích
+// 12 Ràng buộc toàn vẹn cốt lõi
 export const INTEGRITY_CONSTRAINTS = [
   {
     id: 'c1',
-    title: 'Cây đơn vị quân sự không chu trình (Acyclic Hierarchy)',
+    title: 'Cơ cấu đơn vị quân sự phi chu trình',
     type: 'Toàn vẹn quan hệ',
-    target: 'DonVi',
-    description: 'Một đơn vị không thể tự làm cha của chính mình (MaDonViCha <> MaDonVi) và chuỗi quan hệ phụ thuộc không được tạo thành vòng lặp vô tận.',
-    implementation: 'CHECK constraint cấp độ bảng & Recursive CTE validation khi thao tác.'
+    target: 'DON_VI',
+    description: 'Một đơn vị không thể tự làm cha của chính mình (MaDonViCha <> MaDonVi) và chuỗi phân cấp không tạo thành vòng lặp vô tận.',
+    implementation: 'CHECK constraint cấp độ bảng & Recursive CTE validation.'
   },
   {
     id: 'c2',
-    title: 'Không trùng lặp lượt học trong cùng lớp học phần',
-    type: 'Khóa duy nhất',
-    target: 'LuotHoc',
-    description: 'Một học viên chỉ có duy nhất một lượt học trong cùng một lớp học phần cụ thể.',
-    implementation: 'UNIQUE (MaHV, MaLHP).'
+    title: 'Kế thừa nhân thân duy nhất (Generalization Integrity)',
+    type: 'Khóa duy nhất 1-1',
+    target: 'HOC_VIEN, GIANG_VIEN, USER',
+    description: 'Mỗi bản ghi trong NGUOI chỉ có thể liên kết với tối đa 1 bản ghi Học viên hoặc Giảng viên, và duy nhất 1 tài khoản User.',
+    implementation: 'UNIQUE constraint trên trường MaNguoi ở các bảng con.'
   },
   {
     id: 'c3',
-    title: 'Bảng điểm gắn duy nhất với một lượt học',
-    type: 'Quan hệ 1 - 1',
-    target: 'BangDiem',
-    description: 'Mỗi lượt học có tối đa một bảng điểm; không được phép tồn tại 2 bảng điểm cho cùng 1 lượt học.',
-    implementation: 'UNIQUE (MaLuotHoc) trên bảng BangDiem.'
+    title: 'Không trùng lặp phân công giảng dạy',
+    type: 'Khóa duy nhất kết hợp',
+    target: 'PHAN_CONG',
+    description: 'Trong cùng một học kỳ, một môn học của một lớp và nhóm học chỉ được phân công cho 1 giảng viên phụ trách chính.',
+    implementation: 'UNIQUE (MaMonHoc, MaLop, MaHocKy, NhomHoc).'
   },
   {
     id: 'c4',
-    title: 'Giới hạn số lần thi trong một lượt học',
-    type: 'Khóa kết hợp & Check',
-    target: 'LanThi',
-    description: 'Mỗi bảng điểm có tối đa 2 lần thi (SoLanThi IN (1, 2)) và không trùng số lần thi trong cùng bảng điểm.',
-    implementation: 'UNIQUE (MaBangDiem, SoLanThi) và CHECK (SoLanThi BETWEEN 1 AND 2).'
+    title: 'Một học viên chỉ có 1 kết quả trong cùng một phân công',
+    type: 'Toàn vẹn nghiệp vụ',
+    target: 'KET_QUA_HOC_TAP',
+    description: 'Một quân nhân trong một lớp học phần chỉ có đúng một bản ghi kết quả học tập tổng hợp.',
+    implementation: 'UNIQUE (MaHV, MaPhanCong).'
   },
   {
     id: 'c5',
-    title: 'Miền giá trị điểm số hợp lệ',
-    type: 'Miền giá trị CHECK',
-    target: 'BangDiem, LanThi',
-    description: 'Tất cả các điểm CC, TX, Điểm thi thực tế và Điểm tổng kết nếu đã nhập phải nằm trong thang điểm [0.0, 10.0]. Điểm 0.0 khác NULL (chưa có điểm).',
+    title: 'Miền giá trị thang điểm [0.0 - 10.0]',
+    type: 'Ràng buộc CHECK miền giá trị',
+    target: 'DIEM, KET_QUA_HOC_TAP',
+    description: 'Mọi điểm thành phần và điểm tổng kết phải nằm trong khoảng [0.0, 10.0]. Điểm 0.0 khác điểm NULL (chưa có điểm).',
     implementation: 'CHECK (Diem >= 0.0 AND Diem <= 10.0).'
   },
   {
     id: 'c6',
-    title: 'Tổng trọng số đánh giá phải tuyệt đối bằng 1.0',
-    type: 'Ràng buộc nghiệp vụ',
-    target: 'QuyTacDanhGia',
-    description: 'Tổng trọng số thành phần Chuyên cần, Thường xuyên và Cuối kỳ phải bằng 1.00 (khắc phục lỗi 0.1 + 0.4 + 0.6 = 1.1 trong đề bài ban đầu).',
-    implementation: 'CHECK (TrongSoCC + TrongSoTX + TrongSoCK = 1.00).'
+    title: 'Tổng trọng số các loại điểm bằng 1.0',
+    type: 'Toàn vẹn cấu hình',
+    target: 'LOAI_DIEM',
+    description: 'Tổng trọng số của các loại điểm thành phần hợp lệ trong cùng chương trình đào tạo phải bằng 1.00 (100%).',
+    implementation: 'CHECK constraint / Trigger kiểm tra cấu hình LOAI_DIEM.'
   },
   {
     id: 'c7',
-    title: 'Chỉ chốt điểm khi đã có đầy đủ điểm hợp lệ',
-    type: 'Quy tắc nghiệp vụ',
-    target: 'BangDiem',
-    description: 'Bảng điểm chỉ được chuyển sang TrangThaiKhoa = "DA_KHOA" khi DiemCC, DiemTX và ít nhất LanThi (SoLanThi = 1) đã có điểm.',
-    implementation: 'Application Logic / Database Trigger kiểm tra trước khi UPDATE.'
+    title: 'Giảng viên chỉ nhập điểm các lớp mình được phân công',
+    type: 'Phân quyền hàng (Row-Level Security)',
+    target: 'DIEM, PHAN_CONG',
+    description: 'Khi một Giảng viên đăng nhập, hệ thống chỉ cho phép nhập điểm vào các bản ghi KET_QUA_HOC_TAP có MaPhanCong trỏ về chính MaGV của giảng viên đó.',
+    implementation: 'Security View / Trigger kiểm tra MaNguoiNhap = PHAN_CONG.MaGV.'
   },
   {
     id: 'c8',
-    title: 'Chỉ được thi lại khi không đạt lần đầu',
+    title: 'Tổ chức đợt thi lại chỉ cho học viên chưa đạt',
     type: 'Quy tắc nghiệp vụ',
-    target: 'LanThi',
-    description: 'Lần thi số 2 chỉ được phép khởi tạo nếu Lần thi 1 đã có kết quả và không đạt yêu cầu theo quy tắc áp dụng.',
-    implementation: 'Stored Procedure hoặc Trigger kiểm tra kết quả Lần 1.'
+    target: 'DOT_THI, KET_QUA_HOC_TAP',
+    description: 'Đợt thi kết thúc môn có LoaiDotThi = THI_LAI chỉ được lập danh sách đối với những học viên có kết quả lần 1 dưới ngưỡng đạt.',
+    implementation: 'Stored Procedure lọc danh sách thí sinh dự thi.'
   },
   {
     id: 'c9',
-    title: 'Sửa điểm đã khóa phải có phê duyệt còn hiệu lực',
-    type: 'Toàn vẹn bảo mật',
-    target: 'BangDiem, NhatKyDiem',
-    description: 'Để cập nhật điểm của một BangDiem đang ở trạng thái khóa, hệ thống bắt buộc phải kiểm tra tồn tại một bản ghi YeuCauMoKhoa có TrangThai = "DA_DUYET" và ThoiDiem <= HanDuocSua.',
-    implementation: 'Trigger trên BangDiem & NhatKyDiem kiểm tra điều kiện mở khóa.'
+    title: 'Năm kết thúc khóa học không trước năm bắt đầu',
+    type: 'Toàn vẹn thời gian',
+    target: 'KHOA_DAO_TAO, HOC_KY',
+    description: 'NamKetThuc >= NamBatDau và NgayKetThuc >= NgayBatDau.',
+    implementation: 'CHECK (NamKetThuc >= NamBatDau).'
   },
   {
     id: 'c10',
-    title: 'Học lại phải bảo lưu lịch sử lượt học cũ',
-    type: 'Quan hệ đệ quy',
-    target: 'LuotHoc',
-    description: 'Khi tạo LuotHoc với LoaiLuotHoc = "HOC_LAI", trường MaLuotHocTruoc phải trỏ về lượt học trước đó của chính học viên đó ở cùng học phần; cấm tạo vòng lặp tham chiếu.',
-    implementation: 'Trigger kiểm tra tính nhất quán của MaHV và MaHP giữa 2 lượt học.'
+    title: 'Giảng viên phải thuộc Bộ môn trực thuộc đơn vị hợp lệ',
+    type: 'Toàn vẹn tham chiếu',
+    target: 'GIANG_VIEN, BO_MON, DON_VI',
+    description: 'Giảng viên gắn với Bộ môn, Bộ môn phải gắn với Đơn vị Khoa hợp lệ.',
+    implementation: 'Foreign Key cascade validation.'
   },
   {
     id: 'c11',
-    title: 'Lần thi trong nhật ký phải thuộc đúng bảng điểm',
-    type: 'Toàn vẹn tham chiếu chéo',
-    target: 'NhatKyDiem',
-    description: 'Nếu bản ghi NhatKyDiem có MaLanThi, thì MaLanThi đó bắt buộc phải có MaBangDiem trùng khớp với MaBangDiem của dòng nhật ký.',
-    implementation: 'Trigger kiểm tra tính nhất quán của khóa ngoại kép.'
+    title: 'Bảo mật quyền truy cập theo mô hình RBAC',
+    type: 'Phân quyền hệ thống',
+    target: 'USER_ROLE, ROLE_PERMISSION',
+    description: 'Các quyền thực thi phải được gán thông qua bảng trung gian ROLE và PERMISSION, không phân quyền tĩnh.',
+    implementation: 'Mô hình chuẩn RBAC với 2 bảng quan hệ N-N.'
   },
   {
     id: 'c12',
-    title: 'Bảo mật phạm vi dữ liệu của Chỉ huy đơn vị',
-    type: 'Phân quyền phạm vi',
-    target: 'PhanCongQuanLy',
-    description: 'Tài khoản chỉ huy chỉ có quyền xem dữ liệu của những học viên thuộc các lớp thuộc biên chế đơn vị (hoặc đơn vị con trực thuộc) mà chỉ huy đó đang được phân công quản lý còn hiệu lực.',
-    implementation: 'Security View / Row-Level Security (RLS) dựa trên cây đơn vị.'
+    title: 'Chỉ huy chỉ xem học viên thuộc đơn vị mình',
+    type: 'Phân quyền phạm vi đơn vị',
+    target: 'HOC_VIEN, LOP_HOC, DON_VI',
+    description: 'Chỉ huy đơn vị chỉ được phép truy vấn danh sách điểm của học viên thuộc các lớp có MaDonVi nằm trong cây phân cấp của mình.',
+    implementation: 'Security Policy CTE truy vấn theo cây DON_VI.'
   }
 ];

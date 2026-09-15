@@ -52,10 +52,10 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
           MÔ HÌNH DỮ LIỆU QUAN HỆ (RELATIONAL SCHEMA)
         </div>
         <h2 className="section-title">
-          Mô Hình Quan Hệ 19 Bảng & Ràng Buộc Khóa
+          Mô Hình Quan Hệ 23 Bảng (R1 – R23) & Ràng Buộc Khóa
         </h2>
         <p className="section-desc">
-          Bản đặc tả 19 bảng quan hệ chuẩn hóa. Nhấn vào bất kỳ <strong>Khóa ngoại [FK]</strong> để truy vết ngay liên kết tham chiếu và mở phân tích toàn vẹn ở bảng bên phải.
+          Bản đặc tả 23 bảng quan hệ chuẩn hóa (R1 đến R23) tích hợp đầy đủ Giảng viên, Bộ môn, Phân công giảng dạy, Loại điểm và Khảo thí. Nhấn vào bất kỳ <strong>Khóa ngoại [FK]</strong> để truy vết ngay liên kết tham chiếu và mở phân tích toàn vẹn ở bảng bên phải.
         </p>
       </div>
 
@@ -66,7 +66,7 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
           className={`btn ${activeTab === 'schema' ? 'btn-primary' : 'btn-secondary'}`}
         >
           <Database size={16} />
-          19 Bảng Quan Hệ Chi Tiết
+          23 Bảng Quan Hệ (R1 – R23)
         </button>
         <button
           onClick={() => setActiveTab('er_to_relational')}
@@ -78,7 +78,7 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
       </div>
 
       {/* ========================================================= */}
-      {/* TAB 1: DANH SÁCH 19 BẢNG */}
+      {/* TAB 1: DANH SÁCH 23 BẢNG */}
       {/* ========================================================= */}
       {activeTab === 'schema' && (
         <>
@@ -88,7 +88,7 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
               onClick={() => setSelectedGroup('all')}
               className={`btn btn-sm ${selectedGroup === 'all' ? 'btn-primary' : 'btn-secondary'}`}
             >
-              Tất Cả 19 Bảng
+              Tất Cả 23 Bảng (R1 – R23)
             </button>
             {groups.map(grp => (
               <button
@@ -245,13 +245,13 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
             <div className="card">
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-blue)', fontWeight: 700, marginBottom: 8 }}>
                 <span className="tag tag-blue">QUY TẮC 1</span>
-                Thực Thể ➔ Bảng Quan Hệ
+                Thực Thể Mạnh ➔ Bảng Quan Hệ
               </div>
               <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 8 }}>
-                Mỗi thực thể mạnh (Strong Entity) trong ER được ánh xạ thành một bảng quan hệ riêng. Thuộc tính định danh của thực thể trở thành Khóa chính (Primary Key - PK) của bảng.
+                Mỗi thực thể mạnh trong ER được ánh xạ thành một bảng quan hệ riêng. Thuộc tính định danh của thực thể trở thành Khóa chính (Primary Key - PK) của bảng.
               </p>
               <div style={{ background: 'rgba(8, 13, 24, 0.6)', padding: '8px 12px', borderRadius: 6, fontSize: '0.8rem', color: 'var(--color-emerald)' }}>
-                Ví dụ: Thực thể <code>HocPhan</code> ➔ Bảng <code>HocPhan(MaHP [PK], TenHP, SoTinChi...)</code>
+                Ví dụ: Thực thể <code>MON_HOC</code> ➔ Bảng <code>MON_HOC(MaMonHoc [PK], TenMonHoc, SoTinChi, SoTiet...)</code>
               </div>
             </div>
 
@@ -265,7 +265,7 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
                 Trong mối quan hệ 1 - N, Khóa chính của bảng phía "1" được đưa vào bảng phía "N" làm Khóa ngoại (Foreign Key - FK).
               </p>
               <div style={{ background: 'rgba(8, 13, 24, 0.6)', padding: '8px 12px', borderRadius: 6, fontSize: '0.8rem', color: 'var(--color-emerald)' }}>
-                Ví dụ: 1 Lớp học có nhiều Học viên ➔ Đưa <code>MaLop [FK]</code> vào bảng <code>HocVien</code>.
+                Ví dụ: 1 Bộ môn có nhiều Giảng viên ➔ Đưa <code>MaBoMon [FK]</code> vào bảng <code>GIANG_VIEN</code>. 1 Lớp có nhiều Học viên ➔ Đưa <code>MaLop [FK]</code> vào <code>HOC_VIEN</code>.
               </div>
             </div>
 
@@ -273,13 +273,13 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
             <div className="card">
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-emerald)', fontWeight: 700, marginBottom: 8 }}>
                 <span className="tag tag-emerald">QUY TẮC 3</span>
-                Quan Hệ N - N ➔ Bảng Liên Kết Trung Gian
+                Quan Hệ N - N ➔ Bảng Liên Kết Mắt Xích
               </div>
               <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 8 }}>
-                Mối quan hệ N - N không thể biểu diễn trực tiếp bằng khóa ngoại ở hai bảng ban đầu mà phải tách thành một Bảng liên kết trung gian chứa khóa chính của cả 2 bên.
+                Mối quan hệ N - N được tách thành bảng liên kết trung gian chứa khóa chính của các thực thể tham gia.
               </p>
               <div style={{ background: 'rgba(8, 13, 24, 0.6)', padding: '8px 12px', borderRadius: 6, fontSize: '0.8rem', color: 'var(--color-emerald)' }}>
-                Ví dụ: Tài khoản và Vai trò ➔ Bảng liên kết <code>TaiKhoanVaiTro(MaTaiKhoan [PK,FK], MaVaiTro [PK,FK])</code>.
+                Ví dụ: Giảng viên, Môn học, Lớp học và Học kỳ ➔ Bảng <code>PHAN_CONG(MaPhanCong [PK], MaGV [FK], MaMonHoc [FK], MaLop [FK], MaHocKy [FK]...)</code>. Người dùng & Vai trò ➔ <code>USER_ROLE(MaUser, MaRole)</code>.
               </div>
             </div>
 
@@ -287,13 +287,27 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
             <div className="card">
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-amber)', fontWeight: 700, marginBottom: 8 }}>
                 <span className="tag tag-amber">QUY TẮC 4</span>
-                Quan Hệ Đệ Quy (Recursive) ➔ Khóa Ngoại Tự Tham Chiếu
+                Quan Hệ Đệ Quy (Recursive) ➔ Tự Tham Chiếu
               </div>
               <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 8 }}>
-                Khi một thực thể có liên kết với chính nó (ví dụ phân cấp cha - con), tạo một cột Khóa ngoại trỏ ngược lại Khóa chính của chính bảng đó. Cho phép giá trị NULL tại nút gốc.
+                Khi một thực thể có liên kết với chính nó (phân cấp cây đơn vị), tạo cột Khóa ngoại trỏ ngược lại Khóa chính của chính bảng đó.
               </p>
               <div style={{ background: 'rgba(8, 13, 24, 0.6)', padding: '8px 12px', borderRadius: 6, fontSize: '0.8rem', color: 'var(--color-emerald)' }}>
-                Ví dụ: <code>DonVi(MaDonVi [PK], MaDonViCha [FK trỏ về DonVi])</code> hoặc <code>LuotHoc(MaLuotHoc, MaLuotHocTruoc)</code>.
+                Ví dụ: <code>DON_VI(MaDonVi [PK], TenDonVi, LoaiDonVi, MaDonViCha [FK trỏ về DON_VI])</code>.
+              </div>
+            </div>
+
+            {/* Quy tắc 5 */}
+            <div className="card" style={{ gridColumn: 'span 2' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-rose)', fontWeight: 700, marginBottom: 8 }}>
+                <span className="tag tag-rose">QUY TẮC 5 (CHUYÊN BIỆT HÓA / KẾ THỪA IS-A)</span>
+                Thực Thể Cha ➔ Thực Thể Con Kế Thừa (Học Viên & Giảng Viên)
+              </div>
+              <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: 1.5, marginBottom: 8 }}>
+                Áp dụng kỹ thuật Generalization / Specialization: Thông tin dùng chung (Họ tên, Ngày sinh, Giới tính, Quê quán, SĐT, Email) được gom vào thực thể cha <code>NGUOI (R4)</code>. Các thực thể con chỉ lưu thuộc tính đặc thù riêng và sử dụng <code>MaNguoi [FK, UQ]</code> để liên kết 1 - 1.
+              </p>
+              <div style={{ background: 'rgba(8, 13, 24, 0.6)', padding: '8px 12px', borderRadius: 6, fontSize: '0.8rem', color: 'var(--color-emerald)' }}>
+                Ví dụ: <code>HOC_VIEN(MaHV [PK], MaNguoi [FK, UQ], MaLop, MaCapBac...)</code> và <code>GIANG_VIEN(MaGV [PK], MaNguoi [FK, UQ], MaBoMon, HocVi, ChuyenMon...)</code>.
               </div>
             </div>
           </div>

@@ -48,7 +48,7 @@ export default function Section7DataDictionary({ onSelectTable, onOpenInspector 
           Từ Điển Dữ Liệu & Ràng Buộc Toàn Vẹn
         </h2>
         <p className="section-desc">
-          Bảng tra cứu toàn diện cấu trúc trường dữ liệu của 19 bảng và hệ thống 12 quy tắc toàn vẹn cốt lõi, phân định rõ ràng ràng buộc nào do CSDL đảm nhiệm và ràng buộc nào cần xử lý nghiệp vụ.
+          Bảng tra cứu toàn diện cấu trúc trường dữ liệu của 23 bảng quan hệ (R1 – R23) và hệ thống 12 quy tắc toàn vẹn cốt lõi, phân định rõ ràng ràng buộc nào do CSDL đảm nhiệm và ràng buộc nào cần xử lý nghiệp vụ.
         </p>
       </div>
 
@@ -92,7 +92,7 @@ export default function Section7DataDictionary({ onSelectTable, onOpenInspector 
                   outline: 'none'
                 }}
               >
-                <option value="ALL">Tất cả 19 bảng ({allAttributes.length} thuộc tính)</option>
+                <option value="ALL">Tất cả 23 bảng ({allAttributes.length} thuộc tính)</option>
                 {TABLES.map(t => (
                   <option key={t.id} value={t.name}>{t.name} ({t.columns.length} cột)</option>
                 ))}

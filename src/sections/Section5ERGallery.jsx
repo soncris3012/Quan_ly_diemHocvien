@@ -159,19 +159,34 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
           </div>
         </div>
 
-        {/* Hàng 3: Tài Khoản */}
+        {/* Hàng 3: Giảng viên & Tài khoản ban đầu */}
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <div style={{ background: 'rgba(251, 191, 36, 0.1)', border: '1.5px solid var(--color-amber)', borderRadius: 8, padding: '10px 14px', width: 170 }}>
-            <div style={{ fontWeight: 700, color: 'var(--color-amber)', fontSize: '0.88rem' }}>TAI_KHOAN</div>
+          <div style={{ background: 'rgba(167, 139, 250, 0.1)', border: '1.5px solid var(--color-purple)', borderRadius: 8, padding: '10px 14px', width: 170 }}>
+            <div style={{ fontWeight: 700, color: 'var(--color-purple)', fontSize: '0.88rem' }}>GIANG_VIEN</div>
             {showAttributes && (
               <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                • <u>MaTaiKhoan</u> (PK)<br/>• TenDangNhap<br/>• MatKhau<br/>• VaiTro (Chỉ huy / Đào tạo)
+                • <u>MaGV</u> (PK)<br/>• HoTen<br/>• HocVi<br/>• MaBoMon
               </div>
             )}
           </div>
 
-          <div style={{ fontSize: '0.76rem', color: 'var(--text-dim)', fontStyle: 'italic' }}>
-            ◄ Chưa có bảng liên kết phân công đơn vị; chỉ huy không có ranh giới xem điểm rõ ràng.
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--text-dim)', fontSize: '0.75rem' }}>
+            <span>(1)</span>
+            <span>─────[Dạy cứng]─────➔</span>
+            <span>(N)</span>
+          </div>
+
+          <div style={{ background: 'rgba(251, 191, 36, 0.1)', border: '1.5px solid var(--color-amber)', borderRadius: 8, padding: '10px 14px', width: 190 }}>
+            <div style={{ fontWeight: 700, color: 'var(--color-amber)', fontSize: '0.88rem' }}>USER (Chưa chuẩn RBAC)</div>
+            {showAttributes && (
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
+                • <u>MaUser</u> (PK)<br/>• TenDangNhap<br/>• MatKhau<br/>• VaiTro (Cờ văn bản)
+              </div>
+            )}
+          </div>
+
+          <div style={{ fontSize: '0.76rem', color: 'var(--text-dim)', fontStyle: 'italic', maxWidth: 200 }}>
+            ◄ Chưa có bảng liên kết phân công PHAN_CONG theo học kỳ và nhóm học; chưa có NGUOI dùng chung.
           </div>
         </div>
       </div>
@@ -179,7 +194,7 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
   };
 
   // =========================================================================
-  // RENDER: BẢN CẢI TIẾN CÓ AI HỖ TRỢ & HOÀN THIỆN
+  // RENDER: BẢN CẢI TIẾN CÓ AI HỖ TRỢ & HOÀN THIỆN (MÔ HÌNH 23 BẢNG R1-R23)
   // =========================================================================
   const renderEnhancedDiagram = (isLarge = false) => {
     return (
@@ -190,132 +205,124 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
           transition: 'transform 0.2s',
           display: 'flex',
           flexDirection: 'column',
-          gap: 16,
-          minWidth: 560
+          gap: 18,
+          minWidth: 640
         }}
       >
-        {/* Hàng 1: Phân hệ Tổ chức & Chỉ huy */}
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        {/* Hàng 1: NGUOI kế thừa -> HOC_VIEN & GIANG_VIEN */}
+        <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
           <div 
-            onClick={() => onSelectTable('DonVi')} 
+            onClick={() => onSelectTable('NGUOI')} 
+            className="card card-clickable" 
+            style={{ padding: '8px 12px', background: 'rgba(56, 189, 248, 0.15)', borderColor: 'var(--color-blue)', width: 160 }}
+          >
+            <span className="tag tag-blue" style={{ fontSize: '0.62rem' }}>THỰC THỂ CHA (R4)</span>
+            <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.85rem' }}>NGUOI</div>
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaNguoi [PK], HoTen, NgaySinh, QueQuan</div>}
+          </div>
+
+          <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>──(IS-A)──➔</div>
+
+          <div 
+            onClick={() => onSelectTable('HOC_VIEN')} 
             className="card card-clickable" 
             style={{ padding: '8px 12px', background: 'rgba(56, 189, 248, 0.1)', borderColor: 'var(--color-blue)', width: 150 }}
           >
-            <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.85rem' }}>DonVi (Đệ quy)</div>
-            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaDonVi, MaDonViCha</div>}
+            <span className="tag tag-blue" style={{ fontSize: '0.62rem' }}>HỌC VIÊN (R14)</span>
+            <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.85rem' }}>HOC_VIEN</div>
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaHV [PK], MaNguoi, MaLop, MaCapBac</div>}
           </div>
 
-          <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>──(1:N)──➔</div>
-
-          {showDiff && (
-            <div 
-              onClick={() => onSelectTable('PhanCongQuanLy')} 
-              className="card card-clickable" 
-              style={{ padding: '8px 12px', background: 'rgba(251, 191, 36, 0.15)', borderColor: 'var(--color-amber)', boxShadow: '0 0 10px rgba(251, 191, 36, 0.2)', width: 170 }}
-              title="Thực thể mới bổ sung để phân quyền chỉ huy"
-            >
-              <span className="tag tag-amber" style={{ fontSize: '0.62rem' }}>+ BỔ SUNG AI</span>
-              <div style={{ fontWeight: 700, color: 'var(--color-amber)', fontSize: '0.85rem' }}>PhanCongQuanLy</div>
-              {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaTaiKhoan, MaDonVi, TuNgay</div>}
-            </div>
-          )}
-
-          <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>──(1:N)──➔</div>
+          <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>và</div>
 
           <div 
-            onClick={() => onSelectTable('LopHoc')} 
+            onClick={() => onSelectTable('GIANG_VIEN')} 
             className="card card-clickable" 
-            style={{ padding: '8px 12px', background: 'rgba(56, 189, 248, 0.1)', borderColor: 'var(--color-blue)', width: 140 }}
+            style={{ padding: '8px 12px', background: 'rgba(167, 139, 250, 0.15)', borderColor: 'var(--color-purple)', width: 170, boxShadow: '0 0 12px rgba(167, 139, 250, 0.25)' }}
           >
-            <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.85rem' }}>LopHoc</div>
-            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaLop, MaDonVi</div>}
+            <span className="tag tag-purple" style={{ fontSize: '0.62rem' }}>GIẢNG VIÊN (R16) ★</span>
+            <div style={{ fontWeight: 700, color: 'var(--color-purple)', fontSize: '0.85rem' }}>GIANG_VIEN</div>
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaGV [PK], MaNguoi, MaBoMon, HocVi</div>}
           </div>
         </div>
 
-        {/* Hàng 2: Trọng tâm Đào tạo & Quản lý Lượt học */}
-        <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        {/* Hàng 2: Bộ Môn & Phân Công Giảng Dạy */}
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <div 
-            onClick={() => onSelectTable('HocVien')} 
+            onClick={() => onSelectTable('BO_MON')} 
             className="card card-clickable" 
-            style={{ padding: '8px 12px', background: 'rgba(56, 189, 248, 0.1)', borderColor: 'var(--color-blue)', width: 120 }}
+            style={{ padding: '8px 12px', background: 'rgba(56, 189, 248, 0.1)', borderColor: 'var(--color-blue)', width: 140 }}
           >
-            <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.85rem' }}>HocVien</div>
+            <span className="tag tag-blue" style={{ fontSize: '0.62rem' }}>BỘ MÔN (R15)</span>
+            <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.85rem' }}>BO_MON</div>
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaBoMon [PK], MaDonVi</div>}
           </div>
 
           <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>──(1:N)──➔</div>
 
-          {/* THỰC THỂ LUOTHOC CỐT LÕI */}
+          {/* MẮT XÍCH PHAN_CONG */}
           <div 
-            onClick={() => onSelectTable('LuotHoc')} 
+            onClick={() => onSelectTable('PHAN_CONG')} 
             className="card card-clickable" 
             style={{ 
               padding: '10px 14px', 
               background: 'rgba(52, 211, 153, 0.2)', 
               borderColor: 'var(--color-emerald)',
               boxShadow: '0 0 15px rgba(52, 211, 153, 0.3)',
-              width: 170
+              width: 200
             }}
           >
-            <span className="tag tag-emerald" style={{ fontSize: '0.62rem' }}>ĐỘT PHÁ KIẾN TRÚC</span>
-            <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '0.9rem' }}>LuotHoc (Đệ quy)</div>
-            {showAttributes && <div style={{ fontSize: '0.7rem', color: '#fff' }}>MaLuotHoc, MaHV, MaLHP, MaLuotHocTruoc</div>}
-          </div>
-
-          <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>──(1:1)──➔</div>
-
-          {/* BẢNG ĐIỂM */}
-          <div 
-            onClick={() => onSelectTable('BangDiem')} 
-            className="card card-clickable" 
-            style={{ padding: '8px 12px', background: 'rgba(52, 211, 153, 0.1)', borderColor: 'var(--color-emerald)', width: 140 }}
-          >
-            <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '0.85rem' }}>BangDiem</div>
-            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>DiemCC, DiemTX, DiemTongKet</div>}
+            <span className="tag tag-emerald" style={{ fontSize: '0.62rem' }}>MẮT XÍCH TRUNG TÂM (R19)</span>
+            <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '0.9rem' }}>PHAN_CONG</div>
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: '#fff' }}>MaPhanCong [PK], MaGV, MaMonHoc, MaLop, MaHocKy, NhomHoc</div>}
           </div>
 
           <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>──(1:N)──➔</div>
 
-          {/* TÁCH LANTHI */}
+          {/* KẾT QUẢ HỌC TẬP */}
           <div 
-            onClick={() => onSelectTable('LanThi')} 
+            onClick={() => onSelectTable('KET_QUA_HOC_TAP')} 
             className="card card-clickable" 
-            style={{ padding: '8px 12px', background: 'rgba(52, 211, 153, 0.15)', borderColor: 'var(--color-emerald)', width: 140 }}
+            style={{ padding: '8px 12px', background: 'rgba(52, 211, 153, 0.1)', borderColor: 'var(--color-emerald)', width: 160 }}
           >
-            <span className="tag tag-emerald" style={{ fontSize: '0.62rem' }}>+ TÁCH LẦN THI</span>
-            <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '0.85rem' }}>LanThi (1, 2)</div>
-            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>DiemThiThucTe, SoLanThi</div>}
+            <span className="tag tag-emerald" style={{ fontSize: '0.62rem' }}>KẾT QUẢ (R21)</span>
+            <div style={{ fontWeight: 700, color: 'var(--color-emerald)', fontSize: '0.85rem' }}>KET_QUA_HOC_TAP</div>
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaKQ [PK], MaHV, DiemTongKet, XepLoai</div>}
           </div>
         </div>
 
-        {/* Hàng 3: Kiểm soát mở khóa & Audit Trail */}
+        {/* Hàng 3: Loại Điểm, Điểm Thành Phần & Đợt Thi */}
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <div 
-            onClick={() => onSelectTable('QuyTacDanhGia')} 
-            className="card card-clickable" 
-            style={{ padding: '8px 12px', background: 'rgba(167, 139, 250, 0.15)', borderColor: 'var(--color-purple)', width: 150 }}
-          >
-            <span className="tag tag-purple" style={{ fontSize: '0.62rem' }}>+ PHIÊN BẢN HÓA</span>
-            <div style={{ fontWeight: 700, color: 'var(--color-purple)', fontSize: '0.85rem' }}>QuyTacDanhGia</div>
-            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>TrongSo, NguongCK, TranDiem</div>}
-          </div>
-
-          <div 
-            onClick={() => onSelectTable('YeuCauMoKhoa')} 
+            onClick={() => onSelectTable('LOAI_DIEM')} 
             className="card card-clickable" 
             style={{ padding: '8px 12px', background: 'rgba(251, 191, 36, 0.15)', borderColor: 'var(--color-amber)', width: 150 }}
           >
-            <span className="tag tag-amber" style={{ fontSize: '0.62rem' }}>+ DUYỆT BGĐ</span>
-            <div style={{ fontWeight: 700, color: 'var(--color-amber)', fontSize: '0.85rem' }}>YeuCauMoKhoa</div>
+            <span className="tag tag-amber" style={{ fontSize: '0.62rem' }}>TRỌNG SỐ (R20)</span>
+            <div style={{ fontWeight: 700, color: 'var(--color-amber)', fontSize: '0.85rem' }}>LOAI_DIEM</div>
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaLoaiDiem, TrongSo</div>}
+          </div>
+
+          <div style={{ color: 'var(--text-dim)', fontSize: '0.75rem' }}>──(1:N)──➔</div>
+
+          <div 
+            onClick={() => onSelectTable('DIEM')} 
+            className="card card-clickable" 
+            style={{ padding: '8px 12px', background: 'rgba(251, 191, 36, 0.15)', borderColor: 'var(--color-amber)', width: 160 }}
+          >
+            <span className="tag tag-amber" style={{ fontSize: '0.62rem' }}>CHI TIẾT ĐIỂM (R22)</span>
+            <div style={{ fontWeight: 700, color: 'var(--color-amber)', fontSize: '0.85rem' }}>DIEM (GV Nhập)</div>
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaDiem [PK], Diem, MaNguoiNhap</div>}
           </div>
 
           <div 
-            onClick={() => onSelectTable('NhatKyDiem')} 
+            onClick={() => onSelectTable('DOT_THI')} 
             className="card card-clickable" 
-            style={{ padding: '8px 12px', background: 'rgba(251, 191, 36, 0.15)', borderColor: 'var(--color-amber)', width: 150 }}
+            style={{ padding: '8px 12px', background: 'rgba(251, 113, 133, 0.15)', borderColor: 'var(--color-rose)', width: 150 }}
           >
-            <span className="tag tag-amber" style={{ fontSize: '0.62rem' }}>+ AUDIT TRAIL</span>
-            <div style={{ fontWeight: 700, color: 'var(--color-amber)', fontSize: '0.85rem' }}>NhatKyDiem</div>
-            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>GiaTriCu, GiaTriMoi, ThoiDiem</div>}
+            <span className="tag tag-rose" style={{ fontSize: '0.62rem' }}>KHẢO THÍ (R23)</span>
+            <div style={{ fontWeight: 700, color: 'var(--color-rose)', fontSize: '0.85rem' }}>DOT_THI</div>
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaDotThi, LoaiDotThi, NgayThi</div>}
           </div>
         </div>
       </div>

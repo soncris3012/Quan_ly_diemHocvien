@@ -54,12 +54,12 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
           Tác Nhân & Ma Trận Phân Quyền Nghiệp Vụ
         </h2>
         <p className="section-desc">
-          Mô hình hóa 4 nhóm đối tượng tương tác trong nhà trường quân sự. Nhấn vào từng tác nhân hoặc đơn vị chỉ huy để kiểm chứng phạm vi dữ liệu và các bảng bị tác động.
+          Mô hình hóa 5 nhóm đối tượng tương tác trong nhà trường quân sự (đặc biệt có sự tham gia của <strong>Giảng viên giảng dạy</strong>). Nhấn vào từng tác nhân hoặc đơn vị chỉ huy để kiểm chứng phạm vi dữ liệu và các bảng bị tác động.
         </p>
       </div>
 
-      {/* 4 Thẻ Đối Tượng Tác Nhân */}
-      <div className="grid-4" style={{ marginBottom: 26 }}>
+      {/* 5 Thẻ Đối Tượng Tác Nhân */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 14, marginBottom: 26 }}>
         {ACTORS.map((actor) => {
           const isSelected = selectedActor.id === actor.id;
           return (

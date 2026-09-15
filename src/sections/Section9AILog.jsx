@@ -41,13 +41,14 @@ B. Đánh giá bản thiết kế ban đầu
 - Không tự tạo một sơ đồ rồi gán là bản tự vẽ của tôi.
 - Không đánh giá chỉ dựa trên hình thức đẹp hoặc xấu.
 C. Đề xuất mô hình cải tiến
-- Làm rõ sự khác nhau giữa lớp chuyên ngành, kế hoạch đào tạo, lớp học phần và lượt học.
-- Phân biệt thi lại trong một lượt học với học lại ở một lượt học mới.
+- Mô hình hóa thực thể Giảng viên (GIANG_VIEN), Bộ môn (BO_MON) và Phân công giảng dạy (PHAN_CONG).
+- Kế thừa IS-A: Thực thể cha NGUOI cho cả Học viên và Giảng viên.
+- Phân biệt thi lại trong cùng phân công với học lại ở một phân công mới.
 - Mô hình hóa cơ cấu đơn vị và phạm vi quản lý của tài khoản chỉ huy.
-- Mô hình hóa chốt điểm, yêu cầu mở khóa, phê duyệt và lịch sử thay đổi.
-- Giữ điểm thi thực tế, phân biệt với điểm được công nhận sau áp dụng quy tắc.
+- Mô hình hóa chốt điểm, phân quyền Giảng viên nhập điểm quá trình và Khảo thí mở đợt thi.
+- Giữ điểm thi thực tế trong DIEM, phân biệt với điểm tổng kết được công nhận trong KET_QUA_HOC_TAP.
 - Mỗi bảng bổ sung phải có lý do nghiệp vụ; tránh mở rộng ngoài phạm vi.
-D. Trình bày kết quả: Tóm tắt bài toán, Ma trận tác nhân, Quy trình nghiệp vụ, Danh sách thực thể, ER khái niệm, Mô hình quan hệ 19 bảng, Từ điển dữ liệu, Ràng buộc, So sánh 2 bản và 6 tình huống kiểm chứng.`;
+D. Trình bày kết quả: Tóm tắt bài toán, Ma trận tác nhân, Quy trình nghiệp vụ, Danh sách thực thể, ER khái niệm, Mô hình quan hệ 23 bảng (R1 – R23), Từ điển dữ liệu, Ràng buộc, So sánh 2 bản và 6 tình huống kiểm chứng.`;
 
   return (
     <div className="section-view">
