@@ -3,6 +3,7 @@
 // Tích hợp tính năng phóng to toàn màn hình (Modal Lightbox Zoom) và upload ảnh thật
 import React, { useEffect, useState, useRef } from 'react';
 import ERDiagram from '../components/ERDiagram';
+import InitialERDiagram from '../components/InitialERDiagram';
 import { 
   Image, 
   ZoomIn, 
@@ -107,121 +108,8 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
     }
 
     return (
-      <AutoFitDiagram width={900} height={430} zoom={isLarge ? modalZoom : zoomLevel}>
-      <div 
-        style={{ 
-          padding: 20, 
-          display: 'flex', 
-          flexDirection: 'column', 
-          gap: 20,
-          width: 900,
-          height: 430
-        }}
-      >
-        {/* Hàng 1: Đơn Vị -> Lớp Học */}
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <div style={{ background: 'rgba(56, 189, 248, 0.1)', border: '1.5px solid var(--color-blue)', borderRadius: 8, padding: '10px 14px', width: 170 }}>
-            <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.88rem' }}>DON_VI</div>
-            {showAttributes && (
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                • <u>MaDonVi</u> (PK)<br/>• TenDonVi<br/>• LoaiDonVi
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--text-dim)', fontSize: '0.75rem' }}>
-            <span>(1)</span>
-            <span>─────[Quản lý]─────➔</span>
-            <span>(N)</span>
-          </div>
-
-          <div style={{ background: 'rgba(56, 189, 248, 0.1)', border: '1.5px solid var(--color-blue)', borderRadius: 8, padding: '10px 14px', width: 170 }}>
-            <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.88rem' }}>LOP_HOC</div>
-            {showAttributes && (
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                • <u>MaLop</u> (PK)<br/>• TenLop<br/>• MaDonVi (FK)
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Hàng 2: Học Viên -> Bảng Điểm -> Môn Học */}
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <div style={{ background: 'rgba(56, 189, 248, 0.12)', border: '1.5px solid var(--color-blue)', borderRadius: 8, padding: '10px 14px', width: 170 }}>
-            <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.88rem' }}>HOC_VIEN</div>
-            {showAttributes && (
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                • <u>MaHV</u> (PK)<br/>• HoTen<br/>• NgaySinh<br/>• MaLop (FK)
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--text-dim)', fontSize: '0.75rem' }}>
-            <span>(1)</span>
-            <span>─────[Có]─────➔</span>
-            <span>(N)</span>
-          </div>
-
-          <div style={{ background: 'rgba(251, 113, 133, 0.12)', border: '1.5px dashed var(--color-rose)', borderRadius: 8, padding: '10px 14px', width: 190 }}>
-            <div style={{ fontWeight: 700, color: 'var(--color-rose)', fontSize: '0.88rem' }}>BANG_DIEM (Chưa chuẩn)</div>
-            {showAttributes && (
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                • <u>MaBangDiem</u> (PK)<br/>• MaHV (FK)<br/>• MaMH (FK)<br/>
-                • DiemCC, DiemTX<br/>
-                <span style={{ color: 'var(--color-rose)' }}>• DiemThi1, DiemThi2 (Vi phạm 1NF)</span><br/>
-                • DiemTongKet<br/>
-                • DaKhoa (boolean)
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--text-dim)', fontSize: '0.75rem' }}>
-            <span>(N)</span>
-            <span>◄─────[Thuộc]─────</span>
-            <span>(1)</span>
-          </div>
-
-          <div style={{ background: 'rgba(167, 139, 250, 0.1)', border: '1.5px solid var(--color-purple)', borderRadius: 8, padding: '10px 14px', width: 160 }}>
-            <div style={{ fontWeight: 700, color: 'var(--color-purple)', fontSize: '0.88rem' }}>MON_HOC</div>
-            {showAttributes && (
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                • <u>MaMH</u> (PK)<br/>• TenMH<br/>• SoTinChi<br/>• SoTiet
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Hàng 3: Giảng viên & Tài khoản ban đầu */}
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <div style={{ background: 'rgba(167, 139, 250, 0.1)', border: '1.5px solid var(--color-purple)', borderRadius: 8, padding: '10px 14px', width: 170 }}>
-            <div style={{ fontWeight: 700, color: 'var(--color-purple)', fontSize: '0.88rem' }}>GIANG_VIEN</div>
-            {showAttributes && (
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                • <u>MaGV</u> (PK)<br/>• HoTen<br/>• HocVi<br/>• MaBoMon
-              </div>
-            )}
-          </div>
-
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', color: 'var(--text-dim)', fontSize: '0.75rem' }}>
-            <span>(1)</span>
-            <span>─────[Dạy cứng]─────➔</span>
-            <span>(N)</span>
-          </div>
-
-          <div style={{ background: 'rgba(251, 191, 36, 0.1)', border: '1.5px solid var(--color-amber)', borderRadius: 8, padding: '10px 14px', width: 190 }}>
-            <div style={{ fontWeight: 700, color: 'var(--color-amber)', fontSize: '0.88rem' }}>USER (Chưa chuẩn RBAC)</div>
-            {showAttributes && (
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>
-                • <u>MaUser</u> (PK)<br/>• TenDangNhap<br/>• MatKhau<br/>• VaiTro (Cờ văn bản)
-              </div>
-            )}
-          </div>
-
-          <div style={{ fontSize: '0.76rem', color: 'var(--text-dim)', fontStyle: 'italic', maxWidth: 200 }}>
-            ◄ Chưa có bảng liên kết phân công PHAN_CONG theo học kỳ và nhóm học; chưa có NGUOI dùng chung.
-          </div>
-        </div>
-      </div>
+      <AutoFitDiagram width={1120} height={650} zoom={isLarge ? modalZoom : zoomLevel}>
+        <InitialERDiagram showAttributes={showAttributes} />
       </AutoFitDiagram>
     );
   };
@@ -534,9 +422,9 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
               </div>
               <ul style={{ paddingLeft: 18, fontSize: '0.84rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: 4 }}>
                 <li>Dồn tất cả các lần thi (DiemThi1, DiemThi2) vào một dòng bảng điểm $\rightarrow$ vi phạm chuẩn hóa.</li>
-                <li>Không phân biệt được <strong>Học lại ở khóa sau</strong> (sẽ bị trùng khóa chính MaHV + MaMH).</li>
-                <li>Chưa có cơ cấu đơn vị quân sự để ràng buộc phạm vi cho tài khoản Chỉ huy.</li>
-                <li>Chỉ có 1 cờ boolean <code>DaKhoa</code>, không thể biết ai cho phép mở khóa và lý do sửa điểm.</li>
+                <li><strong>BANG_DIEM</strong> gộp kết quả tổng hợp và điểm thành phần nên khó lưu nhiều lần học hoặc thi lại.</li>
+                <li><strong>USER.VaiTro</strong> vẫn là cờ văn bản, chưa tách ROLE–PERMISSION để quản lý quyền linh hoạt.</li>
+                <li>Chưa tách <strong>LOAI_DIEM</strong>, <strong>DIEM</strong> và <strong>DOT_THI</strong> nên khó kiểm soát trọng số, người nhập và lịch sử kỳ thi.</li>
               </ul>
             </div>
           </div>
