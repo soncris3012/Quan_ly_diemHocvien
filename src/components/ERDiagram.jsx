@@ -141,7 +141,6 @@ export default function ERDiagram({ showAttributes = true, notation = 'crowsfoot
           })}
         </svg>
       </div>
-      <div className="er-stage__hint">Di chuột để làm nổi bật quan hệ · Tên khóa ngoại hiển thị trực tiếp trên đường nối · Bấm thực thể để xem chi tiết</div>
     </div>
   );
 }
