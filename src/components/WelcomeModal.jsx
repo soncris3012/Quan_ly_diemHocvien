@@ -31,6 +31,7 @@ export default function WelcomeModal() {
 
   return (
     <div
+      className="welcome-overlay"
       role="dialog"
       aria-modal="true"
       aria-labelledby="welcome-title"
@@ -51,7 +52,7 @@ export default function WelcomeModal() {
       onClick={() => setIsOpen(false)}
     >
       <div 
-        className="card"
+        className="card welcome-modal-card"
         style={{
           maxWidth: 560,
           width: '100%',
@@ -65,6 +66,9 @@ export default function WelcomeModal() {
         }}
         onClick={(e) => e.stopPropagation()}
       >
+        <div className="welcome-modal-grid" aria-hidden="true" />
+        <div className="welcome-modal-orb welcome-modal-orb--one" aria-hidden="true" />
+        <div className="welcome-modal-orb welcome-modal-orb--two" aria-hidden="true" />
         {/* Nút đóng */}
         <button 
           onClick={() => setIsOpen(false)}
@@ -85,7 +89,7 @@ export default function WelcomeModal() {
         </button>
 
         {/* Header Huy Hiệu */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+        <div className="welcome-modal-header" style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
           <div className="welcome-academy-logo">
             <img src="/smta-logo.png" alt="Logo Học viện Kỹ thuật Quân sự" />
           </div>
@@ -100,7 +104,7 @@ export default function WelcomeModal() {
         </div>
 
         {/* Thông tin nhóm 519 */}
-        <div style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 12, padding: '16px 20px', margin: '18px 0' }}>
+        <div className="welcome-members" style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 12, padding: '16px 20px', margin: '18px 0' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-blue)', fontWeight: 700, fontSize: '0.95rem', marginBottom: 8 }}>
             <Users size={18} />
             THÀNH VIÊN
@@ -108,16 +112,13 @@ export default function WelcomeModal() {
           <p style={{ color: '#fff', fontSize: '1.05rem', fontWeight: 600, margin: 0, letterSpacing: '0.02em' }}>
             Sơn, Bảo, Quyết, Hùng, Khánh
           </p>
-          <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 6, lineHeight: 1.5 }}>
-            Mô hình dữ liệu học vụ quân sự gồm 23 thực thể chuẩn hóa, 27 khóa ngoại và quy trình quản lý điểm có kiểm soát.
-          </p>
         </div>
 
         {/* Nút hành động */}
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
           <button 
             onClick={() => setIsOpen(false)}
-            className="btn btn-primary"
+            className="btn btn-primary welcome-cta"
             style={{ width: '100%', padding: '12px 20px', fontSize: '0.92rem' }}
           >
             Khám Phá Dự Án Ngay
