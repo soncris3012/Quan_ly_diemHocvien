@@ -5,7 +5,7 @@ export const AI_LOGS = [
   {
     id: 'prompt_1',
     sessionTitle: 'Phiên 1: Phân Tích Nghiệp Vụ Ban Đầu & Phát Hiện Bất Cập Đề Bài',
-    date: '2026-03-02',
+    date: '2026-09-02',
     objective: 'Rà soát bài toán quản lý điểm học viên quân sự, xác định tác nhân, các luồng nghiệp vụ và phát hiện các điểm mâu thuẫn trong đề bài.',
     inputProvided: 'Mô tả bài toán ban đầu từ đề cương môn học CSDL.',
     verbatimPrompt: `Bạn đóng vai trò chuyên gia phân tích nghiệp vụ cơ sở dữ liệu. Hãy phân tích đề tài "Quản lý điểm học viên quân sự".
@@ -31,7 +31,7 @@ Cho tôi biết:
   {
     id: 'prompt_2',
     sessionTitle: 'Phiên 2: Đề Xuất Mô Hình ER & Giải Quyết Vấn Đề "Thi Lại vs Học Lại"',
-    date: '2026-03-05',
+    date: '2026-09-05',
     objective: 'Thiết kế các thực thể cho bài toán kết quả học tập, giải quyết triệt để sự khác nhau giữa thi lại và học lại ở khóa sau.',
     inputProvided: 'Sơ đồ ER tự phác thảo ban đầu (chỉ có SinhVien, MonHoc, BangDiem, DiemThi).',
     verbatimPrompt: `Tôi gửi bạn sơ đồ ER ban đầu gồm: SinhVien, MonHoc, BangDiem.
@@ -58,7 +58,7 @@ Hãy đề xuất giải pháp chuẩn hóa mô hình dữ liệu để:
   {
     id: 'prompt_3',
     sessionTitle: 'Phiên 3: Tích Hợp Đầy Đủ Giảng Viên, Bộ Môn & Chuẩn Hóa 23 Bảng (R1 – R23)',
-    date: '2026-03-08',
+    date: '2026-09-08',
     objective: 'Bổ sung đầy đủ yếu tố Giảng viên và Phân công giảng dạy, hoàn thiện mô hình 23 bảng quan hệ chuẩn mực (R1 - R23) đáp ứng trọn vẹn yêu cầu thực tế.',
     inputProvided: 'Danh sách 23 bảng quan hệ theo thiết kế mới: R1 DON_VI đến R23 DOT_THI.',
     verbatimPrompt: `Hãy hoàn thiện mô hình quan hệ 23 bảng (R1 đến R23) tích hợp đầy đủ yếu tố Giảng viên:

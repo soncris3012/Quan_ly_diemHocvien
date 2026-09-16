@@ -1,6 +1,6 @@
 // src/sections/Section9AILog.jsx
 // Mục 9: Nhật ký sử dụng AI & Đánh giá phản biện học thuật
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { 
   Terminal, 
   Sparkles, 
@@ -8,15 +8,52 @@ import {
   X, 
   Copy, 
   CheckCheck, 
-  HelpCircle, 
   Calendar, 
   Code,
-  FileText
+  Cpu,
+  Coins,
+  RefreshCw
 } from 'lucide-react';
 import { AI_LOGS } from '../data/aiLogData';
 
 export default function Section9AILog() {
   const [copiedPromptId, setCopiedPromptId] = useState(null);
+  const [exchangeRate, setExchangeRate] = useState(25904.22);
+  const [rateUpdatedAt, setRateUpdatedAt] = useState(null);
+  const [rateStatus, setRateStatus] = useState('loading');
+
+  const modelUsage = useMemo(() => [
+    { model: 'Fable 5', role: 'Phân tích nghiệp vụ & phác thảo ER', input: 32400, output: 8600, inputPrice: 1.25, outputPrice: 10 },
+    { model: 'Astra 6', role: 'Rà soát quan hệ & chuẩn hóa mô hình', input: 14400, output: 9600, inputPrice: 2.5, outputPrice: 15 }
+  ].map(item => ({
+    ...item,
+    cost: item.input / 1_000_000 * item.inputPrice + item.output / 1_000_000 * item.outputPrice
+  })), []);
+
+  const usageTotals = useMemo(() => modelUsage.reduce((total, item) => ({
+    input: total.input + item.input,
+    output: total.output + item.output,
+    cost: total.cost + item.cost
+  }), { input: 0, output: 0, cost: 0 }), [modelUsage]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('https://open.er-api.com/v6/latest/USD')
+      .then(response => {
+        if (!response.ok) throw new Error('Không thể tải tỷ giá');
+        return response.json();
+      })
+      .then(data => {
+        if (cancelled || !data?.rates?.VND) return;
+        setExchangeRate(data.rates.VND);
+        setRateUpdatedAt(data.time_last_update_utc || new Date().toISOString());
+        setRateStatus('live');
+      })
+      .catch(() => {
+        if (!cancelled) setRateStatus('fallback');
+      });
+    return () => { cancelled = true; };
+  }, []);
 
   const handleCopy = (text, id) => {
     navigator.clipboard.writeText(text);
@@ -63,6 +100,47 @@ D. Trình bày kết quả: Tóm tắt bài toán, Ma trận tác nhân, Quy tr�
         <p className="section-desc">
           Báo cáo trung thực quá trình đồng hành cùng Trí tuệ Nhân tạo: Sinh viên đóng vai trò kiến trúc sư trưởng, tiếp thu có chọn lọc các gợi ý xác đáng và kiên quyết bác bỏ các đề xuất vi phạm nguyên tắc cơ sở dữ liệu.
         </p>
+      </div>
+
+      {/* Minh bạch mức sử dụng mô hình và chi phí ước tính */}
+      <div className="card ai-usage-card" style={{ marginBottom: 28 }}>
+        <div className="ai-usage-card__head">
+          <div>
+            <div className="section-tag" style={{ marginBottom: 8 }}><Cpu size={15} /> NHẬT KÝ TÀI NGUYÊN AI</div>
+            <h3>Mô Hình AI Sử Dụng Để Vẽ Sơ Đồ</h3>
+            <p>Fable 5 + Astra 6 · Số liệu token được ước tính theo các phiên phân tích, vẽ và rà soát mô hình ER.</p>
+          </div>
+          <div className={`ai-rate-status is-${rateStatus}`}>
+            <RefreshCw size={14} className={rateStatus === 'loading' ? 'is-spinning' : ''} />
+            {rateStatus === 'live' ? 'Tỷ giá trực tiếp' : rateStatus === 'loading' ? 'Đang lấy tỷ giá' : 'Tỷ giá dự phòng'}
+          </div>
+        </div>
+
+        <div className="ai-usage-grid">
+          {modelUsage.map(item => <div key={item.model} className="ai-model-usage">
+            <div className="ai-model-usage__name"><Sparkles size={16} /> {item.model}</div>
+            <div className="ai-model-usage__role">{item.role}</div>
+            <div className="ai-model-usage__stats">
+              <span>Input <b>{item.input.toLocaleString('vi-VN')}</b></span>
+              <span>Output <b>{item.output.toLocaleString('vi-VN')}</b></span>
+              <span>Chi phí <b>${item.cost.toFixed(4)}</b></span>
+            </div>
+          </div>)}
+
+          <div className="ai-cost-total">
+            <div><Coins size={18} /> SỐ TIỀN THỰC TẾ ƯỚC TÍNH</div>
+            <strong>${usageTotals.cost.toFixed(4)}</strong>
+            <b>≈ {Math.round(usageTotals.cost * exchangeRate).toLocaleString('vi-VN')} VNĐ</b>
+            <small>1 USD = {exchangeRate.toLocaleString('vi-VN', { maximumFractionDigits: 2 })} VNĐ</small>
+          </div>
+        </div>
+
+        <div className="ai-usage-footnote">
+          Tổng token sử dụng để vẽ và rà soát: <strong>{(usageTotals.input + usageTotals.output).toLocaleString('vi-VN')} token</strong>
+          <span>Input: {usageTotals.input.toLocaleString('vi-VN')} · Output: {usageTotals.output.toLocaleString('vi-VN')}</span>
+          <span>Nguồn tỷ giá: ExchangeRate-API{rateUpdatedAt ? ` · Cập nhật ${new Date(rateUpdatedAt).toLocaleString('vi-VN')}` : ''}</span>
+          <em>Chi phí là ước tính học thuật theo lượng token và đơn giá giả định, không phải hóa đơn API.</em>
+        </div>
       </div>
 
       {/* Hộp Master Prompt Chuẩn */}
