@@ -1,7 +1,7 @@
 // src/components/WelcomeModal.jsx
 // Popup giới thiệu dự án và nhóm thực hiện
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Users, X, ArrowRight } from 'lucide-react';
+import { Users, X, ArrowRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function WelcomeModal() {
@@ -86,12 +86,12 @@ export default function WelcomeModal() {
 
         {/* Header Huy Hiệu */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-          <div style={{ width: 44, height: 44, borderRadius: 12, background: 'linear-gradient(135deg, #0284c7, #38bdf8)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#031221', boxShadow: '0 0 20px rgba(56, 189, 248, 0.4)' }}>
-            <Sparkles size={24} />
+          <div className="welcome-academy-logo">
+            <img src="/smta-logo.png" alt="Logo Học viện Kỹ thuật Quân sự" />
           </div>
           <div>
             <span className="badge-military" style={{ fontSize: '0.72rem' }}>
-              CADET DB v2.0 • HỌC VIỆN QUÂN SỰ
+              SMTA v2.0 • HỌC VIỆN KỸ THUẬT QUÂN SỰ
             </span>
             <h3 id="welcome-title" style={{ fontSize: '1.48rem', color: '#fff', marginTop: 5, fontWeight: 800, lineHeight: 1.28 }}>
               Dự án Cơ sở dữ liệu quản lý điểm Học viên quân sự MTA

@@ -54,7 +54,7 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
           BÁO CÁO THIẾT KẾ CƠ SỞ DỮ LIỆU HỌC THUẬT
         </div>
         <h1 className="section-title">
-          CADET DB — Quản Lý Điểm Học Viên Quân Sự
+          SMTA — Quản Lý Điểm Học Viên Quân Sự
         </h1>
         <p className="section-desc">
           Bản báo cáo tương tác phân tích nghiệp vụ, mô hình hóa thực thể ER, chuyển đổi sang 23 bảng quan hệ chuẩn hóa (R1 - R23) tích hợp đầy đủ Giảng viên & Phân công giảng dạy, và kiểm chứng bằng 6 tình huống thực tế.
@@ -163,7 +163,7 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
               <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-dim)', textAlign: 'left' }}>
                 <th style={{ padding: '10px 14px' }}>Vấn đề trong đề bài</th>
                 <th style={{ padding: '10px 14px' }}>Vì sao cần làm rõ?</th>
-                <th style={{ padding: '10px 14px' }}>Cách trình bày đề xuất trên CADET DB</th>
+                <th style={{ padding: '10px 14px' }}>Cách trình bày đề xuất trên SMTA</th>
               </tr>
             </thead>
             <tbody>

@@ -166,7 +166,7 @@ export default function App() {
           <div className="top-bar-left">
             <span className="badge-military">
               <Sparkles size={12} />
-              CADET DB v2.0 • BÁO CÁO HỌC THUẬT
+              SMTA v2.0 • BÁO CÁO HỌC THUẬT
             </span>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.85rem', color: 'var(--text-muted)' }}>
               <span>Đồ án CSDL</span>

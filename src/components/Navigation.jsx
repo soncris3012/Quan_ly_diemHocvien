@@ -45,11 +45,11 @@ export default function Navigation({
     <aside className="sidebar">
       {/* Brand Header */}
       <div className="sidebar-header">
-        <div className="logo-icon">
-          <Layers size={22} />
+        <div className="logo-icon logo-icon--academy">
+          <img src="/smta-logo.png" alt="Logo Học viện Kỹ thuật Quân sự" />
         </div>
         <div className="logo-text">
-          <h1>CADET DB</h1>
+          <h1>SMTA</h1>
           <p>Hệ Thống Điểm Quân Sự</p>
         </div>
       </div>

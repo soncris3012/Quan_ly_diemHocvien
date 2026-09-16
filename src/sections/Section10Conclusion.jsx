@@ -24,7 +24,7 @@ export default function Section10Conclusion({ onSelectSection }) {
           Kết Luận Thiết Kế & Ranh Giới Đề Tài
         </h2>
         <p className="section-desc">
-          Đánh giá mức độ hoàn thiện của mô hình cơ sở dữ liệu CADET DB, chỉ rõ các ranh giới thiết kế có chủ đích và lộ trình phát triển cho các giai đoạn triển khai tiếp theo.
+          Đánh giá mức độ hoàn thiện của mô hình cơ sở dữ liệu SMTA, chỉ rõ các ranh giới thiết kế có chủ đích và lộ trình phát triển cho các giai đoạn triển khai tiếp theo.
         </p>
       </div>
 
