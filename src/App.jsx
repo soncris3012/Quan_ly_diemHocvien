@@ -191,7 +191,7 @@ export default function App() {
             <button
               onClick={() => {
                 if (inspectorItem) setInspectorItem(null);
-                else handleSelectTable('LuotHoc'); // Bảng tiêu biểu
+                else handleSelectTable('KET_QUA_HOC_TAP'); // Bảng trung tâm tiêu biểu
               }}
               className={`btn btn-sm ${inspectorItem ? 'btn-primary' : 'btn-secondary'}`}
               style={{ fontSize: '0.8rem' }}

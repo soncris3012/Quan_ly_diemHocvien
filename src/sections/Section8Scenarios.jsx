@@ -242,7 +242,7 @@ export default function Section8Scenarios({ onSelectTable, onOpenInspector }) {
                 {retestInterpretation === 'A' ? currentScenario.mockData.interpretationA.calc : currentScenario.mockData.interpretationB.calc}
               </div>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-dim)', marginTop: 8, fontStyle: 'italic' }}>
-                * Bảo toàn dữ liệu: Cột <code>LanThi.DiemThiThucTe</code> vẫn lưu số 8.0, không ghi đè trực tiếp trong CSDL.
+                * Bảo toàn dữ liệu: Bản ghi <code>DIEM</code> của đợt thi lại lưu giá trị thực tế 8.0; quy tắc áp trần chỉ tác động khi tổng hợp <code>KET_QUA_HOC_TAP</code>.
               </div>
             </div>
           </div>
@@ -255,7 +255,7 @@ export default function Section8Scenarios({ onSelectTable, onOpenInspector }) {
               {/* Lượt học 1 (Trượt) */}
               <div style={{ background: 'rgba(251, 113, 133, 0.05)', border: '1px solid rgba(251, 113, 133, 0.3)', borderRadius: 8, padding: 14 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                  <span className="tag tag-rose">LƯỢT HỌC 1 (LH001)</span>
+                  <span className="tag tag-rose">KẾT QUẢ 1 (KQ_001)</span>
                   <span style={{ fontSize: '0.72rem', color: 'var(--text-dim)' }}>Học lần đầu</span>
                 </div>
                 <div style={{ fontSize: '0.85rem', color: '#fff', fontWeight: 600 }}>{currentScenario.mockData.attempt1.term}</div>
@@ -268,9 +268,9 @@ export default function Section8Scenarios({ onSelectTable, onOpenInspector }) {
               {/* Lượt học 2 (Học lại cùng K59 - Đạt) */}
               <div style={{ background: 'rgba(52, 211, 153, 0.05)', border: '1px solid rgba(52, 211, 153, 0.3)', borderRadius: 8, padding: 14 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                  <span className="tag tag-emerald">LƯỢT HỌC 2 (LH002)</span>
+                  <span className="tag tag-emerald">KẾT QUẢ 2 (KQ_002)</span>
                   <span className="mono-font" style={{ fontSize: '0.72rem', color: 'var(--color-purple)' }}>
-                    MaLuotHocTruoc = 'LH001'
+                    MaPhanCong = 'PC_KY_SAU'
                   </span>
                 </div>
                 <div style={{ fontSize: '0.85rem', color: '#fff', fontWeight: 600 }}>{currentScenario.mockData.attempt2.term}</div>
@@ -331,7 +331,7 @@ export default function Section8Scenarios({ onSelectTable, onOpenInspector }) {
             {simStep === 2 && (
               <div style={{ background: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: 8, padding: 16 }}>
                 <div style={{ fontWeight: 700, color: 'var(--color-amber)', marginBottom: 6 }}>
-                  Đã tạo bản ghi YeuCauMoKhoa: Mã YC_2026_001
+                  Đã tạo phiếu mở khóa mô phỏng: Mã YC_2026_001
                 </div>
                 <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: 14 }}>
                   Lý do: "Chấm phúc khảo bài thi kết thúc môn theo quyết định Hội đồng". Trạng thái: CHO_DUYET.
@@ -362,7 +362,7 @@ export default function Section8Scenarios({ onSelectTable, onOpenInspector }) {
             {simStep === 4 && (
               <div style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 8, padding: 16 }}>
                 <div style={{ fontWeight: 700, color: 'var(--color-blue)', marginBottom: 8 }}>
-                  Cập Nhật Điểm Bài Thi Mới (LanThi.DiemThiThucTe)
+                  Cập Nhật Bản Ghi Điểm Thi (DIEM.Diem)
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
                   <span style={{ fontSize: '0.88rem', color: 'var(--text-muted)' }}>Điểm cũ: <strong style={{ color: 'var(--color-rose)' }}>3.0</strong></span>
@@ -396,10 +396,10 @@ export default function Section8Scenarios({ onSelectTable, onOpenInspector }) {
                 <div style={{ background: 'rgba(52, 211, 153, 0.1)', border: '1px solid rgba(52, 211, 153, 0.3)', borderRadius: 8, padding: 14 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, color: 'var(--color-emerald)' }}>
                     <FileCheck size={18} />
-                    Đã Ghi Nhận Bản Ghi Nhật Ký Điểm (NhatKyDiem - LOG_001)
+                    Đã ghi nhật ký sửa điểm mô phỏng (bảng mở rộng đề xuất — LOG_001)
                   </div>
                   <div className="mono-font" style={{ fontSize: '0.82rem', color: '#fff', marginTop: 6 }}>
-                    INSERT INTO NhatKyDiem (MaBangDiem, LoaiThaoTac, TenTruong, GiaTriCu, GiaTriMoi, NguoiThucHien) <br/>
+                    AUDIT_LOG (MaDiem, LoaiThaoTac, GiaTriCu, GiaTriMoi, NguoiThucHien) <br/>
                     VALUES ('BD001', 'SUA_DIEM', 'DiemThiThucTe', '3.0', '{editedScore}', 'TK_DAO_TAO')
                   </div>
                 </div>

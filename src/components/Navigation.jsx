@@ -78,17 +78,19 @@ export default function Navigation({
           const Icon = sec.icon;
           const isActive = currentSection === sec.id;
           return (
-            <div
+            <button
               key={sec.id}
               onClick={() => onSelectSection(sec.id)}
               className={`nav-item ${isActive ? 'active' : ''}`}
+              aria-current={isActive ? 'page' : undefined}
+              title={sec.title}
             >
               <span className="nav-num">{sec.num}</span>
               <Icon size={17} style={{ flexShrink: 0 }} />
               <span className="nav-label" style={{ flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {sec.title}
               </span>
-            </div>
+            </button>
           );
         })}
       </nav>

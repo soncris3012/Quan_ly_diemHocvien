@@ -18,7 +18,7 @@ export default function Section7DataDictionary({ onSelectTable, onOpenInspector 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('dictionary'); // 'dictionary' | 'constraints'
 
-  // Thu thập toàn bộ thuộc tính từ 19 bảng thành danh sách phẳng
+  // Thu thập toàn bộ thuộc tính từ 23 bảng thành danh sách phẳng
   const allAttributes = TABLES.flatMap(tbl => {
     return tbl.columns.map(col => ({
       ...col,

@@ -1,7 +1,7 @@
 // src/components/WelcomeModal.jsx
-// Popup thông báo chào mừng khi truy cập trang web: Nhóm 519: Sơn, Quyết, Bảo, Khánh, Hùng
+// Popup giới thiệu dự án và nhóm thực hiện
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Users, X, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Sparkles, Users, X, ArrowRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 export default function WelcomeModal() {
@@ -17,13 +17,23 @@ export default function WelcomeModal() {
         origin: { y: 0.6 }
       });
     }, 350);
-    return () => clearTimeout(timer);
+    const closeOnEscape = (event) => {
+      if (event.key === 'Escape') setIsOpen(false);
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('keydown', closeOnEscape);
+    };
   }, []);
 
   if (!isOpen) return null;
 
   return (
-    <div 
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="welcome-title"
       style={{
         position: 'fixed',
         top: 0,
@@ -83,8 +93,8 @@ export default function WelcomeModal() {
             <span className="badge-military" style={{ fontSize: '0.72rem' }}>
               CADET DB v2.0 • HỌC VIỆN QUÂN SỰ
             </span>
-            <h3 style={{ fontSize: '1.35rem', color: '#fff', marginTop: 2, fontWeight: 800 }}>
-              Chào Mừng Đến Với Dự Án Quản Lý Điểm!
+            <h3 id="welcome-title" style={{ fontSize: '1.48rem', color: '#fff', marginTop: 5, fontWeight: 800, lineHeight: 1.28 }}>
+              Dự án Cơ sở dữ liệu quản lý điểm Học viên quân sự MTA
             </h3>
           </div>
         </div>
@@ -93,13 +103,13 @@ export default function WelcomeModal() {
         <div style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 12, padding: '16px 20px', margin: '18px 0' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-blue)', fontWeight: 700, fontSize: '0.95rem', marginBottom: 8 }}>
             <Users size={18} />
-            NHÓM THỰC HIỆN 519
+            THÀNH VIÊN
           </div>
           <p style={{ color: '#fff', fontSize: '1.05rem', fontWeight: 600, margin: 0, letterSpacing: '0.02em' }}>
-            Sơn • Quyết • Bảo • Khánh • Hùng
+            Sơn, Bảo, Quyết, Hùng, Khánh
           </p>
           <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 6, lineHeight: 1.5 }}>
-            Báo cáo tương tác thiết kế cơ sở dữ liệu: Phân tích bài toán, mô hình ER tự vẽ vs AI hỗ trợ, 19 bảng quan hệ chuẩn hóa và 6 tình huống kiểm chứng thực tế.
+            Mô hình dữ liệu học vụ quân sự gồm 23 thực thể chuẩn hóa, 27 khóa ngoại và quy trình quản lý điểm có kiểm soát.
           </p>
         </div>
 

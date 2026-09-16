@@ -70,7 +70,7 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
           <div>
             <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Nhóm Thực Hiện</div>
             <div style={{ fontWeight: 700, color: '#fff' }}>Nhóm 519</div>
-            <div style={{ fontSize: '0.78rem', color: 'var(--color-blue)' }}>Sơn, Quyết, Bảo, Khánh, Hùng</div>
+            <div style={{ fontSize: '0.78rem', color: 'var(--color-blue)' }}>Sơn, Bảo, Quyết, Hùng, Khánh</div>
           </div>
         </div>
 

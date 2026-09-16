@@ -2,6 +2,7 @@
 // Mục 5: Phòng trưng bày ER - So sánh 2 phiên bản (Tự thiết kế đàng hoàng vs Có AI hỗ trợ)
 // Tích hợp tính năng phóng to toàn màn hình (Modal Lightbox Zoom) và upload ảnh thật
 import React, { useState, useRef } from 'react';
+import ERDiagram from '../components/ERDiagram';
 import { 
   Image, 
   ZoomIn, 
@@ -329,6 +330,16 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
     );
   };
 
+  const renderAccurateDiagram = (isLarge = false) => (
+    <div style={{ width: isLarge ? 1180 * modalZoom : '100%', transform: isLarge ? `scale(${modalZoom})` : `scale(${zoomLevel})`, transformOrigin: 'top left', transition: 'transform .35s cubic-bezier(.16,1,.3,1)' }}>
+      <ERDiagram
+        showAttributes={showAttributes}
+        notation={notation}
+        onSelectTable={onSelectTable}
+      />
+    </div>
+  );
+
   return (
     <div className="section-view">
       <div className="section-header">
@@ -543,7 +554,7 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
               <div style={{ position: 'absolute', top: 8, right: 8, zIndex: 10, background: 'rgba(8, 13, 24, 0.8)', padding: '3px 8px', borderRadius: 4, fontSize: '0.7rem', color: 'var(--color-blue)', pointerEvents: 'none' }}>
                 🔍 Click để phóng to
               </div>
-              {renderEnhancedDiagram(false)}
+              {renderAccurateDiagram(false)}
             </div>
 
             {/* Giá trị học thuật của bản cải tiến */}
@@ -552,10 +563,10 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
                 Điểm Khác Biệt Mang Giá Trị Học Thuật:
               </div>
               <ul style={{ paddingLeft: 18, fontSize: '0.84rem', color: 'var(--text-muted)', display: 'flex', flexDirection: 'column', gap: 4 }}>
-                <li><strong style={{ color: 'var(--color-emerald)' }}>Bổ sung LuotHoc:</strong> Phân biệt rõ thi lại (cùng lượt) với học lại ở khóa sau (lượt mới).</li>
-                <li><strong style={{ color: 'var(--color-emerald)' }}>Tách LanThi:</strong> Bảo toàn điểm thi thực tế (DiemThiThucTe = 8.0) dù có trần điểm 6.9.</li>
-                <li><strong style={{ color: 'var(--color-amber)' }}>Bổ sung PhanCongQuanLy:</strong> Ràng buộc bảo mật phạm vi dữ liệu theo cây đơn vị.</li>
-                <li><strong style={{ color: 'var(--color-purple)' }}>QuyTacDanhGia:</strong> Không hardcode công thức; lưu cấu hình trọng số theo đợt học.</li>
+                <li><strong style={{ color: 'var(--color-emerald)' }}>KET_QUA_HOC_TAP theo PHAN_CONG:</strong> Mỗi học kỳ/phân công tạo một kết quả độc lập, không ghi đè lịch sử học phần.</li>
+                <li><strong style={{ color: 'var(--color-emerald)' }}>DIEM tách theo LOAI_DIEM:</strong> Mỗi đầu điểm là một bản ghi chuẩn hóa, loại bỏ các cột lặp DiemThi1, DiemThi2.</li>
+                <li><strong style={{ color: 'var(--color-amber)' }}>RBAC đầy đủ:</strong> USER–ROLE–PERMISSION giải quyết quan hệ nhiều-nhiều và tách xác thực khỏi hồ sơ NGUOI.</li>
+                <li><strong style={{ color: 'var(--color-purple)' }}>PHAN_CONG làm mắt xích:</strong> Liên kết đúng Giảng viên, Môn học, Lớp và Học kỳ; DOT_THI phụ thuộc phân công thực tế.</li>
               </ul>
             </div>
           </div>
@@ -646,7 +657,7 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            {fullscreenDiagram === 'initial' ? renderInitialDiagram(true) : renderEnhancedDiagram(true)}
+            {fullscreenDiagram === 'initial' ? renderInitialDiagram(true) : renderAccurateDiagram(true)}
           </div>
         </div>
       )}

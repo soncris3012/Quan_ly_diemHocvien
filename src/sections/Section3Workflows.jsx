@@ -172,13 +172,13 @@ export default function Section3Workflows({ onSelectTable, onOpenInspector }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12, padding: '14px 18px', background: 'rgba(17, 27, 46, 0.5)', borderRadius: 10, fontFamily: 'monospace', fontSize: '0.88rem', color: 'var(--text-primary)' }}>
             <div>Có kết quả học tập lần đầu</div>
             <div style={{ paddingLeft: 20 }}>↓</div>
-            <div style={{ paddingLeft: 20 }}>Đạt yêu cầu? ── <strong>CÓ</strong> ──➔ [Hoàn thành học phần] (Lưu BangDiem, TrangThaiKhoa = DA_KHOA)</div>
+            <div style={{ paddingLeft: 20 }}>Đạt yêu cầu? ── <strong>CÓ</strong> ──➔ [Hoàn thành học phần] (KET_QUA_HOC_TAP.TrangThai = HOAN_THANH)</div>
             <div style={{ paddingLeft: 20 }}>│</div>
             <div style={{ paddingLeft: 20 }}><strong>KHÔNG ĐẠT</strong></div>
             <div style={{ paddingLeft: 20 }}>↓</div>
             <div style={{ paddingLeft: 20 }}>Đủ điều kiện thi lại? (Chưa quá 2 lần thi)</div>
             <div style={{ paddingLeft: 20 }}>↓</div>
-            <div style={{ paddingLeft: 20 }}>Thi lại Lần 2 (Tạo thêm bản ghi <code style={{ color: 'var(--color-emerald)' }}>LanThi (SoLanThi = 2)</code> trong CÙNG bảng điểm)</div>
+            <div style={{ paddingLeft: 20 }}>Thi lại Lần 2 (Tổ chức <code style={{ color: 'var(--color-emerald)' }}>DOT_THI.LoaiDotThi = THI_LAI</code> và ghi đầu điểm thi mới trong DIEM)</div>
             <div style={{ paddingLeft: 20 }}>↓</div>
             <div style={{ paddingLeft: 20 }}>Đạt sau thi lại? ── <strong>CÓ</strong> ──➔ [Hoàn thành sau thi lại] (Áp trần 6.9, bảo toàn điểm thực tế 8.0)</div>
             <div style={{ paddingLeft: 20 }}>│</div>
@@ -187,7 +187,7 @@ export default function Section3Workflows({ onSelectTable, onOpenInspector }) {
             <div style={{ paddingLeft: 20 }}>BẮT BUỘC PHẢI HỌC LẠI Ở KHÓA SAU</div>
             <div style={{ paddingLeft: 20 }}>↓</div>
             <div style={{ paddingLeft: 20, color: 'var(--color-amber)', fontWeight: 'bold' }}>
-              ➔ Mở Lớp học phần mới ở kỳ sau ➔ Tạo <code style={{ color: 'var(--color-blue)' }}>LuotHoc MỚI</code> với <code style={{ color: 'var(--color-purple)' }}>MaLuotHocTruoc</code> trỏ về lượt cũ!
+              ➔ Tạo <code style={{ color: 'var(--color-blue)' }}>PHAN_CONG mới</code> ở học kỳ sau ➔ Tạo một <code style={{ color: 'var(--color-purple)' }}>KET_QUA_HOC_TAP mới</code> cho học viên; kết quả cũ vẫn được bảo toàn.
             </div>
           </div>
         </div>
@@ -198,20 +198,20 @@ export default function Section3Workflows({ onSelectTable, onOpenInspector }) {
         <div className="card" style={{ background: 'rgba(8, 13, 24, 0.8)', border: '1px solid rgba(251, 191, 36, 0.3)', marginBottom: 28 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700, color: 'var(--color-amber)', marginBottom: 14 }}>
             <Lock size={18} />
-            CƠ CHẾ BẢO MẬT & KIỂM TOÁN SỬA ĐIỂM (AUDIT TRAIL)
+            QUY TRÌNH ĐỀ XUẤT CHO GIAI ĐOẠN TRIỂN KHAI (AUDIT TRAIL)
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 10, textAlign: 'center', fontSize: '0.8rem' }}>
             <div style={{ background: 'rgba(251, 113, 133, 0.1)', border: '1px solid rgba(251, 113, 133, 0.3)', borderRadius: 8, padding: 12 }}>
               <Lock size={20} color="var(--color-rose)" style={{ margin: '0 auto 6px' }} />
               <div style={{ fontWeight: 700, color: 'var(--color-rose)' }}>1. Điểm Khóa</div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>BangDiem: DA_KHOA</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>Kết quả đã công bố</div>
             </div>
 
             <div style={{ background: 'rgba(251, 191, 36, 0.1)', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: 8, padding: 12 }}>
               <AlertCircle size={20} color="var(--color-amber)" style={{ margin: '0 auto 6px' }} />
               <div style={{ fontWeight: 700, color: 'var(--color-amber)' }}>2. Đề Xuất</div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>YeuCauMoKhoa: CHO_DUYET</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>Phiếu yêu cầu: CHỜ DUYỆT</div>
             </div>
 
             <div style={{ background: 'rgba(52, 211, 153, 0.1)', border: '1px solid rgba(52, 211, 153, 0.3)', borderRadius: 8, padding: 12 }}>
@@ -223,7 +223,7 @@ export default function Section3Workflows({ onSelectTable, onOpenInspector }) {
             <div style={{ background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 8, padding: 12 }}>
               <FileCheck size={20} color="var(--color-blue)" style={{ margin: '0 auto 6px' }} />
               <div style={{ fontWeight: 700, color: 'var(--color-blue)' }}>4. Sửa & Nhật Ký</div>
-              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>NhatKyDiem (Before/After)</div>
+              <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: 4 }}>Nhật ký trước/sau (bảng mở rộng)</div>
             </div>
 
             <div style={{ background: 'rgba(167, 139, 250, 0.1)', border: '1px solid rgba(167, 139, 250, 0.3)', borderRadius: 8, padding: 12 }}>

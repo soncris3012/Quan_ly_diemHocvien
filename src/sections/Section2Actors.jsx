@@ -31,14 +31,14 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
     onOpenInspector({
       type: 'entity',
       data: {
-        name: 'Phân Công Quản Lý',
+        name: 'Phạm Vi Quản Lý Theo Đơn Vị',
         groupId: 'org',
-        meaning: 'Quyết định phân công tài khoản chỉ huy phụ trách đơn vị quân sự trong khoảng thời gian xác định.',
-        identifier: 'MaPhanCong',
-        relationships: 'TaiKhoan (1) --- (0..N) PhanCongQuanLy (0..N) --- (1) DonVi',
+        meaning: 'Phạm vi xem được suy ra từ vai trò của tài khoản và chuỗi biên chế HOC_VIEN → LOP_HOC → DON_VI.',
+        identifier: 'MaUser + MaRole',
+        relationships: 'USER (N) — USER_ROLE — (N) ROLE; HOC_VIEN (N) — LOP_HOC (N) — DON_VI',
         example: `Chỉ huy đơn vị ${unitId === 'd1_c1' ? 'Đại đội 1' : 'Đại đội 2'} có phạm vi xem học viên thuộc các lớp biên chế tại đơn vị này.`,
-        justification: 'ĐIỂM SÁNG KIẾN TRÚC: Quyền xem điểm không thể chỉ dựa vào một trường vai trò đơn giản! Cần bảng PhanCongQuanLy để xác thực phạm vi truy cập dữ liệu theo cây đơn vị và lịch sử công tác.',
-        tableRef: 'PhanCongQuanLy'
+        justification: 'Trong phạm vi mô hình 23 bảng hiện tại, RBAC xác định quyền thao tác; phạm vi dữ liệu được lọc theo cây DON_VI. Nếu cần lưu lịch sử cán bộ phụ trách từng đơn vị, đây là một bảng mở rộng ở giai đoạn triển khai.',
+        tableRef: 'USER_ROLE'
       }
     });
   };
@@ -275,7 +275,7 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
         </div>
 
         <div style={{ marginTop: 14, fontSize: '0.82rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-          * Nhận xét: Khi chỉ huy thay đổi công tác, chỉ cần thêm 1 bản ghi mới trong bảng <code style={{ color: 'var(--color-blue)' }}>PhanCongQuanLy</code> (với TuNgay, DenNgay) mà không làm thay đổi cấu trúc bảng người dùng hay xáo trộn dữ liệu học viên.
+          * Nhận xét: Đây là mô phỏng phạm vi truy cập theo <code style={{ color: 'var(--color-blue)' }}>USER_ROLE</code> và cây <code style={{ color: 'var(--color-blue)' }}>DON_VI</code>. Lịch sử cán bộ phụ trách đơn vị là phần mở rộng đề xuất, chưa thuộc 23 bảng cốt lõi.
         </div>
       </div>
 
