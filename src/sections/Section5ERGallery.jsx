@@ -1,7 +1,7 @@
 // src/sections/Section5ERGallery.jsx
 // Mục 5: Phòng trưng bày ER - So sánh 2 phiên bản (Tự thiết kế đàng hoàng vs Có AI hỗ trợ)
 // Tích hợp tính năng phóng to toàn màn hình (Modal Lightbox Zoom) và upload ảnh thật
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ERDiagram from '../components/ERDiagram';
 import { 
   Image, 
@@ -23,6 +23,38 @@ import {
   ExternalLink,
   HelpCircle
 } from 'lucide-react';
+
+function AutoFitDiagram({ width, height, zoom = 1, children }) {
+  const hostRef = useRef(null);
+  const [fitScale, setFitScale] = useState(1);
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return undefined;
+
+    const updateScale = () => {
+      const availableWidth = Math.max(1, host.clientWidth - 20);
+      const availableHeight = Math.max(1, host.clientHeight - 20);
+      setFitScale(Math.min(availableWidth / width, availableHeight / height, 1));
+    };
+
+    updateScale();
+    const observer = new ResizeObserver(updateScale);
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, [width, height]);
+
+  const scale = fitScale * zoom;
+  return (
+    <div ref={hostRef} className="diagram-fit-host">
+      <div className="diagram-fit-space" style={{ width: width * scale, height: height * scale }}>
+        <div className="diagram-fit-content" style={{ width, height, transform: `scale(${scale})` }}>
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
   const [viewMode, setViewMode] = useState('split'); // 'split' | 'initial' | 'enhanced'
@@ -64,27 +96,26 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
   const renderInitialDiagram = (isLarge = false) => {
     if (customImage) {
       return (
-        <div style={{ width: '100%', height: '100%', overflow: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <img 
             src={customImage} 
             alt="Sơ đồ ER tự vẽ của nhóm 519" 
-            style={{ transform: `scale(${isLarge ? modalZoom : zoomLevel})`, transition: 'transform 0.2s', maxWidth: '95%', maxHeight: '95%', objectFit: 'contain' }}
+            style={{ transform: `scale(${isLarge ? modalZoom : zoomLevel})`, transition: 'transform 0.2s', maxWidth: '90%', maxHeight: '90%', objectFit: 'contain' }}
           />
         </div>
       );
     }
 
     return (
+      <AutoFitDiagram width={900} height={430} zoom={isLarge ? modalZoom : zoomLevel}>
       <div 
         style={{ 
-          transform: `scale(${isLarge ? modalZoom : zoomLevel})`, 
-          transformOrigin: 'top left',
-          transition: 'transform 0.2s', 
           padding: 20, 
           display: 'flex', 
           flexDirection: 'column', 
           gap: 20,
-          minWidth: 580
+          width: 900,
+          height: 430
         }}
       >
         {/* Hàng 1: Đơn Vị -> Lớp Học */}
@@ -191,6 +222,7 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
           </div>
         </div>
       </div>
+      </AutoFitDiagram>
     );
   };
 
@@ -331,13 +363,13 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
   };
 
   const renderAccurateDiagram = (isLarge = false) => (
-    <div style={{ width: isLarge ? 1180 * modalZoom : '100%', transform: isLarge ? `scale(${modalZoom})` : `scale(${zoomLevel})`, transformOrigin: 'top left', transition: 'transform .35s cubic-bezier(.16,1,.3,1)' }}>
+    <AutoFitDiagram width={1480} height={1062} zoom={isLarge ? modalZoom : zoomLevel}>
       <ERDiagram
         showAttributes={showAttributes}
         notation={notation}
         onSelectTable={onSelectTable}
       />
-    </div>
+    </AutoFitDiagram>
   );
 
   return (
@@ -471,7 +503,7 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
                   <Maximize2 size={13} />
                   Phóng To
                 </button>
-                <span className="mono-font" style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>02/03/2026</span>
+                <span className="mono-font" style={{ fontSize: '0.75rem', color: 'var(--text-dim)' }}>02/09/2026</span>
               </div>
             </div>
 
@@ -479,11 +511,11 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
             <div 
               onClick={() => setFullscreenDiagram('initial')}
               style={{ 
-                height: 440, 
+                height: 560,
                 background: '#070B14', 
                 border: '1px solid var(--border-subtle)', 
                 borderRadius: 8, 
-                overflow: 'auto',
+                overflow: 'hidden',
                 position: 'relative',
                 cursor: 'zoom-in'
               }}
@@ -533,7 +565,7 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
                   <Maximize2 size={13} />
                   Phóng To
                 </button>
-                <span className="mono-font" style={{ fontSize: '0.75rem', color: 'var(--color-blue)' }}>08/03/2026</span>
+                <span className="mono-font" style={{ fontSize: '0.75rem', color: 'var(--color-blue)' }}>08/09/2026</span>
               </div>
             </div>
 
@@ -541,11 +573,11 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
             <div 
               onClick={() => setFullscreenDiagram('enhanced')}
               style={{ 
-                height: 440, 
+                height: 560,
                 background: '#070B14', 
                 border: '1px solid var(--border-subtle)', 
                 borderRadius: 8, 
-                overflow: 'auto',
+                overflow: 'hidden',
                 position: 'relative',
                 cursor: 'zoom-in'
               }}

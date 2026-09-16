@@ -226,6 +226,10 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 2px;
 }
 
+.diagram-fit-host { width: 100%; height: 100%; display: flex; align-items: flex-start; justify-content: center; overflow: auto; padding: 10px; }
+.diagram-fit-space { position: relative; flex: 0 0 auto; transition: width .3s ease, height .3s ease; }
+.diagram-fit-content { position: absolute; inset: 0 auto auto 0; transform-origin: top left; transition: transform .35s cubic-bezier(.16,1,.3,1); }
+
 .sidebar-nav {
   flex: 1;
   overflow-y: auto;
@@ -464,6 +468,8 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Light presentation theme */
 :root[data-theme='light'] .sidebar { background: rgba(255,255,255,.94); box-shadow: 12px 0 35px rgba(44,85,59,.08); }
+:root[data-theme='light'] .logo-text h1 { color: #123d29; text-shadow: 0 1px 0 #fff; }
+:root[data-theme='light'] .logo-text p { color: #587365; }
 :root[data-theme='light'] .top-bar { background: rgba(248,253,249,.9); }
 :root[data-theme='light'] .top-bar-left [style*='color: rgb(255'] { color: #173427 !important; }
 :root[data-theme='light'] .card { background: linear-gradient(145deg,#fff,#f0f8f3) !important; border-color: #c8ded0; box-shadow: 0 10px 28px rgba(47,86,61,.1), inset 0 1px #fff; }
