@@ -16,7 +16,7 @@ import {
   ChevronRight,
   FolderTree
 } from 'lucide-react';
-import { ACTORS, UNIT_TREE_DATA, ACADEMIC_STRUCTURE } from '../data/actorsData';
+import { ACTORS, UNIT_TREE_DATA } from '../data/actorsData';
 
 export default function Section2Actors({ onSelectTable, onOpenInspector }) {
   const [selectedActor, setSelectedActor] = useState(ACTORS[1]); // Mặc định chọn Chỉ huy
@@ -56,27 +56,6 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
         <p className="section-desc">
           Mô hình hóa 5 nhóm đối tượng tương tác trong nhà trường quân sự (đặc biệt có sự tham gia của <strong>Giảng viên giảng dạy</strong>). Nhấn vào từng tác nhân hoặc đơn vị chỉ huy để kiểm chứng phạm vi dữ liệu và các bảng bị tác động.
         </p>
-      </div>
-
-      {/* Cơ cấu học thuật thực tế của Viện CNTT-TT */}
-      <div className="card academic-structure" style={{ marginBottom: 28 }}>
-        <div className="academic-structure__head">
-          <div>
-            <span className="tag tag-emerald">CƠ CẤU HỌC THUẬT MTA</span>
-            <h3>{ACADEMIC_STRUCTURE.name}</h3>
-            <p>Đơn vị cấp Viện trong DON_VI, quản lý trực tiếp các bản ghi BO_MON dưới đây.</p>
-          </div>
-          <span className="academic-structure__code">{ACADEMIC_STRUCTURE.code}</span>
-        </div>
-        <div className="academic-structure__grid">
-          {ACADEMIC_STRUCTURE.departments.map((department, index) => (
-            <button key={department.code} onClick={() => onSelectTable('BO_MON')} className="academic-department">
-              <span>{String(index + 1).padStart(2, '0')}</span>
-              <strong>{department.name}</strong>
-              <small>{department.code}</small>
-            </button>
-          ))}
-        </div>
       </div>
 
       {/* 5 Thẻ Đối Tượng Tác Nhân */}
