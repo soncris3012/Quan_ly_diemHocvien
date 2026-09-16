@@ -54,26 +54,21 @@ export default function Navigation({
         </div>
       </div>
 
-      {/* Progress Bar */}
-      <div style={{ padding: '10px 18px 4px', borderBottom: '1px solid var(--border-subtle)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-dim)', marginBottom: 4 }}>
-          <span>TIẾN TRÌNH THUYẾT TRÌNH</span>
-          <span className="mono-font" style={{ color: 'var(--color-blue)', fontWeight: 600 }}>{progressPercent}%</span>
+      {/* Chỉ hiển thị tiến trình khi bắt đầu chế độ báo cáo */}
+      {presentationMode && (
+        <div className="presentation-progress">
+          <div className="presentation-progress__label">
+            <span>TIẾN TRÌNH THUYẾT TRÌNH</span>
+            <span className="mono-font">{progressPercent}%</span>
+          </div>
+          <div className="presentation-progress__track">
+            <div className="presentation-progress__value" style={{ width: `${progressPercent}%` }} />
+          </div>
         </div>
-        <div style={{ width: '100%', height: 3, background: 'rgba(38, 52, 77, 0.6)', borderRadius: 2, overflow: 'hidden' }}>
-          <div 
-            style={{ 
-              width: `${progressPercent}%`, 
-              height: '100%', 
-              background: 'linear-gradient(90deg, #0284c7, #38bdf8)',
-              transition: 'width 0.3s ease'
-            }} 
-          />
-        </div>
-      </div>
+      )}
 
       {/* 10 Navigation Items */}
-      <nav className="sidebar-nav">
+      <nav className={`sidebar-nav ${presentationMode ? 'is-presenting' : ''}`}>
         {SECTIONS.map((sec) => {
           const Icon = sec.icon;
           const isActive = currentSection === sec.id;

@@ -33,6 +33,8 @@ export default function App() {
   const [currentSection, setCurrentSection] = useState('sec_overview');
   const [inspectorItem, setInspectorItem] = useState(null);
   const [presentationMode, setPresentationMode] = useState(false);
+  const [presentationPlaying, setPresentationPlaying] = useState(false);
+  const [presentationSpeed, setPresentationSpeed] = useState(1);
   const [highlightedTable, setHighlightedTable] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -59,6 +61,20 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const startPresentation = () => {
+    setInspectorItem(null);
+    setSearchOpen(false);
+    setPresentationMode(true);
+    setPresentationPlaying(true);
+    setCurrentSection('sec_overview');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const stopPresentation = () => {
+    setPresentationPlaying(false);
+    setPresentationMode(false);
+  };
+
   // Bắt phím tắt Cmd+K hoặc Ctrl+K
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -71,13 +87,51 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // Tự cuộn toàn bộ nội dung và chuyển mục khi chạy chế độ báo cáo.
+  useEffect(() => {
+    if (!presentationMode || !presentationPlaying) return undefined;
+
+    let frameId;
+    let lastTime = performance.now();
+    let reachedBottomAt = null;
+    const pixelsPerSecond = 42 * presentationSpeed;
+
+    const animate = (now) => {
+      const delta = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+      const atBottom = window.scrollY >= maxScroll - 3;
+
+      if (!atBottom) {
+        reachedBottomAt = null;
+        window.scrollBy(0, pixelsPerSecond * delta);
+      } else {
+        reachedBottomAt ??= now;
+        if (now - reachedBottomAt > 1100 / presentationSpeed) {
+          const index = SECTIONS.findIndex(section => section.id === currentSection);
+          if (index < SECTIONS.length - 1) {
+            setCurrentSection(SECTIONS[index + 1].id);
+            window.scrollTo({ top: 0, behavior: 'instant' });
+            return;
+          }
+          setPresentationPlaying(false);
+          return;
+        }
+      }
+      frameId = requestAnimationFrame(animate);
+    };
+
+    frameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(frameId);
+  }, [presentationMode, presentationPlaying, presentationSpeed, currentSection]);
+
   // Render Component tương ứng với chuyên mục
   const renderCurrentSection = () => {
     switch (currentSection) {
       case 'sec_overview':
         return (
           <Section1Overview 
-            onStartPresentation={() => setPresentationMode(true)}
+            onStartPresentation={startPresentation}
             onSelectSection={handleSelectSection}
             onOpenInspector={handleOpenInspector}
           />
@@ -137,7 +191,7 @@ export default function App() {
       case 'sec_conclusion':
         return <Section10Conclusion onSelectSection={handleSelectSection} />;
       default:
-        return <Section1Overview onStartPresentation={() => setPresentationMode(true)} onSelectSection={handleSelectSection} />;
+        return <Section1Overview onStartPresentation={startPresentation} onSelectSection={handleSelectSection} />;
     }
   };
 
@@ -150,7 +204,7 @@ export default function App() {
         currentSection={currentSection}
         onSelectSection={handleSelectSection}
         presentationMode={presentationMode}
-        onTogglePresentation={() => setPresentationMode(!presentationMode)}
+        onTogglePresentation={() => presentationMode ? stopPresentation() : startPresentation()}
         onResetMockData={() => {
           setInspectorItem(null);
           setHighlightedTable(null);
@@ -205,7 +259,9 @@ export default function App() {
 
         {/* Nội dung chuyên mục chính */}
         <main className="content-body">
-          {renderCurrentSection()}
+          <div key={currentSection} className="section-page-transition">
+            {renderCurrentSection()}
+          </div>
         </main>
       </div>
 
@@ -221,7 +277,11 @@ export default function App() {
         <PresentationController 
           currentSection={currentSection}
           onSelectSection={handleSelectSection}
-          onExit={() => setPresentationMode(false)}
+          isPlaying={presentationPlaying}
+          speed={presentationSpeed}
+          onTogglePlaying={() => setPresentationPlaying(value => !value)}
+          onSpeedChange={setPresentationSpeed}
+          onExit={stopPresentation}
         />
       )}
 
