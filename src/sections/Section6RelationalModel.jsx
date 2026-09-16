@@ -174,7 +174,6 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
                       <thead>
                         <tr style={{ color: 'var(--text-dim)', borderBottom: '1px solid var(--border-subtle)', textAlign: 'left' }}>
                           <th style={{ padding: '6px 10px' }}>Tên Cột</th>
-                          <th style={{ padding: '6px 10px' }}>Kiểu Dữ Liệu</th>
                           <th style={{ padding: '6px 10px' }}>Loại Khóa</th>
                           <th style={{ padding: '6px 10px' }}>Bắt Buộc?</th>
                           <th style={{ padding: '6px 10px' }}>Diễn Giải Nghiệp Vụ</th>
@@ -186,9 +185,6 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
                           <tr key={idx} style={{ borderBottom: '1px solid rgba(38, 52, 77, 0.3)' }}>
                             <td style={{ padding: '7px 10px', fontWeight: 600, color: '#fff' }} className="mono-font">
                               {col.name}
-                            </td>
-                            <td style={{ padding: '7px 10px', color: 'var(--text-muted)' }} className="mono-font">
-                              {col.type}
                             </td>
                             <td style={{ padding: '7px 10px' }}>
                               {col.key?.includes('PK') && <span className="tag tag-amber" style={{ fontSize: '0.65rem' }}>PK</span>}

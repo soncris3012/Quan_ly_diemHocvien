@@ -129,7 +129,6 @@ export default function Section7DataDictionary({ onSelectTable, onOpenInspector 
                     <th style={{ padding: '12px 14px' }}>Bảng</th>
                     <th style={{ padding: '12px 14px' }}>Tên Trường</th>
                     <th style={{ padding: '12px 14px' }}>Ý Nghĩa Nghiệp Vụ</th>
-                    <th style={{ padding: '12px 14px' }}>Kiểu Dữ Liệu</th>
                     <th style={{ padding: '12px 14px' }}>Khóa</th>
                     <th style={{ padding: '12px 14px' }}>Bắt Buộc?</th>
                     <th style={{ padding: '12px 14px' }}>Miền Giá Trị</th>
@@ -159,9 +158,6 @@ export default function Section7DataDictionary({ onSelectTable, onOpenInspector 
                       </td>
                       <td style={{ padding: '10px 14px', color: 'var(--text-muted)' }}>
                         {attr.description}
-                      </td>
-                      <td style={{ padding: '10px 14px', color: 'var(--text-dim)' }} className="mono-font">
-                        {attr.type}
                       </td>
                       <td style={{ padding: '10px 14px' }}>
                         {attr.key?.includes('PK') && <span className="tag tag-amber" style={{ fontSize: '0.65rem' }}>PK</span>}

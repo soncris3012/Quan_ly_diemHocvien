@@ -109,7 +109,7 @@ export default function RightDrawer({ item, onClose, onSelectTable }) {
                       gap: 4
                     }}
                   >
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                         <span className="mono-font" style={{ fontWeight: 600, color: '#fff', fontSize: '0.88rem' }}>
                           {col.name}
@@ -127,9 +127,6 @@ export default function RightDrawer({ item, onClose, onSelectTable }) {
                         )}
                         {col.key?.includes('UQ') && <span className="tag tag-purple" style={{ fontSize: '0.68rem', padding: '1px 5px' }}>UQ</span>}
                       </div>
-                      <span className="mono-font" style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
-                        {col.type}
-                      </span>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
