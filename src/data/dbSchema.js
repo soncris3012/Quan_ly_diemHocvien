@@ -69,9 +69,9 @@ export const TABLES = [
     description: 'Các bộ môn chuyên ngành trực thuộc Khoa/Đơn vị quản lý giảng viên.',
     justification: 'Quản lý tổ chức học thuật chuyên môn, phân bổ môn học cho giảng viên trực thuộc.',
     columns: [
-      { name: 'MaBoMon', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã bộ môn', domain: 'Duy nhất', example: 'BM_CSDL' },
-      { name: 'TenBoMon', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên bộ môn', domain: 'Văn bản', example: 'Bộ môn Cơ sở dữ liệu & HTTT' },
-      { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Đơn vị quản lý (Khoa)', domain: 'Tham chiếu DON_VI', example: 'DV_KHOA_CNTT', ref: { table: 'DON_VI', column: 'MaDonVi' } }
+      { name: 'MaBoMon', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã bộ môn', domain: 'Duy nhất', example: 'BM_ATTT' },
+      { name: 'TenBoMon', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên bộ môn', domain: 'Văn bản', example: 'Bộ môn An toàn thông tin' },
+      { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Viện quản lý trực tiếp', domain: 'Tham chiếu DON_VI', example: 'DV_VIEN_CNTT_TT', ref: { table: 'DON_VI', column: 'MaDonVi' } }
     ],
     constraints: ['PK: MaBoMon', 'FK: MaDonVi -> DON_VI(MaDonVi)']
   },
@@ -559,10 +559,10 @@ export const INTEGRITY_CONSTRAINTS = [
   },
   {
     id: 'c12',
-    title: 'Chỉ huy chỉ xem học viên thuộc đơn vị mình',
-    type: 'Phân quyền phạm vi đơn vị',
+    title: 'Chỉ huy được tra cứu điểm toàn Học viện',
+    type: 'Phân quyền đọc toàn Học viện',
     target: 'HOC_VIEN, LOP_HOC, DON_VI',
-    description: 'Chỉ huy đơn vị chỉ được phép truy vấn danh sách điểm của học viên thuộc các lớp có MaDonVi nằm trong cây phân cấp của mình.',
-    implementation: 'Security Policy CTE truy vấn theo cây DON_VI.'
+    description: 'ROLE_CH được đọc kết quả của toàn bộ học viên; DON_VI và LOP_HOC được sử dụng làm điều kiện lọc, nhóm và tổng hợp báo cáo.',
+    implementation: 'RBAC cấp quyền SELECT toàn Học viện; bộ lọc theo cây DON_VI.'
   }
 ];

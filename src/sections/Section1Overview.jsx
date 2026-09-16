@@ -41,7 +41,7 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
     {
       issue: 'Bảo mật phân quyền quân sự',
       why: 'Chỉ huy đơn vị, Giảng viên và Học viên có thẩm quyền và phạm vi dữ liệu hoàn toàn khác nhau.',
-      resolution: 'Ứng dụng mô hình RBAC (USER, ROLE, PERMISSION) kết hợp Row-Level Security theo cây đơn vị DON_VI và phân công PHAN_CONG.'
+      resolution: 'Ứng dụng RBAC: Học viên chỉ xem điểm bản thân; Giảng viên thao tác theo PHAN_CONG; Chỉ huy được đọc toàn Học viện và lọc báo cáo theo cây DON_VI.'
     }
   ];
 

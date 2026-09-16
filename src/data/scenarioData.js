@@ -11,7 +11,7 @@ export const SCENARIOS = [
     highlightTables: ['GIANG_VIEN', 'PHAN_CONG', 'LOAI_DIEM', 'DIEM', 'KET_QUA_HOC_TAP'],
     mockData: {
       student: { id: 'HV001', name: 'Nguyễn Văn An', class: 'CNTT2_K58' },
-      lecturer: { id: 'GV001', name: 'TS. Lê Đức Thắng', dept: 'Bộ môn CSDL' },
+      lecturer: { id: 'GV001', name: 'TS. Lê Đức Thắng', dept: 'Bộ môn Hệ thống thông tin' },
       assignment: { id: 'PC_CSDL_01', course: 'Cơ sở dữ liệu (3 TC)', term: 'Học kỳ 1 (2025-2026)' },
       scores: {
         cc: 8.0,
@@ -130,27 +130,25 @@ export const SCENARIOS = [
 
   {
     id: 'sc6',
-    title: 'Tình huống 6: Chỉ Huy Xem Điểm Quân Nhân Đơn Vị Mình',
-    badge: 'Phân quyền đơn vị',
+    title: 'Tình huống 6: Chỉ Huy Tra Cứu Điểm Toàn Học Viện',
+    badge: 'Quyền xem toàn Học viện',
     badgeClass: 'tag-blue',
-    description: 'Chỉ huy Đại đội 1 chỉ xem được điểm của học viên thuộc các lớp biên chế tại Đại đội 1 (CNTT1, CNTT2), bị từ chối xem Đại đội 2.',
+    description: 'Theo nghiệp vụ thực tế tại MTA, Chỉ huy đơn vị có thể tra cứu thông tin điểm của toàn bộ học viên; đơn vị và lớp là tiêu chí lọc báo cáo, không phải ranh giới chặn truy cập.',
     highlightTables: ['DON_VI', 'LOP_HOC', 'HOC_VIEN', 'KET_QUA_HOC_TAP'],
     commanders: [
       {
         id: 'ch_c1',
         name: 'Đại úy Trần Văn Bình',
         unit: 'Đại đội 1 (DV_C1)',
-        allowedClasses: ['CNTT1_K58', 'CNTT2_K58'],
-        blockedClasses: ['ATTT1_K58']
+        allowedClasses: ['CNTT1_K58', 'CNTT2_K58', 'ATTT1_K58']
       },
       {
         id: 'ch_c2',
         name: 'Đại úy Nguyễn Hữu Hùng',
         unit: 'Đại đội 2 (DV_C2)',
-        allowedClasses: ['ATTT1_K58'],
-        blockedClasses: ['CNTT1_K58', 'CNTT2_K58']
+        allowedClasses: ['CNTT1_K58', 'CNTT2_K58', 'ATTT1_K58']
       }
     ],
-    explanation: 'Phân quyền phạm vi dựa trên liên kết DON_VI -> LOP_HOC -> HOC_VIEN -> KET_QUA_HOC_TAP: Tách bạch rõ ràng giữa vai trò quản lý quân sự của Chỉ huy và vai trò chuyên môn của Giảng viên.'
+    explanation: 'ROLE_CH cho phép đọc kết quả toàn Học viện. Liên kết DON_VI → LOP_HOC → HOC_VIEN → KET_QUA_HOC_TAP được dùng để tìm kiếm, lọc và tổng hợp theo đơn vị; quyền sửa điểm vẫn bị tách biệt và chỉ thuộc các tác nhân chuyên môn được phân công.'
   }
 ];

@@ -16,7 +16,7 @@ import {
   ChevronRight,
   FolderTree
 } from 'lucide-react';
-import { ACTORS, UNIT_TREE_DATA } from '../data/actorsData';
+import { ACTORS, UNIT_TREE_DATA, ACADEMIC_STRUCTURE } from '../data/actorsData';
 
 export default function Section2Actors({ onSelectTable, onOpenInspector }) {
   const [selectedActor, setSelectedActor] = useState(ACTORS[1]); // Mặc định chọn Chỉ huy
@@ -31,13 +31,13 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
     onOpenInspector({
       type: 'entity',
       data: {
-        name: 'Phạm Vi Quản Lý Theo Đơn Vị',
+        name: 'Tra Cứu Điểm Toàn Học Viện',
         groupId: 'org',
-        meaning: 'Phạm vi xem được suy ra từ vai trò của tài khoản và chuỗi biên chế HOC_VIEN → LOP_HOC → DON_VI.',
+        meaning: 'ROLE_CH cho phép Chỉ huy tra cứu điểm toàn bộ học viên; chuỗi biên chế chỉ phục vụ lọc và tổng hợp.',
         identifier: 'MaUser + MaRole',
         relationships: 'USER (N) — USER_ROLE — (N) ROLE; HOC_VIEN (N) — LOP_HOC (N) — DON_VI',
-        example: `Chỉ huy đơn vị ${unitId === 'd1_c1' ? 'Đại đội 1' : 'Đại đội 2'} có phạm vi xem học viên thuộc các lớp biên chế tại đơn vị này.`,
-        justification: 'Trong phạm vi mô hình 23 bảng hiện tại, RBAC xác định quyền thao tác; phạm vi dữ liệu được lọc theo cây DON_VI. Nếu cần lưu lịch sử cán bộ phụ trách từng đơn vị, đây là một bảng mở rộng ở giai đoạn triển khai.',
+        example: `Chỉ huy ${unitId === 'd1_c1' ? 'Đại đội 1' : 'Đại đội 2'} có thể xem điểm toàn Học viện và chọn DON_VI để lọc báo cáo theo đơn vị.`,
+        justification: 'RBAC xác định quyền đọc toàn Học viện cho ROLE_CH. DON_VI và LOP_HOC là chiều phân tích dữ liệu, không phải điều kiện từ chối quyền xem.',
         tableRef: 'USER_ROLE'
       }
     });
@@ -56,6 +56,27 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
         <p className="section-desc">
           Mô hình hóa 5 nhóm đối tượng tương tác trong nhà trường quân sự (đặc biệt có sự tham gia của <strong>Giảng viên giảng dạy</strong>). Nhấn vào từng tác nhân hoặc đơn vị chỉ huy để kiểm chứng phạm vi dữ liệu và các bảng bị tác động.
         </p>
+      </div>
+
+      {/* Cơ cấu học thuật thực tế của Viện CNTT-TT */}
+      <div className="card academic-structure" style={{ marginBottom: 28 }}>
+        <div className="academic-structure__head">
+          <div>
+            <span className="tag tag-emerald">CƠ CẤU HỌC THUẬT MTA</span>
+            <h3>{ACADEMIC_STRUCTURE.name}</h3>
+            <p>Đơn vị cấp Viện trong DON_VI, quản lý trực tiếp các bản ghi BO_MON dưới đây.</p>
+          </div>
+          <span className="academic-structure__code">{ACADEMIC_STRUCTURE.code}</span>
+        </div>
+        <div className="academic-structure__grid">
+          {ACADEMIC_STRUCTURE.departments.map((department, index) => (
+            <button key={department.code} onClick={() => onSelectTable('BO_MON')} className="academic-department">
+              <span>{String(index + 1).padStart(2, '0')}</span>
+              <strong>{department.name}</strong>
+              <small>{department.code}</small>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* 5 Thẻ Đối Tượng Tác Nhân */}
@@ -169,13 +190,13 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <h3 style={{ fontSize: '1.15rem', color: '#fff', display: 'flex', alignItems: 'center', gap: 8 }}>
             <FolderTree size={18} color="var(--color-blue)" />
-            Tương Tác Thực Nghiệm: Cây Đơn Vị & Ranh Giới Quản Lý Của Chỉ Huy
+            Tương Tác Thực Nghiệm: Cây Đơn Vị & Bộ Lọc Báo Cáo Của Chỉ Huy
           </h3>
           <span className="badge-military">Bấm để kiểm chứng</span>
         </div>
 
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: 18 }}>
-          Hãy chọn một cán bộ chỉ huy đại đội bên dưới để quan sát hệ thống tự động <strong>tô sáng đại đội được giao</strong>, <strong>sáng các lớp trực thuộc</strong> và <strong>làm mờ học viên ngoài phạm vi</strong>:
+          Chỉ huy được xem điểm toàn Học viện. Hãy chọn một cán bộ bên dưới để quan sát cách hệ thống <strong>lọc nhanh theo đơn vị đang phụ trách</strong>; các đơn vị còn lại chỉ được làm mờ để trực quan hóa bộ lọc, không có nghĩa là bị từ chối truy cập.
         </p>
 
         {/* Nút chọn chỉ huy */}
@@ -223,7 +244,7 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
                     </span>
                     {isManaged && (
                       <span style={{ fontSize: '0.75rem', color: 'var(--color-blue)', fontWeight: 700 }}>
-                        ● TRONG PHẠM VI QUẢN LÝ
+                        ● BỘ LỌC ĐANG CHỌN
                       </span>
                     )}
                   </div>
@@ -275,7 +296,7 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
         </div>
 
         <div style={{ marginTop: 14, fontSize: '0.82rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-          * Nhận xét: Đây là mô phỏng phạm vi truy cập theo <code style={{ color: 'var(--color-blue)' }}>USER_ROLE</code> và cây <code style={{ color: 'var(--color-blue)' }}>DON_VI</code>. Lịch sử cán bộ phụ trách đơn vị là phần mở rộng đề xuất, chưa thuộc 23 bảng cốt lõi.
+          * Nhận xét: <code style={{ color: 'var(--color-blue)' }}>USER_ROLE</code> cấp quyền xem toàn Học viện cho Chỉ huy; cây <code style={{ color: 'var(--color-blue)' }}>DON_VI</code> chỉ hỗ trợ lọc, nhóm và tổng hợp báo cáo.
         </div>
       </div>
 
@@ -304,9 +325,9 @@ export default function Section2Actors({ onSelectTable, onOpenInspector }) {
                 <td style={{ padding: '10px 14px', color: 'var(--text-dim)' }}><X size={16} /> Không</td>
               </tr>
               <tr style={{ borderBottom: '1px solid var(--border-subtle)' }}>
-                <td style={{ padding: '10px 14px', fontWeight: 600 }}>Xem điểm theo Đơn vị phụ trách</td>
+                <td style={{ padding: '10px 14px', fontWeight: 600 }}>Tra cứu điểm toàn Học viện</td>
                 <td style={{ padding: '10px 14px', color: 'var(--text-dim)' }}><X size={16} /> Chặn</td>
-                <td style={{ padding: '10px 14px', color: 'var(--color-emerald)' }}><Check size={16} /> Đọc đơn vị (R)</td>
+                <td style={{ padding: '10px 14px', color: 'var(--color-emerald)' }}><Check size={16} /> Đọc toàn trường (R)</td>
                 <td style={{ padding: '10px 14px', color: 'var(--color-emerald)' }}><Check size={16} /> Đọc toàn trường (R)</td>
                 <td style={{ padding: '10px 14px', color: 'var(--color-emerald)' }}><Check size={16} /> Đọc toàn trường (R)</td>
               </tr>

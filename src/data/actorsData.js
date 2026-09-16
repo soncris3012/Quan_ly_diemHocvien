@@ -38,11 +38,11 @@ export const ACTORS = [
     tagClass: 'tag-blue',
     icon: 'Shield',
     summary: 'Cán bộ chỉ huy trực tiếp quản lý quân nhân và kết quả rèn luyện',
-    whatTheyDo: 'Theo dõi, tổng hợp và giám sát kết quả học tập của toàn bộ quân nhân thuộc đơn vị mình phụ trách nhằm phục vụ đánh giá phân loại rèn luyện quân sự định kỳ.',
-    dataScopeView: 'XEM ĐƯỢC HỌC VIÊN THUỘC ĐƠN VỊ ĐƯỢC PHÂN CÔNG (dựa trên cây đơn vị DON_VI và LOP_HOC).',
+    whatTheyDo: 'Theo dõi, tổng hợp và giám sát kết quả học tập của toàn bộ học viên trong Học viện nhằm phục vụ công tác quản lý, đánh giá và chỉ huy.',
+    dataScopeView: 'ĐƯỢC TRA CỨU THÔNG TIN ĐIỂM CỦA TOÀN BỘ HỌC VIÊN TRONG HỌC VIỆN; đơn vị và lớp được dùng để lọc, tổng hợp báo cáo, không dùng để chặn quyền xem.',
     dataScopeModify: 'Không có quyền nhập điểm hay sửa điểm chuyên môn (thuộc thẩm quyền Giảng viên và Phòng Đào tạo).',
     impactedTables: ['DON_VI', 'LOP_HOC', 'HOC_VIEN', 'KET_QUA_HOC_TAP'],
-    note: 'Chỉ huy quản lý theo biên chế lớp hành chính (LOP_HOC) và đơn vị quân sự (DON_VI).'
+    note: 'ROLE_CH cấp quyền xem điểm toàn Học viện. Chuỗi DON_VI → LOP_HOC → HOC_VIEN hỗ trợ lọc và tổng hợp theo cơ cấu tổ chức, không giới hạn bản ghi mà Chỉ huy được phép tra cứu.'
   },
   {
     id: 'actor_dt',
@@ -128,5 +128,18 @@ export const UNIT_TREE_DATA = {
         }
       ]
     }
+  ]
+};
+
+export const ACADEMIC_STRUCTURE = {
+  id: 'vien_cntt_tt',
+  code: 'DV_VIEN_CNTT_TT',
+  name: 'Viện Công nghệ Thông tin và Truyền thông',
+  type: 'VIEN',
+  departments: [
+    { code: 'BM_ATTT', name: 'Bộ môn An toàn thông tin' },
+    { code: 'BM_HTTT', name: 'Bộ môn Hệ thống thông tin' },
+    { code: 'BM_KHMT', name: 'Bộ môn Khoa học máy tính' },
+    { code: 'BM_CNPM', name: 'Bộ môn Công nghệ phần mềm' }
   ]
 };

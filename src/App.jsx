@@ -26,7 +26,9 @@ import {
   Bell, 
   ExternalLink,
   ChevronRight,
-  Sparkles
+  Sparkles,
+  Sun,
+  Moon
 } from 'lucide-react';
 
 export default function App() {
@@ -37,6 +39,7 @@ export default function App() {
   const [presentationSpeed, setPresentationSpeed] = useState(1);
   const [highlightedTable, setHighlightedTable] = useState(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [theme, setTheme] = useState(() => localStorage.getItem('smta-theme') || 'dark');
 
   // Mở inspector khi người dùng chọn một bảng
   const handleSelectTable = (tableName) => {
@@ -86,6 +89,11 @@ export default function App() {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('smta-theme', theme);
+  }, [theme]);
 
   // Tự cuộn toàn bộ nội dung và chuyển mục khi chạy chế độ báo cáo.
   useEffect(() => {
@@ -230,6 +238,15 @@ export default function App() {
           </div>
 
           <div className="top-bar-right">
+            <button
+              onClick={() => setTheme(value => value === 'dark' ? 'light' : 'dark')}
+              className="theme-toggle"
+              aria-label={theme === 'dark' ? 'Chuyển sang chế độ sáng' : 'Chuyển sang chế độ tối'}
+              title={theme === 'dark' ? 'Chế độ sáng' : 'Chế độ tối'}
+            >
+              <span className={theme === 'dark' ? 'is-active' : ''}><Moon size={14} /></span>
+              <span className={theme === 'light' ? 'is-active' : ''}><Sun size={14} /></span>
+            </button>
             <button
               onClick={() => setSearchOpen(true)}
               className="btn btn-secondary btn-sm"

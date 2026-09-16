@@ -417,7 +417,7 @@ export default function Section8Scenarios({ onSelectTable, onOpenInspector }) {
           </div>
         )}
 
-        {/* TÌNH HUỐNG 6: XEM THEO ĐƠN VỊ CỦA CHỈ HUY */}
+        {/* TÌNH HUỐNG 6: CHỈ HUY XEM ĐIỂM TOÀN HỌC VIỆN */}
         {activeScenarioId === 'sc6' && (
           <div style={{ background: 'rgba(8, 13, 24, 0.7)', padding: 18, borderRadius: 10, border: '1px solid var(--border-color)' }}>
             <div style={{ display: 'flex', gap: 10, marginBottom: 16 }}>
@@ -435,31 +435,27 @@ export default function Section8Scenarios({ onSelectTable, onOpenInspector }) {
             {(() => {
               const cmd = currentScenario.commanders.find(c => c.id === selectedCommander);
               return (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.35fr .85fr', gap: 16 }}>
                   <div style={{ background: 'rgba(52, 211, 153, 0.08)', border: '1px solid rgba(52, 211, 153, 0.3)', borderRadius: 8, padding: 14 }}>
                     <div style={{ fontWeight: 700, color: 'var(--color-emerald)', marginBottom: 8 }}>
-                      ✓ ĐƯỢC PHÉP TRUY CẬP ({cmd.allowedClasses.length} Lớp)
+                      ✓ ĐƯỢC PHÉP TRA CỨU TOÀN HỌC VIỆN
                     </div>
                     <ul style={{ paddingLeft: 18, fontSize: '0.85rem', color: 'var(--text-primary)' }}>
                       {cmd.allowedClasses.map((cls, idx) => (
                         <li key={idx} style={{ marginBottom: 4 }}>
-                          Lớp <strong>{cls}</strong> (Thuộc biên chế {cmd.unit})
+                          Lớp <strong>{cls}</strong>
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div style={{ background: 'rgba(251, 113, 133, 0.08)', border: '1px solid rgba(251, 113, 133, 0.3)', borderRadius: 8, padding: 14 }}>
-                    <div style={{ fontWeight: 700, color: 'var(--color-rose)', marginBottom: 8 }}>
-                      ✗ TỪ CHỐI TRUY CẬP (NGOÀI PHẠM VI)
+                  <div style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 8, padding: 14 }}>
+                    <div style={{ fontWeight: 700, color: 'var(--color-blue)', marginBottom: 8 }}>
+                      BỘ LỌC GỢI Ý
                     </div>
-                    <ul style={{ paddingLeft: 18, fontSize: '0.85rem', color: 'var(--text-dim)' }}>
-                      {cmd.blockedClasses.map((cls, idx) => (
-                        <li key={idx} style={{ marginBottom: 4 }}>
-                          Lớp <strong>{cls}</strong> (Không thuộc quyền quản lý)
-                        </li>
-                      ))}
-                    </ul>
+                    <p style={{ fontSize: '0.84rem', color: 'var(--text-muted)', lineHeight: 1.65 }}>
+                      Đang ưu tiên hiển thị: <strong>{cmd.unit}</strong>. Chỉ huy vẫn có thể bỏ bộ lọc để tra cứu học viên thuộc mọi đơn vị, lớp và chuyên ngành.
+                    </p>
                   </div>
                 </div>
               );

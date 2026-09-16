@@ -14,23 +14,23 @@ export const ENTITIES = [
     id: 'ent_donvi',
     name: 'Đơn Vị (DON_VI)',
     groupId: 'org',
-    meaning: 'Cơ cấu tổ chức quân đội phân cấp từ Tiểu đoàn xuống các Đại đội và Khoa chuyên ngành.',
+    meaning: 'Cơ cấu tổ chức phân cấp gồm đơn vị quân sự và đơn vị học thuật như Viện, Bộ môn.',
     identifier: 'Mã đơn vị (MaDonVi [PK])',
     keyAttributes: ['MaDonVi', 'TenDonVi', 'LoaiDonVi', 'MaDonViCha'],
     relationships: 'Quan hệ đệ quy cha-con; 1 Đơn vị quản lý nhiều Lớp học hoặc nhiều Bộ môn chuyên ngành.',
-    example: 'Tiểu đoàn 1 (DV_D1) quản lý Đại đội 1 (DV_C1). Khoa CNTT quản lý Bộ môn CSDL.',
-    justification: 'Xác định ranh giới quản lý quân sự và cơ chế bảo mật theo phạm vi đơn vị.',
+    example: 'Tiểu đoàn 1 quản lý Đại đội 1; Viện Công nghệ Thông tin và Truyền thông quản lý bốn Bộ môn chuyên môn.',
+    justification: 'Biểu diễn đúng cây tổ chức, phục vụ lọc và tổng hợp báo cáo theo đơn vị.',
     tableRef: 'DON_VI'
   },
   {
     id: 'ent_bomon',
     name: 'Bộ Môn (BO_MON)',
     groupId: 'org',
-    meaning: 'Đơn vị chuyên môn trực thuộc Khoa/Đơn vị, chịu trách nhiệm quản lý học thuật và giảng viên.',
+    meaning: 'Đơn vị chuyên môn trực thuộc Viện, chịu trách nhiệm quản lý học thuật và giảng viên.',
     identifier: 'Mã bộ môn (MaBoMon [PK])',
     keyAttributes: ['MaBoMon', 'TenBoMon', 'MaDonVi'],
-    relationships: 'Thuộc 1 Đơn vị (Khoa); Quản lý nhiều Giảng viên (1:N).',
-    example: 'Bộ môn Cơ sở dữ liệu & HTTT thuộc Khoa Công nghệ thông tin.',
+    relationships: 'Thuộc 1 Đơn vị cấp Viện; Quản lý nhiều Giảng viên (1:N).',
+    example: 'An toàn thông tin, Hệ thống thông tin, Khoa học máy tính và Công nghệ phần mềm trực thuộc Viện CNTT-TT.',
     justification: 'Tổ chức học thuật: Giảng viên thuộc bộ môn chịu trách nhiệm giảng dạy các môn học chuyên ngành.',
     tableRef: 'BO_MON'
   },
@@ -55,7 +55,7 @@ export const ENTITIES = [
     keyAttributes: ['MaUser', 'TenDangNhap', 'MatKhau', 'TrangThai', 'MaNguoi'],
     relationships: 'Gắn với 1 NGUOI; Gán nhiều ROLE qua USER_ROLE; ROLE gán nhiều PERMISSION qua ROLE_PERMISSION.',
     example: 'Tài khoản gv_lethang có quyền nhập điểm thành phần cho lớp được phân công.',
-    justification: 'Phân quyền chặt chẽ: Giảng viên chỉ nhập điểm lớp mình dạy; Chỉ huy chỉ xem điểm đơn vị mình quản lý.',
+    justification: 'Phân quyền chặt chẽ: Giảng viên chỉ nhập điểm lớp mình dạy; Chỉ huy được đọc điểm toàn Học viện nhưng không được sửa điểm.',
     tableRef: 'USER'
   },
 
@@ -94,7 +94,7 @@ export const ENTITIES = [
     identifier: 'Mã giảng viên (MaGV [PK])',
     keyAttributes: ['MaGV', 'MaNguoi', 'MaBoMon', 'HocVi', 'ChuyenMon', 'TrangThai'],
     relationships: 'Kế thừa từ NGUOI; Thuộc 1 BO_MON; Được phân công giảng dạy nhiều lớp học phần qua PHAN_CONG.',
-    example: 'GV001: TS. Lê Đức Thắng, Bộ môn CSDL, Phụ trách giảng dạy môn Cơ sở dữ liệu lớp CNTT2-K58.',
+    example: 'GV001: TS. Lê Đức Thắng, Bộ môn Hệ thống thông tin, phụ trách môn Cơ sở dữ liệu lớp CNTT2-K58.',
     justification: 'ĐÁP ỨNG YÊU CẦU ĐỀ BÀI: Giảng viên là chủ thể trực tiếp giảng bài, chấm điểm chuyên cần, thường xuyên và kiểm tra bài tập.',
     tableRef: 'GIANG_VIEN'
   },
