@@ -6,6 +6,8 @@ import RightDrawer from './components/RightDrawer';
 import PresentationController from './components/PresentationController';
 import SearchModal from './components/SearchModal';
 import WelcomeModal from './components/WelcomeModal';
+import SystemSelector from './components/SystemSelector';
+import XmtaApp from './xmta/XmtaApp';
 
 import Section1Overview from './sections/Section1Overview';
 import Section2Actors from './sections/Section2Actors';
@@ -31,7 +33,7 @@ import {
   Moon
 } from 'lucide-react';
 
-export default function App() {
+function SmtaWorkspace({ onBack }) {
   const [currentSection, setCurrentSection] = useState('sec_overview');
   const [inspectorItem, setInspectorItem] = useState(null);
   const [presentationMode, setPresentationMode] = useState(false);
@@ -238,6 +240,7 @@ export default function App() {
           </div>
 
           <div className="top-bar-right">
+            <button onClick={onBack} className="btn btn-secondary btn-sm"><ChevronRight size={14} style={{ transform: 'rotate(180deg)' }}/> Đổi hệ thống</button>
             <button
               onClick={() => setTheme(value => value === 'dark' ? 'light' : 'dark')}
               className="theme-toggle"
@@ -314,4 +317,15 @@ export default function App() {
       <WelcomeModal />
     </div>
   );
+}
+
+export default function App() {
+  const [system, setSystem] = useState(null);
+  const selectSystem = (value) => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setSystem(value);
+  };
+  if (!system) return <SystemSelector onSelect={selectSystem} />;
+  if (system === 'xmta') return <XmtaApp onBack={() => selectSystem(null)} />;
+  return <SmtaWorkspace onBack={() => selectSystem(null)} />;
 }

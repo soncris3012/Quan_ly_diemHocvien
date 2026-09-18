@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { Users, X, ArrowRight } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-export default function WelcomeModal() {
+export default function WelcomeModal({ system = 'smta' }) {
   const [isOpen, setIsOpen] = useState(false);
+  const isXmta = system === 'xmta';
 
   useEffect(() => {
     // Tự động mở popup sau 300ms khi vào trang web
@@ -95,10 +96,10 @@ export default function WelcomeModal() {
           </div>
           <div>
             <span className="badge-military" style={{ fontSize: '0.72rem' }}>
-              SMTA v2.0 • HỌC VIỆN KỸ THUẬT QUÂN SỰ
+              {isXmta ? 'XMTA v1.0' : 'SMTA v2.0'} • HỌC VIỆN KỸ THUẬT QUÂN SỰ
             </span>
             <h3 id="welcome-title" style={{ fontSize: '1.48rem', color: '#fff', marginTop: 5, fontWeight: 800, lineHeight: 1.28 }}>
-              Dự án Cơ sở dữ liệu quản lý điểm Học viên quân sự MTA
+              {isXmta ? 'Dự án Cơ sở dữ liệu quản lý kết quả kiểm tra thể lực MTA' : 'Dự án Cơ sở dữ liệu quản lý điểm Học viên quân sự MTA'}
             </h3>
           </div>
         </div>
@@ -121,7 +122,7 @@ export default function WelcomeModal() {
             className="btn btn-primary welcome-cta"
             style={{ width: '100%', padding: '12px 20px', fontSize: '0.92rem' }}
           >
-            Khám Phá Dự Án Ngay
+            {isXmta ? 'Khám Phá XMTA Ngay' : 'Khám Phá Dự Án Ngay'}
             <ArrowRight size={16} />
           </button>
         </div>
