@@ -38,27 +38,49 @@ export default function Section9AILog() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch('https://open.er-api.com/v6/latest/USD')
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => controller.abort(), 5000);
+
+    fetch('https://open.er-api.com/v6/latest/USD', {
+      method: 'GET',
+      mode: 'cors',
+      credentials: 'omit',
+      cache: 'no-store',
+      referrerPolicy: 'no-referrer',
+      signal: controller.signal
+    })
       .then(response => {
         if (!response.ok) throw new Error('Không thể tải tỷ giá');
         return response.json();
       })
       .then(data => {
-        if (cancelled || !data?.rates?.VND) return;
-        setExchangeRate(data.rates.VND);
+        const vndRate = Number(data?.rates?.VND);
+        if (cancelled || !Number.isFinite(vndRate) || vndRate < 10000 || vndRate > 100000) {
+          throw new Error('Dữ liệu tỷ giá không hợp lệ');
+        }
+        setExchangeRate(vndRate);
         setRateUpdatedAt(data.time_last_update_utc || new Date().toISOString());
         setRateStatus('live');
       })
       .catch(() => {
         if (!cancelled) setRateStatus('fallback');
-      });
-    return () => { cancelled = true; };
+      })
+      .finally(() => window.clearTimeout(timeoutId));
+    return () => {
+      cancelled = true;
+      controller.abort();
+      window.clearTimeout(timeoutId);
+    };
   }, []);
 
-  const handleCopy = (text, id) => {
-    navigator.clipboard.writeText(text);
-    setCopiedPromptId(id);
-    setTimeout(() => setCopiedPromptId(null), 2000);
+  const handleCopy = async (text, id) => {
+    try {
+      await navigator.clipboard.writeText(String(text));
+      setCopiedPromptId(id);
+      setTimeout(() => setCopiedPromptId(null), 2000);
+    } catch {
+      setCopiedPromptId(null);
+    }
   };
 
   const masterPrompt = `Bạn đóng vai trò người hướng dẫn phân tích và thiết kế cơ sở dữ liệu cho đề tài “Quản lý điểm học viên quân sự”.
