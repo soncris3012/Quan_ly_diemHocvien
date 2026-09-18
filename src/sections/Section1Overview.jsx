@@ -61,7 +61,7 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
         </p>
       </div>
 
-      {/* Thông tin sinh viên & Học phần */}
+      {/* Thông tin học viên và học phần */}
       <div className="grid-4" style={{ marginBottom: 26 }}>
         <div className="card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
           <div style={{ width: 40, height: 40, borderRadius: 8, background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-blue)' }}>

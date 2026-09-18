@@ -243,7 +243,7 @@ export const TABLES = [
     groupId: 'teaching',
     title: 'Khóa Tuyển Sinh Đào Tạo',
     description: 'Khóa đào tạo theo năm nhập học và niên hạn kết thúc.',
-    justification: 'Quản lý sinh viên và kế hoạch theo niên khóa.',
+    justification: 'Quản lý học viên và kế hoạch theo niên khóa.',
     columns: [
       { name: 'MaKhoaDT', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã khóa học', domain: 'Duy nhất', example: 'K58' },
       { name: 'TenKhoaDT', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên khóa đào tạo', domain: 'Văn bản', example: 'Khóa 58 Đại học Quân sự' },
@@ -365,7 +365,7 @@ export const TABLES = [
       { name: 'MaPhanCong', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã dòng phân công', domain: 'Duy nhất', example: 'PC_CSDL_01' },
       { name: 'MaGV', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Giảng viên phụ trách', domain: 'Tham chiếu GIANG_VIEN', example: 'GV001', ref: { table: 'GIANG_VIEN', column: 'MaGV' } },
       { name: 'MaMonHoc', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Môn học được giảng dạy', domain: 'Tham chiếu MON_HOC', example: 'CSDL101', ref: { table: 'MON_HOC', column: 'MaMonHoc' } },
-      { name: 'MaLop', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Lớp sinh viên tham gia', domain: 'Tham chiếu LOP_HOC', example: 'CNTT2_K58', ref: { table: 'LOP_HOC', column: 'MaLop' } },
+      { name: 'MaLop', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Lớp học viên tham gia', domain: 'Tham chiếu LOP_HOC', example: 'CNTT2_K58', ref: { table: 'LOP_HOC', column: 'MaLop' } },
       { name: 'MaHocKy', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Học kỳ triển khai', domain: 'Tham chiếu HOC_KY', example: 'HK1_2025', ref: { table: 'HOC_KY', column: 'MaHocKy' } },
       { name: 'NhomHoc', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Mã phân nhóm (nhóm 1, nhóm 2)', domain: 'Văn bản', example: 'Nhóm 01' },
       { name: 'SoTiet', type: 'INT', key: null, nullable: false, description: 'Số tiết được giao giảng dạy', domain: '> 0', example: '45' }
@@ -531,7 +531,7 @@ export const INTEGRITY_CONSTRAINTS = [
     type: 'Quy tắc nghiệp vụ',
     target: 'DOT_THI, KET_QUA_HOC_TAP',
     description: 'Đợt thi kết thúc môn có LoaiDotThi = THI_LAI chỉ được lập danh sách đối với những học viên có kết quả lần 1 dưới ngưỡng đạt.',
-    implementation: 'Stored Procedure lọc danh sách thí sinh dự thi.'
+    implementation: 'Stored Procedure lọc danh sách học viên dự thi.'
   },
   {
     id: 'c9',
