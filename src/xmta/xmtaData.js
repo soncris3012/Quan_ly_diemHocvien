@@ -1,7 +1,7 @@
 export const XMTA_SECTIONS = [
   ['overview','01','Tổng Quan XMTA'],['actors','02','Tác Nhân & Quyền'],['workflow','03','Quy Trình Kiểm Tra'],
-  ['entities','04','Danh Mục Thực Thể'],['er','05','Mô Hình ER'],['barem','06','Barem & Quy Đổi'],
-  ['medical','07','Sàng Lọc Y Tế'],['results','08','Kết Quả & Báo Cáo'],['scenarios','09','Kiểm Chứng Tình Huống'],['conclusion','10','Kết Luận & Mở Rộng']
+  ['entities','04','Danh Mục Thực Thể'],['er','05','Phòng Trưng Bày ER'],['relational','06','Mô Hình Quan Hệ'],
+  ['dictionary','07','Từ Điển Dữ Liệu'],['scenarios','08','Kiểm Chứng Tình Huống'],['ai','09','Nhật Ký Sử Dụng AI'],['conclusion','10','Kết Luận & Mở Rộng']
 ];
 
 export const FITNESS_ENTITIES = [
