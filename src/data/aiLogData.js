@@ -33,8 +33,8 @@ Cho tôi biết:
     sessionTitle: 'Phiên 2: Đề Xuất Mô Hình ER & Giải Quyết Vấn Đề "Thi Lại vs Học Lại"',
     date: '2026-09-05',
     objective: 'Thiết kế các thực thể cho bài toán kết quả học tập, giải quyết triệt để sự khác nhau giữa thi lại và học lại ở khóa sau.',
-    inputProvided: 'Sơ đồ ER tự phác thảo ban đầu (chỉ có SinhVien, MonHoc, BangDiem, DiemThi).',
-    verbatimPrompt: `Tôi gửi bạn sơ đồ ER ban đầu gồm: SinhVien, MonHoc, BangDiem.
+    inputProvided: 'Sơ đồ ER tự phác thảo ban đầu (chỉ có HocVien, MonHoc, BangDiem, DiemThi).',
+    verbatimPrompt: `Tôi gửi bạn sơ đồ ER ban đầu gồm: HocVien, MonHoc, BangDiem.
 Vấn đề gặp phải: Nếu một học viên thi lại thì lưu ở đâu? Nếu học viên trượt hẳn và năm sau phải học lại cùng khóa sau thì bảng BangDiem hiện tại sẽ bị ghi đè hoặc trùng khóa chính!
 Hãy đề xuất giải pháp chuẩn hóa mô hình dữ liệu để:
 - Lưu được cả lần thi đầu và lần thi lại.

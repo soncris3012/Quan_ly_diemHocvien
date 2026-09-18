@@ -81,7 +81,7 @@ export default function Section10Conclusion({ onSelectSection }) {
           Ranh Giới Thiết Kế Có Chủ Đích (Scope Boundary)
         </h3>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', lineHeight: 1.6, marginBottom: 14 }}>
-          Mô hình đã tích hợp đầy đủ <strong>Giảng viên, Bộ môn và Phân công giảng dạy</strong>. Sinh viên chủ động <strong>chưa mở rộng sang các bài toán hạ tầng cơ sở vật chất ngoài phạm vi quản lý điểm</strong> như: Điểm danh từng tiết 45 phút, Quản lý phòng học vật lý hay Xếp thời khóa biểu tự động.
+          Mô hình đã tích hợp đầy đủ <strong>Giảng viên, Bộ môn và Phân công giảng dạy</strong>. Nhóm chủ động <strong>chưa mở rộng sang các bài toán hạ tầng cơ sở vật chất ngoài phạm vi quản lý điểm</strong> như: Điểm danh từng tiết 45 phút, Quản lý phòng học vật lý hay Xếp thời khóa biểu tự động.
         </p>
         <div className="alert-box alert-amber" style={{ margin: 0 }}>
           <HelpCircle size={20} style={{ flexShrink: 0, marginTop: 2 }} />

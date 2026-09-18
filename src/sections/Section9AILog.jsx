@@ -98,7 +98,7 @@ D. Trình bày kết quả: Tóm tắt bài toán, Ma trận tác nhân, Quy tr�
           Nhật Ký Sử Dụng AI & Đánh Giá Phản Biện
         </h2>
         <p className="section-desc">
-          Báo cáo trung thực quá trình đồng hành cùng Trí tuệ Nhân tạo: Sinh viên đóng vai trò kiến trúc sư trưởng, tiếp thu có chọn lọc các gợi ý xác đáng và kiên quyết bác bỏ các đề xuất vi phạm nguyên tắc cơ sở dữ liệu.
+          Báo cáo trung thực quá trình đồng hành cùng Trí tuệ Nhân tạo: Nhóm đóng vai trò kiến trúc sư trưởng, tiếp thu có chọn lọc các gợi ý xác đáng và kiên quyết bác bỏ các đề xuất vi phạm nguyên tắc cơ sở dữ liệu.
         </p>
       </div>
 
@@ -221,10 +221,10 @@ D. Trình bày kết quả: Tóm tắt bài toán, Ma trận tác nhân, Quy tr�
               </div>
             </div>
 
-            {/* Đánh Giá Phản Biện Của Sinh Viên */}
+            {/* Đánh giá phản biện của nhóm */}
             <div style={{ background: 'rgba(56, 189, 248, 0.05)', border: '1px solid rgba(56, 189, 248, 0.25)', borderRadius: 8, padding: '12px 14px', marginBottom: 16 }}>
               <div style={{ fontWeight: 700, color: 'var(--color-blue)', fontSize: '0.82rem', textTransform: 'uppercase', marginBottom: 4 }}>
-                Nhận Xét & Đánh Giá Phản Biện Của Sinh Viên:
+                Nhận Xét & Đánh Giá Phản Biện Của Nhóm:
               </div>
               <p style={{ fontSize: '0.88rem', color: 'var(--text-primary)', lineHeight: 1.6, margin: 0 }}>
                 {log.studentCritique}
