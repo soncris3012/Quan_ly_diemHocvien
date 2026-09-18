@@ -10,7 +10,6 @@ export default function SystemSelector({ onSelect }) {
         <div>
           <span>MTA DATA PORTAL</span>
           <h1>Chọn Hệ Thống Quản Lý</h1>
-          <p>Hai không gian báo cáo cơ sở dữ liệu độc lập dành cho học vụ và kiểm tra thể lực quân sự.</p>
         </div>
       </header>
 
