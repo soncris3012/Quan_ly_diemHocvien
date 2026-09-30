@@ -40,6 +40,17 @@ export const SCHEMA_GROUPS = {
   }
 };
 
+export function getSqlTypeReason(column) {
+  if (column.ref) return `Dùng ${column.type} để đồng nhất với khóa được tham chiếu ${column.ref.table}.${column.ref.column}, bảo đảm tạo khóa ngoại hợp lệ.`;
+  if (/NVARCHAR/i.test(column.type)) return `${column.type} lưu được tiếng Việt có dấu và giới hạn độ dài phù hợp với ${column.description.toLowerCase()}.`;
+  if (/VARCHAR/i.test(column.type)) return `${column.type} phù hợp cho mã hoặc chuỗi chuẩn hóa không cần Unicode; độ dài giới hạn giúp kiểm soát dữ liệu.`;
+  if (/DECIMAL|NUMERIC/i.test(column.type)) return `${column.type} giữ giá trị thập phân chính xác, tránh sai số của kiểu số thực khi tính điểm hoặc trọng số.`;
+  if (/DATE|TIME/i.test(column.type)) return `${column.type} cho phép kiểm tra, sắp xếp và tính toán thời gian trực tiếp trong SQL.`;
+  if (/INT|TINYINT|SMALLINT|BIGINT/i.test(column.type)) return `${column.type} phù hợp với giá trị nguyên và hỗ trợ so sánh, sắp xếp hiệu quả.`;
+  if (/BIT|BOOLEAN/i.test(column.type)) return `${column.type} biểu diễn trạng thái đúng/sai rõ ràng và tiết kiệm dung lượng.`;
+  return `${column.type} được chọn theo miền giá trị của ${column.description.toLowerCase()} và yêu cầu toàn vẹn dữ liệu.`;
+}
+
 export const TABLES = [
   // ==========================================
   // NHÓM 1: TỔ CHỨC, ĐƠN VỊ & BẢO MẬT (R1, R4, R5, R6, R7, R8, R9, R15)

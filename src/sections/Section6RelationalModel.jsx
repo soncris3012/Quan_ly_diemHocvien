@@ -10,13 +10,15 @@ import {
   Key, 
   ExternalLink, 
   Layers,
-  HelpCircle
+  HelpCircle,
+  X
 } from 'lucide-react';
-import { TABLES, SCHEMA_GROUPS } from '../data/dbSchema';
+import { TABLES, SCHEMA_GROUPS, getSqlTypeReason } from '../data/dbSchema';
 
 export default function Section6RelationalModel({ onSelectTable, onOpenInspector, highlightedTable }) {
   const [activeTab, setActiveTab] = useState('schema'); // 'schema' | 'er_to_relational'
   const [selectedGroup, setSelectedGroup] = useState('all');
+  const [typeDetail, setTypeDetail] = useState(null);
 
   const groups = Object.values(SCHEMA_GROUPS);
 
@@ -174,6 +176,7 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
                       <thead>
                         <tr style={{ color: 'var(--text-dim)', borderBottom: '1px solid var(--border-subtle)', textAlign: 'left' }}>
                           <th style={{ padding: '6px 10px' }}>Tên Cột</th>
+                          <th style={{ padding: '6px 10px' }}>Kiểu SQL</th>
                           <th style={{ padding: '6px 10px' }}>Loại Khóa</th>
                           <th style={{ padding: '6px 10px' }}>Bắt Buộc?</th>
                           <th style={{ padding: '6px 10px' }}>Diễn Giải Nghiệp Vụ</th>
@@ -185,6 +188,11 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
                           <tr key={idx} style={{ borderBottom: '1px solid rgba(38, 52, 77, 0.3)' }}>
                             <td style={{ padding: '7px 10px', fontWeight: 600, color: '#fff' }} className="mono-font">
                               {col.name}
+                            </td>
+                            <td style={{ padding: '7px 10px' }}>
+                              <button className="sql-type-button mono-font" onClick={() => setTypeDetail({ table: tbl, column: col })} title="Bấm để xem lý do chọn kiểu dữ liệu">
+                                {col.type}
+                              </button>
                             </td>
                             <td style={{ padding: '7px 10px' }}>
                               {col.key?.includes('PK') && <span className="tag tag-amber" style={{ fontSize: '0.65rem' }}>PK</span>}
@@ -307,6 +315,18 @@ export default function Section6RelationalModel({ onSelectTable, onOpenInspector
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {typeDetail && (
+        <div className="smta-modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setTypeDetail(null)}>
+          <section className="smta-detail-modal" role="dialog" aria-modal="true" aria-label={`Giải thích kiểu dữ liệu ${typeDetail.column.name}`}>
+            <button className="smta-modal-close" onClick={() => setTypeDetail(null)} aria-label="Đóng"><X size={19} /></button>
+            <span className="smta-modal-kicker">{typeDetail.table.name}.{typeDetail.column.name}</span>
+            <h3>{typeDetail.column.type}</h3>
+            <p>{getSqlTypeReason(typeDetail.column)}</p>
+            <div className="smta-type-meta"><span>{typeDetail.column.nullable ? 'NULL' : 'NOT NULL'}</span>{typeDetail.column.key && <span>{typeDetail.column.key}</span>}<span>{typeDetail.column.description}</span></div>
+          </section>
         </div>
       )}
     </div>

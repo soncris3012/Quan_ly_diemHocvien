@@ -4,6 +4,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import ERDiagram from '../components/ERDiagram';
 import InitialERDiagram from '../components/InitialERDiagram';
+import { getSqlTypeReason } from '../data/dbSchema';
 import { 
   Image, 
   ZoomIn, 
@@ -64,6 +65,8 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
   const [showAttributes, setShowAttributes] = useState(true);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [customImage, setCustomImage] = useState(null);
+  const [expandedTable, setExpandedTable] = useState(null);
+  const [typeDetail, setTypeDetail] = useState(null);
 
   // Modal phóng to toàn màn hình
   const [fullscreenDiagram, setFullscreenDiagram] = useState(null); // null | 'initial' | 'enhanced'
@@ -256,6 +259,7 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
         showAttributes={showAttributes}
         notation={notation}
         onSelectTable={onSelectTable}
+        onExpandTable={setExpandedTable}
       />
     </AutoFitDiagram>
   );
@@ -492,6 +496,30 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
           </div>
         )}
       </div>
+
+      {expandedTable && (
+        <div className="smta-modal-backdrop" onMouseDown={(event) => event.target === event.currentTarget && setExpandedTable(null)}>
+          <section className="smta-detail-modal smta-table-modal" role="dialog" aria-modal="true" aria-label={`Chi tiết bảng ${expandedTable.name}`}>
+            <button className="smta-modal-close" onClick={() => setExpandedTable(null)} aria-label="Đóng"><X size={19} /></button>
+            <span className="smta-modal-kicker">{expandedTable.code} · LƯỢC ĐỒ AI</span>
+            <h3>{expandedTable.name}</h3>
+            <p>{expandedTable.title} — {expandedTable.description}</p>
+            <div className="smta-column-list">{expandedTable.columns.map((column) => <button key={column.name} onClick={() => setTypeDetail({ table: expandedTable, column })}><span><strong>{column.name}</strong>{column.key && <small>{column.key}</small>}</span><code>{column.type}</code><em>{column.nullable ? 'NULL' : 'NOT NULL'}</em></button>)}</div>
+            <small>Bấm vào từng thuộc tính để xem lý do chọn kiểu SQL.</small>
+          </section>
+        </div>
+      )}
+
+      {typeDetail && (
+        <div className="smta-modal-backdrop smta-modal-top" onMouseDown={(event) => event.target === event.currentTarget && setTypeDetail(null)}>
+          <section className="smta-detail-modal" role="dialog" aria-modal="true">
+            <button className="smta-modal-close" onClick={() => setTypeDetail(null)} aria-label="Đóng"><X size={19} /></button>
+            <span className="smta-modal-kicker">{typeDetail.table.name}.{typeDetail.column.name}</span>
+            <h3>{typeDetail.column.type}</h3>
+            <p>{getSqlTypeReason(typeDetail.column)}</p>
+          </section>
+        </div>
+      )}
 
       {/* ========================================================= */}
       {/* MODAL LIGHTBOX PHÓNG TO TOÀN MÀN HÌNH THEO YÊU CẦU NGƯỜI DÙNG */}

@@ -50,7 +50,7 @@ function relationPath(from, to, selfRelation) {
   return `M ${fromCenter.x} ${sy} V ${midY} H ${toCenter.x} V ${ty}`;
 }
 
-export default function ERDiagram({ showAttributes = true, notation = 'crowsfoot', onSelectTable }) {
+export default function ERDiagram({ showAttributes = true, notation = 'crowsfoot', onSelectTable, onExpandTable }) {
   const [active, setActive] = useState(null);
   const relations = useMemo(() => TABLES.flatMap(table => table.columns
     .filter(column => column.ref && POSITIONS[column.ref.table])
@@ -126,7 +126,12 @@ export default function ERDiagram({ showAttributes = true, notation = 'crowsfoot
                 style={{ '--entity-color': group.color }}
                 onMouseEnter={() => setActive(table.name)}
                 onFocus={() => setActive(table.name)}
-                onClick={() => onSelectTable?.(table.name)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  if (onExpandTable) onExpandTable(table);
+                  else onSelectTable?.(table.name);
+                }}
+                title="Bấm để mở lớn bảng và xem đầy đủ kiểu dữ liệu"
               >
                 <span className="er-entity__code">{table.code}</span>
                 <strong>{table.name}</strong>
