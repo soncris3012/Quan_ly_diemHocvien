@@ -16,13 +16,14 @@ export default function PresentationController({
   isPlaying,
   speed,
   onTogglePlaying,
-  onSpeedChange
+  onSpeedChange,
+  sections = SECTIONS
 }) {
-  const currentIndex = SECTIONS.findIndex(section => section.id === currentSection);
-  const current = SECTIONS[currentIndex] || SECTIONS[0];
+  const currentIndex = sections.findIndex(section => section.id === currentSection);
+  const current = sections[currentIndex] || sections[0];
 
   const selectSection = (index) => {
-    if (index >= 0 && index < SECTIONS.length) onSelectSection(SECTIONS[index].id);
+    if (index >= 0 && index < sections.length) onSelectSection(sections[index].id);
   };
 
   return (
@@ -45,7 +46,7 @@ export default function PresentationController({
           {isPlaying ? 'Tạm dừng' : 'Tiếp tục'}
         </button>
 
-        <button onClick={() => selectSection(currentIndex + 1)} disabled={currentIndex === SECTIONS.length - 1} className="presentation-icon-btn" title="Mục tiếp theo">
+        <button onClick={() => selectSection(currentIndex + 1)} disabled={currentIndex === sections.length - 1} className="presentation-icon-btn" title="Mục tiếp theo">
           <ChevronRight size={17} />
         </button>
 
@@ -57,7 +58,7 @@ export default function PresentationController({
           </select>
         </div>
 
-        <span className="presentation-count">{currentIndex + 1}/{SECTIONS.length}</span>
+        <span className="presentation-count">{currentIndex + 1}/{sections.length}</span>
         <button onClick={onExit} className="presentation-icon-btn presentation-close" title="Thoát trình chiếu">
           <X size={17} />
         </button>

@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { Activity, ArrowLeft, BarChart3, CheckCircle2, ClipboardCheck, Database, LayoutDashboard, Moon, Play, Ruler, ShieldCheck, Sun, Users, X } from 'lucide-react';
+import { Activity, ArrowLeft, BarChart3, CheckCircle2, ChevronRight, ClipboardCheck, Database, LayoutDashboard, Moon, Play, RotateCcw, Ruler, ShieldCheck, Sparkles, Sun, Users, X } from 'lucide-react';
 import WelcomeModal from '../components/WelcomeModal';
+import PresentationController from '../components/PresentationController';
 import { FITNESS_ENTITIES, FITNESS_FIELD_META, FITNESS_RELATIONS, FITNESS_TESTS, XMTA_SECTIONS, parseFitnessField } from './xmtaData';
 import './xmta.css';
 
 const ICONS = [LayoutDashboard,Users,Play,Database,Database,Ruler,Activity,BarChart3,ClipboardCheck,CheckCircle2];
 
-function SectionHead({ tag, title, children }) { return <header className="xmta-section-head"><span>{tag}</span><h2>{title}</h2>{children && <p>{children}</p>}</header>; }
+function SectionHead({ tag, title, children }) { return <header className="section-header xmta-section-head"><span className="section-tag">{tag}</span><h2 className="section-title">{title}</h2>{children && <p className="section-desc">{children}</p>}</header>; }
 function Metric({ value, label, tone='cyan' }) { return <div className={`xmta-metric tone-${tone}`}><strong>{value}</strong><span>{label}</span></div>; }
 
 function FieldChip({ entity, field, onExplain }) {
@@ -73,8 +74,24 @@ function Conclusion() { return <div><SectionHead tag="KẾT LUẬN" title="XMTA 
 
 export default function XmtaApp({ onBack }) {
   const [section,setSection]=useState('overview'); const [theme,setTheme]=useState(()=>localStorage.getItem('smta-theme')||'dark');
+  const [presentationMode,setPresentationMode]=useState(false); const [presentationPlaying,setPresentationPlaying]=useState(false); const [presentationSpeed,setPresentationSpeed]=useState(1);
   const go=id=>{setSection(id);window.scrollTo({top:0,behavior:'smooth'})};
   React.useEffect(()=>{document.documentElement.dataset.theme=theme;localStorage.setItem('smta-theme',theme)},[theme]);
+  React.useEffect(()=>{if(!presentationMode||!presentationPlaying)return undefined;let frame,last=performance.now(),bottomAt=null;const animate=now=>{const delta=Math.min((now-last)/1000,.05);last=now;const max=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);if(window.scrollY<max-3){bottomAt=null;window.scrollBy(0,42*presentationSpeed*delta)}else{bottomAt??=now;if(now-bottomAt>1100/presentationSpeed){const index=XMTA_SECTIONS.findIndex(item=>item[0]===section);if(index<XMTA_SECTIONS.length-1){setSection(XMTA_SECTIONS[index+1][0]);window.scrollTo({top:0,behavior:'instant'});return}else{setPresentationPlaying(false);return}}}frame=requestAnimationFrame(animate)};frame=requestAnimationFrame(animate);return()=>cancelAnimationFrame(frame)},[presentationMode,presentationPlaying,presentationSpeed,section]);
   const content={overview:<Overview go={go}/>,actors:<Actors/>,workflow:<Workflow/>,entities:<Entities/>,er:<ERGallery/>,relational:<RelationalModel/>,dictionary:<Dictionary/>,scenarios:<><Scenarios/><Results/></>,ai:<AILog/>,conclusion:<Conclusion/>}[section];
-  return <div className="xmta-app"><aside className="xmta-sidebar"><div className="xmta-brand"><div><Activity/></div><span><b>XMTA</b><small>QUẢN LÝ THỂ LỰC</small></span></div><nav>{XMTA_SECTIONS.map(([id,n,label],i)=>{const Icon=ICONS[i];return <button key={id} className={section===id?'active':''} onClick={()=>go(id)}><span>{n}</span><Icon size={17}/><b>{label}</b></button>})}</nav><button className="xmta-back" onClick={onBack}><ArrowLeft size={16}/> Đổi hệ thống</button></aside><div className="xmta-main"><header className="xmta-top"><div><span>XMTA v1.0</span><b>{XMTA_SECTIONS.find(x=>x[0]===section)?.[2]}</b></div><button className="theme-toggle" onClick={()=>setTheme(v=>v==='dark'?'light':'dark')}><span className={theme==='dark'?'is-active':''}><Moon size={14}/></span><span className={theme==='light'?'is-active':''}><Sun size={14}/></span></button></header><main key={section} className="xmta-content section-page-transition">{content}</main></div><WelcomeModal system="xmta"/></div>;
+  const navSections=XMTA_SECTIONS.map(([id,num,title],index)=>({id,num,title,icon:ICONS[index]})); const current=navSections.find(item=>item.id===section)||navSections[0]; const currentIndex=navSections.findIndex(item=>item.id===section); const progress=Math.round(((currentIndex+1)/navSections.length)*100);
+  const startPresentation=()=>{setPresentationMode(true);setPresentationPlaying(true);setSection('overview');window.scrollTo({top:0,behavior:'instant'})}; const stopPresentation=()=>{setPresentationPlaying(false);setPresentationMode(false)};
+  return <div className="app-container xmta-app">
+    <aside className="sidebar xmta-unified-sidebar">
+      <div className="sidebar-header"><div className="logo-icon xmta-unified-logo"><Activity size={23}/></div><div className="logo-text"><h1>XMTA</h1><p>Quản Lý Thể Lực</p></div></div>
+      {presentationMode&&<div className="presentation-progress"><div className="presentation-progress__label"><span>TIẾN TRÌNH THUYẾT TRÌNH</span><span className="mono-font">{progress}%</span></div><div className="presentation-progress__track"><div className="presentation-progress__value" style={{width:`${progress}%`}}/></div></div>}
+      <nav className={`sidebar-nav ${presentationMode?'is-presenting':''}`}>{navSections.map(item=>{const Icon=item.icon;const active=section===item.id;return <button key={item.id} className={`nav-item ${active?'active':''}`} aria-current={active?'page':undefined} onClick={()=>go(item.id)}><span className="nav-num">{item.num}</span><Icon size={17}/><span className="nav-label">{item.title}</span></button>})}</nav>
+      <div className="sidebar-footer"><button onClick={()=>presentationMode?stopPresentation():startPresentation()} className={`btn ${presentationMode?'btn-primary':'btn-secondary'}`} style={{width:'100%',fontSize:'.82rem',padding:'8px 12px'}}><Play size={15}/>{presentationMode?'Dừng Trình Chiếu':'Bắt Đầu Báo Cáo'}</button><div style={{display:'flex',gap:6,marginTop:8}}><button onClick={()=>{stopPresentation();setSection('overview');window.scrollTo({top:0,behavior:'smooth'})}} className="btn btn-secondary" style={{flex:1,fontSize:'.78rem',padding:'6px 8px'}}><RotateCcw size={14}/>Khôi Phục</button><button onClick={onBack} className="btn btn-secondary" style={{flex:1,fontSize:'.78rem',padding:'6px 8px'}}><ArrowLeft size={14}/>Đổi Hệ</button></div></div>
+    </aside>
+    <div className="main-wrapper">
+      <header className="top-bar"><div className="top-bar-left"><span className="badge-military xmta-badge"><Sparkles size={12}/>XMTA v1.0 • BÁO CÁO HỌC THUẬT</span><div className="xmta-breadcrumb"><span>Đồ án CSDL</span><ChevronRight size={14}/><strong>Mục {current.num}: {current.title}</strong></div></div><div className="top-bar-right"><button onClick={onBack} className="btn btn-secondary btn-sm"><ArrowLeft size={14}/>Đổi hệ thống</button><button className="theme-toggle" onClick={()=>setTheme(v=>v==='dark'?'light':'dark')} aria-label="Đổi giao diện"><span className={theme==='dark'?'is-active':''}><Moon size={14}/></span><span className={theme==='light'?'is-active':''}><Sun size={14}/></span></button></div></header>
+      <main className="content-body"><div key={section} className="section-view section-page-transition">{content}</div></main>
+    </div>
+    {presentationMode&&<PresentationController currentSection={section} onSelectSection={go} isPlaying={presentationPlaying} speed={presentationSpeed} onTogglePlaying={()=>setPresentationPlaying(value=>!value)} onSpeedChange={setPresentationSpeed} onExit={stopPresentation} sections={navSections}/>}<WelcomeModal system="xmta"/>
+  </div>;
 }
