@@ -35,11 +35,11 @@ export const WORKFLOWS = [
         id: 'step_a3',
         lane: 'Giảng viên giảng dạy',
         title: '3. Giảng Viên Nhập Điểm Thành Phần (CC, TX)',
-        desc: 'Giảng viên phụ trách lớp đăng nhập hệ thống, nhập điểm Chuyên cần và Thường xuyên cho học viên.',
-        input: 'Sổ điểm nhóm học, Điểm CC, TX, Mã giảng viên (MaGV / MaNguoi)',
-        processing: 'INSERT các bản ghi vào bảng DIEM với MaLoaiDiem tương ứng (LD_CC, LD_TX), ghi nhận MaNguoiNhap = MaGV.',
-        output: 'Các bản ghi điểm thành phần được lưu trữ kèm danh tính giảng viên nhập.',
-        relatedTables: ['GIANG_VIEN', 'KET_QUA_HOC_TAP', 'LOAI_DIEM', 'DIEM'],
+        desc: 'Giảng viên đăng nhập bằng tài khoản duy nhất; hệ thống chỉ mở sổ điểm của lớp học phần có PHAN_CONG.MaGV đúng với giảng viên đó.',
+        input: 'USER hiện tại, sổ điểm thuộc PHAN_CONG, Điểm CC và TX',
+        processing: 'Đối chiếu USER.MaNguoi = GIANG_VIEN.MaNguoi và GIANG_VIEN.MaGV = PHAN_CONG.MaGV; nếu đúng mới INSERT/UPDATE DIEM và ghi MaNguoiNhap = USER.MaNguoi.',
+        output: 'Điểm thành phần được lưu kèm đúng danh tính; yêu cầu sang lớp không được phân công bị từ chối.',
+        relatedTables: ['USER', 'GIANG_VIEN', 'PHAN_CONG', 'KET_QUA_HOC_TAP', 'LOAI_DIEM', 'DIEM'],
         highlightColor: 'var(--color-blue)'
       },
       {

@@ -25,10 +25,10 @@ export const ACTORS = [
     icon: 'GraduationCap',
     summary: 'Cán bộ trực tiếp giảng dạy và đánh giá quá trình học tập',
     whatTheyDo: 'Theo dõi danh sách lớp được phân công, ghi nhận điểm chuyên cần (CC), điểm kiểm tra thường xuyên (TX), bài tập lớn cho học viên thuộc phân công giảng dạy của mình.',
-    dataScopeView: 'Xem danh sách học viên và bảng điểm các lớp học phần mà mình được phân công giảng dạy (thông qua bảng PHAN_CONG có MaGV = CurrentUser.MaGV).',
-    dataScopeModify: 'ĐƯỢC NHẬP VÀ ĐIỀU CHỈNH ĐIỂM THÀNH PHẦN (CC, TX) trong thời hạn đợt học đang mở. Không được nhập điểm thi cuối kỳ (do Hội đồng Khảo thí phụ trách).',
-    impactedTables: ['PHAN_CONG', 'KET_QUA_HOC_TAP', 'DIEM', 'GIANG_VIEN'],
-    note: 'ĐIỂM SÁNG KIẾN TRÚC MỚI: Bảng PHAN_CONG kết nối Giảng viên với Lớp học và Môn học; khi Giảng viên nhập điểm, bảng DIEM ghi nhận trường MaNguoiNhap chính là mã của Giảng viên để bảo đảm tính minh bạch giải trình.'
+    dataScopeView: 'Mỗi giảng viên có đúng một USER. Từ USER.MaNguoi, hệ thống tìm GIANG_VIEN.MaGV và chỉ hiển thị các lớp học phần có PHAN_CONG.MaGV tương ứng.',
+    dataScopeModify: 'CHỈ ĐƯỢC NHẬP/ĐIỀU CHỈNH CC, TX cho lớp học phần mình được phân công và khi sổ điểm còn mở. Không được nhập lớp của giảng viên khác hoặc điểm thi cuối kỳ.',
+    impactedTables: ['USER', 'GIANG_VIEN', 'PHAN_CONG', 'KET_QUA_HOC_TAP', 'DIEM'],
+    note: 'Chuỗi kiểm soát bắt buộc: USER.MaNguoi = GIANG_VIEN.MaNguoi → GIANG_VIEN.MaGV = PHAN_CONG.MaGV. DIEM lưu MaNguoiNhap = USER.MaNguoi để truy vết đúng người thao tác.'
   },
   {
     id: 'actor_ch',

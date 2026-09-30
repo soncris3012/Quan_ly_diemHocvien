@@ -36,7 +36,7 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
     {
       issue: 'Giảng viên & Trách nhiệm nhập điểm',
       why: 'Đề bài ban đầu thiếu thực thể Giảng viên nên chưa xác định được ai trực tiếp giảng dạy và ai chịu trách nhiệm nhập điểm quá trình.',
-      resolution: 'Chuẩn hóa thêm BO_MON (R15), GIANG_VIEN (R16) kế thừa NGUOI (R4), liên kết qua PHAN_CONG (R19) và lưu MaNguoiNhap trong DIEM (R22).'
+      resolution: 'Mỗi GIANG_VIEN dùng đúng một USER qua UNIQUE(MaNguoi). Khi nhập điểm, hệ thống đối chiếu tài khoản → giảng viên → PHAN_CONG và chỉ mở lớp học phần do chính giảng viên phụ trách.'
     },
     {
       issue: 'Bảo mật phân quyền quân sự',

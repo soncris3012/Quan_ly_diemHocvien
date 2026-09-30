@@ -8,10 +8,10 @@ export const SCENARIOS = [
     badge: 'Đạt chuẩn',
     badgeClass: 'tag-emerald',
     description: 'Giảng viên TS. Lê Đức Thắng được phân công dạy CSDL, nhập điểm CC = 8.0, TX = 7.0; Học viên thi cuối kỳ đạt 6.0.',
-    highlightTables: ['GIANG_VIEN', 'PHAN_CONG', 'LOAI_DIEM', 'DIEM', 'KET_QUA_HOC_TAP'],
+    highlightTables: ['USER', 'GIANG_VIEN', 'PHAN_CONG', 'LOAI_DIEM', 'DIEM', 'KET_QUA_HOC_TAP'],
     mockData: {
       student: { id: 'HV001', name: 'Nguyễn Văn An', class: 'CNTT2_K58' },
-      lecturer: { id: 'GV001', name: 'TS. Lê Đức Thắng', dept: 'Bộ môn Hệ thống thông tin' },
+      lecturer: { id: 'GV001', personId: 'NG_002', account: 'gv_lethang', name: 'TS. Lê Đức Thắng', dept: 'Bộ môn Hệ thống thông tin' },
       assignment: { id: 'PC_CSDL_01', course: 'Cơ sở dữ liệu (3 TC)', term: 'Học kỳ 1 (2025-2026)' },
       scores: {
         cc: 8.0,
@@ -25,7 +25,7 @@ export const SCENARIOS = [
         formulaStr: '8.0 × 0.1 (CC do GV nhập) + 7.0 × 0.3 (TX do GV nhập) + 6.0 × 0.6 (Thi cuối kỳ) = 6.5'
       }
     },
-    explanation: 'Giảng viên đăng nhập với tài khoản gv_lethang, xem danh sách phân công PC_CSDL_01 và nhập điểm thành phần vào bảng DIEM kèm MaNguoiNhap = GV001. Hệ thống tự động tính điểm tổng kết lưu vào KET_QUA_HOC_TAP.'
+    explanation: 'Giảng viên đăng nhập bằng tài khoản duy nhất gv_lethang. Hệ thống ánh xạ USER.MaNguoi = NG_002 sang GIANG_VIEN.MaGV = GV001, xác nhận PHAN_CONG PC_CSDL_01 thuộc GV001 rồi mới cho nhập; DIEM lưu MaNguoiNhap = NG_002. Mọi lớp học phần khác đều bị từ chối.'
   },
 
   {

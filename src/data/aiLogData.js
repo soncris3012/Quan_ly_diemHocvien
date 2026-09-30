@@ -68,14 +68,14 @@ R17 MON_HOC, R18 HOC_KY, R19 PHAN_CONG, R20 LOAI_DIEM, R21 KET_QUA_HOC_TAP, R22 
 Hãy giải thích:
 1. Mối quan hệ giữa NGUOI với HOC_VIEN và GIANG_VIEN (Kế thừa IS-A).
 2. Vai trò trung tâm của PHAN_CONG (R19) trong việc kết nối Giảng viên với Lớp học và Môn học.
-3. Cơ chế phân quyền: Giảng viên chỉ nhập điểm lớp mình dạy, lưu MaNguoiNhap trong DIEM.`,
+3. Cơ chế phân quyền: mỗi Giảng viên có đúng một USER; chỉ nhập điểm lớp mình dạy và lưu USER.MaNguoi vào DIEM.MaNguoiNhap.`,
     aiOutputSummary: 'AI phân tích chi tiết cấu trúc 23 bảng: NGUOI là thực thể cha, GIANG_VIEN và HOC_VIEN là thực thể con (mô hình IS-A chuẩn). Bảng PHAN_CONG là mắt xích trung tâm giải quyết quan hệ N-N-N-N giữa Giảng viên, Môn học, Lớp và Học kỳ. Thuộc tính MaNguoiNhap trong DIEM giải quyết hoàn hảo bài toán trách nhiệm giải trình.',
     studentCritique: 'Mô hình 23 bảng này hoàn toàn chặt chẽ và chuẩn hóa cao nhất (đạt BCNF). Yếu tố Giảng viên được tích hợp rất tự nhiên và hợp lý: Giảng viên thuộc Bộ môn, được phân công giảng dạy, trực tiếp nhập điểm CC, TX cho lớp mình dạy; Phòng Đào tạo tổ chức đợt thi và chốt điểm.',
     acceptedProposals: [
       'Chốt trọn bộ 23 bảng quan hệ (R1 đến R23) với các khóa chính PK và khóa ngoại FK đầy đủ.',
       'Sử dụng mô hình kế thừa IS-A: NGUOI ➔ HOC_VIEN & GIANG_VIEN.',
-      'Áp dụng Row-Level Security: Giảng viên chỉ nhập điểm cho phân công giảng dạy mang MaGV của mình.',
-      'Lưu MaNguoiNhap trong bảng DIEM để lưu vết danh tính người nhập điểm.'
+      'Áp dụng Row-Level Security theo chuỗi USER.MaNguoi → GIANG_VIEN.MaGV → PHAN_CONG.MaGV.',
+      'Lưu USER.MaNguoi vào DIEM.MaNguoiNhap để truy vết đúng tài khoản và người nhập điểm.'
     ],
     rejectedProposals: [
       {

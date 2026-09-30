@@ -53,9 +53,9 @@ export const ENTITIES = [
     meaning: 'Cơ chế định danh, xác thực và phân quyền truy cập theo mô hình RBAC.',
     identifier: 'Mã người dùng (MaUser [PK])',
     keyAttributes: ['MaUser', 'TenDangNhap', 'MatKhau', 'TrangThai', 'MaNguoi'],
-    relationships: 'Gắn với 1 NGUOI; Gán nhiều ROLE qua USER_ROLE; ROLE gán nhiều PERMISSION qua ROLE_PERMISSION.',
+    relationships: 'Gắn 1-1 với NGUOI qua UNIQUE(MaNguoi); Giảng viên đang công tác bắt buộc có đúng 1 USER; quyền được gán qua USER_ROLE.',
     example: 'Tài khoản gv_lethang có quyền nhập điểm thành phần cho lớp được phân công.',
-    justification: 'Phân quyền chặt chẽ: Giảng viên chỉ nhập điểm lớp mình dạy; Chỉ huy được đọc điểm toàn Học viện nhưng không được sửa điểm.',
+    justification: 'Một giảng viên không thể có nhiều tài khoản. Quyền nhập điểm còn bị giới hạn theo PHAN_CONG, không chỉ dựa vào ROLE_GV.',
     tableRef: 'USER'
   },
 
@@ -179,7 +179,7 @@ export const ENTITIES = [
     meaning: 'Chi tiết từng con điểm thành phần được Giảng viên hoặc Phòng Khảo thí nhập vào hệ thống.',
     identifier: 'Mã điểm (MaDiem [PK])',
     keyAttributes: ['MaDiem', 'MaKQ', 'MaLoaiDiem', 'Diem', 'NgayNhap', 'MaNguoiNhap'],
-    relationships: 'Gắn liền với KET_QUA_HOC_TAP; Thuộc 1 LOAI_DIEM; Lưu vết người nhập MaNguoiNhap (Giảng viên/Khảo thí).',
+    relationships: 'Gắn với KET_QUA_HOC_TAP và LOAI_DIEM; lưu MaNguoiNhap tham chiếu NGUOI. Nếu người nhập là giảng viên, MaKQ phải thuộc PHAN_CONG của chính MaGV tương ứng.',
     example: 'Giảng viên Lê Đức Thắng nhập Điểm chuyên cần: 8.5 cho học viên Nguyễn Văn An ngày 20/11/2025.',
     justification: 'Ghi nhận chi tiết, minh bạch từng đầu điểm, lưu vết thời gian và người nhập bảo đảm tính giải trình.',
     tableRef: 'DIEM'

@@ -111,8 +111,8 @@ export const TABLES = [
     name: 'USER',
     groupId: 'org',
     title: 'Tài Khoản Xác Thực Hệ Thống',
-    description: 'Chứa thông tin tài khoản đăng nhập gắn liền với hồ sơ cá nhân.',
-    justification: 'Tách cơ chế bảo mật đăng nhập độc lập khỏi thông tin nhân thân.',
+    description: 'Chứa tài khoản đăng nhập duy nhất gắn 1-1 với hồ sơ NGUOI; mỗi giảng viên bắt buộc dùng đúng tài khoản của mình.',
+    justification: 'Tách cơ chế xác thực khỏi nhân thân, đồng thời UNIQUE(MaNguoi) ngăn một giảng viên sở hữu nhiều tài khoản.',
     columns: [
       { name: 'MaUser', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã tài khoản', domain: 'Duy nhất', example: 'USR_001' },
       { name: 'TenDangNhap', type: 'VARCHAR(50)', key: 'UQ', nullable: false, description: 'Tên đăng nhập hệ thống', domain: 'Duy nhất', example: 'gv_lethang' },
@@ -120,7 +120,7 @@ export const TABLES = [
       { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tình trạng tài khoản', domain: 'HOAT_DONG, KHOA', example: 'HOAT_DONG' },
       { name: 'MaNguoi', type: 'VARCHAR(20)', key: 'FK, UQ', nullable: false, description: 'Gắn liền với 1 người', domain: 'Tham chiếu NGUOI', example: 'NG_001', ref: { table: 'NGUOI', column: 'MaNguoi' } }
     ],
-    constraints: ['PK: MaUser', 'UQ: TenDangNhap', 'FK: MaNguoi -> NGUOI(MaNguoi)']
+    constraints: ['PK: MaUser', 'UQ: TenDangNhap', 'UQ: MaNguoi (mỗi người/giảng viên tối đa 1 tài khoản)', 'FK: MaNguoi -> NGUOI(MaNguoi)', 'BUSINESS: Giảng viên đang công tác bắt buộc có đúng 1 USER']
   },
   {
     id: 'ROLE',
@@ -439,7 +439,7 @@ export const TABLES = [
     groupId: 'grading',
     title: 'Chi Tiết Từng Đầu Điểm Thành Phần',
     description: 'Lưu từng con điểm cụ thể gắn với kết quả học tập, loại điểm, ngày nhập và người nhập.',
-    justification: 'CHUẨN HÓA CẤP ĐỘ CAO: Giảng viên nhập điểm Chuyên cần, Thường xuyên sẽ được ghi vào đây kèm mã người nhập MaNguoiNhap (chính là MaGV hoặc Cán bộ).',
+    justification: 'CHUẨN HÓA CẤP ĐỘ CAO: Mọi lần nhập điểm được lưu bằng MaNguoiNhap. Với giảng viên, hệ thống đối chiếu MaNguoiNhap với GIANG_VIEN.MaNguoi và PHAN_CONG.MaGV trước khi cho ghi.',
     columns: [
       { name: 'MaDiem', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã điểm chi tiết', domain: 'Duy nhất', example: 'D_001' },
       { name: 'MaKQ', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Gắn liền với Kết quả học tập', domain: 'Tham chiếu KET_QUA_HOC_TAP', example: 'KQ_001', ref: { table: 'KET_QUA_HOC_TAP', column: 'MaKQ' } },
@@ -453,7 +453,8 @@ export const TABLES = [
       'FK: MaKQ -> KET_QUA_HOC_TAP(MaKQ)',
       'FK: MaLoaiDiem -> LOAI_DIEM(MaLoaiDiem)',
       'FK: MaNguoiNhap -> NGUOI(MaNguoi)',
-      'CHECK: Diem BETWEEN 0.0 AND 10.0'
+      'CHECK: Diem BETWEEN 0.0 AND 10.0',
+      'RLS: Giảng viên chỉ INSERT/UPDATE khi USER.MaNguoi = GIANG_VIEN.MaNguoi và GIANG_VIEN.MaGV = PHAN_CONG.MaGV của MaKQ'
     ]
   },
   {
@@ -493,8 +494,8 @@ export const INTEGRITY_CONSTRAINTS = [
     title: 'Kế thừa nhân thân duy nhất (Generalization Integrity)',
     type: 'Khóa duy nhất 1-1',
     target: 'HOC_VIEN, GIANG_VIEN, USER',
-    description: 'Mỗi bản ghi trong NGUOI chỉ có thể liên kết với tối đa 1 bản ghi Học viên hoặc Giảng viên, và duy nhất 1 tài khoản User.',
-    implementation: 'UNIQUE constraint trên trường MaNguoi ở các bảng con.'
+    description: 'Mỗi NGUOI chỉ liên kết tối đa một hồ sơ GIANG_VIEN và một USER. Mỗi giảng viên đang công tác bắt buộc có đúng một tài khoản; không được dùng chung hoặc tạo tài khoản thứ hai.',
+    implementation: 'UNIQUE(GIANG_VIEN.MaNguoi), UNIQUE(USER.MaNguoi) và trigger/quy trình tạo giảng viên đồng thời cấp USER.'
   },
   {
     id: 'c3',
@@ -532,9 +533,9 @@ export const INTEGRITY_CONSTRAINTS = [
     id: 'c7',
     title: 'Giảng viên chỉ nhập điểm các lớp mình được phân công',
     type: 'Phân quyền hàng (Row-Level Security)',
-    target: 'DIEM, PHAN_CONG',
-    description: 'Khi một Giảng viên đăng nhập, hệ thống chỉ cho phép nhập điểm vào các bản ghi KET_QUA_HOC_TAP có MaPhanCong trỏ về chính MaGV của giảng viên đó.',
-    implementation: 'Security View / Trigger kiểm tra MaNguoiNhap = PHAN_CONG.MaGV.'
+    target: 'USER, GIANG_VIEN, PHAN_CONG, KET_QUA_HOC_TAP, DIEM',
+    description: 'Từ tài khoản đang đăng nhập, hệ thống lấy USER.MaNguoi, tìm đúng GIANG_VIEN.MaGV rồi chỉ cho nhập/sửa DIEM của KET_QUA_HOC_TAP thuộc PHAN_CONG mang MaGV đó.',
+    implementation: 'RLS/Stored Procedure kiểm tra USER.MaNguoi = GIANG_VIEN.MaNguoi AND GIANG_VIEN.MaGV = PHAN_CONG.MaGV; từ chối mọi lớp học phần khác.'
   },
   {
     id: 'c8',
