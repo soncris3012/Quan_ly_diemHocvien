@@ -16,6 +16,22 @@ export const FITNESS_ENTITIES = [
   { code:'R8', name:'KET_QUA_TONG_HOP', title:'Kết luận toàn đợt và chỉ đạo', kind:'GIAO DỊCH', fields:['MaDot [PK, FK]','MaQuanNhan [PK, FK]','XepLoaiChungCuoc','TrangThaiThiVet','DeXuatAI','GhiChuChiHuy'] }
 ];
 
+// Kiểu SQL đề xuất và lý do lựa chọn, dùng chung cho mọi cách trình bày lược đồ.
+export const FITNESS_FIELD_META = {
+  DON_VI: { MaDonVi:['VARCHAR(20)','Mã nghiệp vụ ngắn, có thể chứa chữ, số và tiền tố đơn vị.'], TenDonVi:['NVARCHAR(100)','Tên đơn vị cần lưu tiếng Việt có dấu.'], RankDonVi:['TINYINT','Cấp đơn vị là số nguyên nhỏ trong một miền giá trị hẹp.'], MaDonViCapTren:['VARCHAR(20)','Phải cùng kiểu với DON_VI.MaDonVi để tạo khóa ngoại đệ quy.'] },
+  CAP_BAC: { RankCapBac:['TINYINT','Thứ bậc quân hàm là số nguyên nhỏ, thuận tiện cho sắp xếp.'], TenCapBac:['NVARCHAR(50)','Tên quân hàm cần hỗ trợ tiếng Việt có dấu.'], VietTat:['NVARCHAR(10)','Chuỗi viết tắt ngắn và có thể chứa ký tự tiếng Việt.'] },
+  QUAN_NHAN: { MaQuanNhan:['VARCHAR(20)','Mã quân nhân là mã nghiệp vụ, không dùng để tính toán.'], HoTen:['NVARCHAR(100)','Họ tên cần lưu đầy đủ ký tự tiếng Việt.'], NgaySinh:['DATE','Chỉ cần ngày sinh, không cần phần giờ.'], GioiTinh:['VARCHAR(10)','Miền giá trị ngắn, được kiểm soát bằng CHECK.'], LoaiDoiTuong:['VARCHAR(20)','Lưu mã phân loại ổn định như HOC_VIEN hoặc CAN_BO.'], RankCapBac:['TINYINT','Đồng nhất với khóa chính CAP_BAC.RankCapBac.'], MaDonVi:['VARCHAR(20)','Đồng nhất với khóa chính DON_VI.MaDonVi.'] },
+  MON_KIEM_TRA: { MaMon:['VARCHAR(20)','Mã môn ngắn, dễ đọc và ổn định khi trao đổi dữ liệu.'], TenMon:['NVARCHAR(100)','Tên môn cần hỗ trợ tiếng Việt có dấu.'], DonViDo:['NVARCHAR(20)','Đơn vị đo là chuỗi ngắn như giây, lần hoặc kg.'], QuyTacSoSanh:['VARCHAR(20)','Lưu mã quy tắc cố định để xử lý nhất quán.'] },
+  TIEU_CHUAN_MON: { MaMon:['VARCHAR(20)','Đồng nhất với khóa chính MON_KIEM_TRA.MaMon.'], DoiTuongApDung:['VARCHAR(30)','Lưu mã nhóm đối tượng dùng trong khóa ghép.'], MucXepLoai:['VARCHAR(20)','Lưu mã xếp loại ổn định dùng trong khóa ghép.'], GiaTriNguong:['DECIMAL(10,2)','Giữ chính xác ngưỡng có phần thập phân, tránh sai số số thực.'], GhiChu:['NVARCHAR(255)','Ghi chú tự do cần hỗ trợ tiếng Việt.'] },
+  DOT_KIEM_TRA: { MaDot:['VARCHAR(20)','Mã đợt là mã nghiệp vụ ngắn, có thể chứa chữ và số.'], TenDot:['NVARCHAR(100)','Tên đợt cần hỗ trợ tiếng Việt có dấu.'], NgayBatDau:['DATE','Nghiệp vụ chỉ cần ngày bắt đầu.'], NgayKetThuc:['DATE','Nghiệp vụ chỉ cần ngày kết thúc.'], GhiChu:['NVARCHAR(255)','Ghi chú ngắn cần hỗ trợ tiếng Việt.'] },
+  KET_QUA_CHI_TIET: { MaDot:['VARCHAR(20)','Đồng nhất với khóa chính DOT_KIEM_TRA.MaDot.'], MaQuanNhan:['VARCHAR(20)','Đồng nhất với khóa chính QUAN_NHAN.MaQuanNhan.'], MaMon:['VARCHAR(20)','Đồng nhất với khóa chính MON_KIEM_TRA.MaMon.'], LanThi:['TINYINT','Số lần thi là số nguyên dương nhỏ và tham gia khóa ghép.'], ThanhTichTho:['DECIMAL(10,2)','Lưu chính xác thành tích đo được có phần thập phân.'], XepLoaiMon:['VARCHAR(20)','Lưu mã xếp loại để lọc và kiểm tra nhất quán.'], NgayKiemTra:['DATE','Chỉ cần ngày thực hiện bài kiểm tra.'], GhiChu:['NVARCHAR(255)','Ghi chú kết quả cần hỗ trợ tiếng Việt.'] },
+  KET_QUA_TONG_HOP: { MaDot:['VARCHAR(20)','Đồng nhất với khóa chính DOT_KIEM_TRA.MaDot.'], MaQuanNhan:['VARCHAR(20)','Đồng nhất với khóa chính QUAN_NHAN.MaQuanNhan.'], XepLoaiChungCuoc:['VARCHAR(20)','Lưu mã kết luận để báo cáo và thống kê.'], TrangThaiThiVet:['VARCHAR(20)','Lưu mã trạng thái hữu hạn của quy trình thi vét.'], DeXuatAI:['NVARCHAR(MAX)','Nội dung AI có độ dài biến đổi và cần hỗ trợ tiếng Việt.'], GhiChuChiHuy:['NVARCHAR(MAX)','Chỉ đạo có thể dài, cần lưu nguyên văn tiếng Việt.'] }
+};
+
+export function parseFitnessField(field) {
+  return { name: field.replace(/\s*\[[^\]]+\]\s*$/, ''), key: field.match(/\[([^\]]+)\]/)?.[1] || '' };
+}
+
 export const FITNESS_RELATIONS = [
   ['R1','DON_VI','DON_VI','MaDonViCapTren','Đơn vị cấp trên quản lý nhiều đơn vị cấp dưới'],
   ['R2','CAP_BAC','QUAN_NHAN','RankCapBac','Một quân hàm gắn với nhiều quân nhân'],
