@@ -68,7 +68,7 @@ export default function Section10Conclusion({ onSelectSection }) {
               4. Bảo Mật Phân Quyền Đa Tầng (RBAC + Row-Level Security)
             </div>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: 1.5, margin: 0 }}>
-              Kết hợp mô hình RBAC chuẩn (<code>USER</code>, <code>ROLE</code>, <code>PERMISSION</code>) với phạm vi nghiệp vụ: Giảng viên chỉ nhập điểm lớp mình dạy; Chỉ huy được tra cứu điểm toàn Học viện nhưng không có quyền sửa điểm.
+              Kết hợp RBAC với phạm vi nghiệp vụ: Giảng viên nhập CC, TX, CK cho đúng lớp mình dạy; Phòng Đào tạo duyệt, khóa/mở khóa và quản lý điều chỉnh; Chỉ huy chỉ tra cứu, không sửa điểm.
             </p>
           </div>
         </div>

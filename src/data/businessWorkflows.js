@@ -5,8 +5,8 @@ export const WORKFLOWS = [
   {
     id: 'flow_a',
     title: 'Luồng A: Phân Công Giảng Dạy, Giảng Viên Nhập Điểm & Đánh Giá',
-    subtitle: 'Chu trình hoàn chỉnh từ phân công, giảng dạy, nhập điểm quá trình đến khảo thí',
-    summary: 'Mô hình hóa việc Phòng Đào tạo lập phân công giảng dạy cho Giảng viên, Giảng viên theo dõi lớp và nhập điểm Chuyên cần, Thường xuyên; Phòng Khảo thí mở đợt thi kết thúc môn và tổng hợp kết quả.',
+    subtitle: 'Giảng viên nhập đủ CC–TX–CK; Phòng Đào tạo quản lý, duyệt và khóa điểm',
+    summary: 'Phòng Đào tạo lập phân công và tổ chức đợt thi; giảng viên được phân công nhập toàn bộ điểm của lớp học phần; Phòng Đào tạo kiểm tra, duyệt, khóa/mở khóa và quản lý điều chỉnh.',
     swimlanes: ['Phòng Đào tạo', 'Giảng viên giảng dạy', 'Hệ thống SMTA', 'Học viên'],
     steps: [
       {
@@ -34,33 +34,55 @@ export const WORKFLOWS = [
       {
         id: 'step_a3',
         lane: 'Giảng viên giảng dạy',
-        title: '3. Giảng Viên Nhập Điểm Thành Phần (CC, TX)',
-        desc: 'Giảng viên đăng nhập bằng tài khoản duy nhất; hệ thống chỉ mở sổ điểm của lớp học phần có PHAN_CONG.MaGV đúng với giảng viên đó.',
-        input: 'USER hiện tại, sổ điểm thuộc PHAN_CONG, Điểm CC và TX',
-        processing: 'Đối chiếu USER.MaNguoi = GIANG_VIEN.MaNguoi và GIANG_VIEN.MaGV = PHAN_CONG.MaGV; nếu đúng mới INSERT/UPDATE DIEM và ghi MaNguoiNhap = USER.MaNguoi.',
-        output: 'Điểm thành phần được lưu kèm đúng danh tính; yêu cầu sang lớp không được phân công bị từ chối.',
+        title: '3. Giảng Viên Nhập Điểm Quá Trình (CC, TX)',
+        desc: 'Giảng viên dùng tài khoản duy nhất và chỉ mở được sổ điểm của PHAN_CONG thuộc mình.',
+        input: 'USER hiện tại, sổ điểm thuộc PHAN_CONG, điểm CC và TX',
+        processing: 'Kiểm tra USER → GIANG_VIEN → PHAN_CONG; ghi DIEM với TrangThaiDiem = NHAP và MaNguoiNhap = USER.MaNguoi.',
+        output: 'Điểm CC, TX ở trạng thái nháp quản lý; lớp không được phân công bị từ chối.',
         relatedTables: ['USER', 'GIANG_VIEN', 'PHAN_CONG', 'KET_QUA_HOC_TAP', 'LOAI_DIEM', 'DIEM'],
         highlightColor: 'var(--color-blue)'
       },
       {
         id: 'step_a4',
         lane: 'Phòng Đào tạo',
-        title: '4. Tổ Chức Đợt Thi Kết Thúc Môn (DOT_THI)',
-        desc: 'Bộ phận Khảo thí mở đợt thi kết thúc môn Lần 1 và nhập điểm bài thi cuối kỳ.',
+        title: '4. Phòng Đào Tạo Tổ Chức Đợt Thi (DOT_THI)',
+        desc: 'Phòng Đào tạo mở đợt thi kết thúc môn cho phân công; không nhập điểm thay giảng viên trong luồng thông thường.',
         input: 'Phân công môn học (PHAN_CONG), Ngày thi, Bài thi đã chấm',
-        processing: 'Tạo bản ghi DOT_THI (LoaiDotThi = LAN_1); INSERT điểm thi vào bảng DIEM với MaLoaiDiem = LD_CK.',
-        output: 'Đợt thi và điểm thi kết thúc môn được ghi nhận.',
-        relatedTables: ['DOT_THI', 'DIEM', 'LOAI_DIEM'],
+        processing: 'Tạo DOT_THI (LoaiDotThi = LAN_1) gắn với MaPhanCong và mở cửa sổ nhập điểm cuối kỳ.',
+        output: 'Đợt thi sẵn sàng để giảng viên phụ trách nhập điểm CK.',
+        relatedTables: ['PHAN_CONG', 'DOT_THI'],
         highlightColor: 'var(--color-amber)'
       },
       {
         id: 'step_a5',
+        lane: 'Giảng viên giảng dạy',
+        title: '5. Giảng Viên Nhập Điểm Cuối Kỳ (CK)',
+        desc: 'Giảng viên phụ trách nhập điểm cuối kỳ cho chính lớp học phần mình dạy.',
+        input: 'DOT_THI đang mở, bài thi đã chấm, điểm CK',
+        processing: 'Ghi DIEM với MaLoaiDiem = LD_CK, MaDotThi tương ứng, MaNguoiNhap là giảng viên và TrangThaiDiem = NHAP.',
+        output: 'Điểm CK được ghi đầy đủ nguồn nhập và đợt thi.',
+        relatedTables: ['GIANG_VIEN', 'PHAN_CONG', 'DOT_THI', 'DIEM'],
+        highlightColor: 'var(--color-blue)'
+      },
+      {
+        id: 'step_a6',
+        lane: 'Phòng Đào tạo',
+        title: '6. Kiểm Tra, Duyệt & Khóa Sổ Điểm',
+        desc: 'Phòng Đào tạo quản lý điểm toàn trường, kiểm tra tính đầy đủ rồi duyệt hoặc trả lại cho giảng viên sửa.',
+        input: 'Toàn bộ DIEM CC, TX, CK của lớp học phần',
+        processing: 'Chuyển TrangThaiDiem từ NHAP → DA_DUYET → DA_KHOA; ghi MaNguoiDuyet và NgayDuyet. Chỉ ROLE_DT được mở khóa.',
+        output: 'Bộ điểm đã được quản lý và khóa có truy vết.',
+        relatedTables: ['USER', 'ROLE_PERMISSION', 'DIEM'],
+        highlightColor: 'var(--color-amber)'
+      },
+      {
+        id: 'step_a7',
         lane: 'Hệ thống SMTA',
-        title: '5. Tổng Hợp Điểm & Xếp Loại Học Phần',
-        desc: 'Hệ thống tự động tính điểm tổng kết dựa trên trọng số LOAI_DIEM và xét đạt/trượt.',
-        input: 'Các đầu điểm trong DIEM, Trọng số trong LOAI_DIEM',
-        processing: 'Tính Điểm tổng kết = CC × 0.1 + TX × 0.3 + Thi × 0.6; Cập nhật DiemTongKet, XepLoai và TrangThai trong KET_QUA_HOC_TAP.',
-        output: 'Kết quả học tập chính thức của môn học được đóng sổ.',
+        title: '7. Tổng Hợp Điểm & Xếp Loại Học Phần',
+        desc: 'Hệ thống chỉ tổng hợp chính thức từ các đầu điểm đã được Phòng Đào tạo duyệt/khóa.',
+        input: 'DIEM đã duyệt, trọng số LOAI_DIEM',
+        processing: 'Tính CC × 0.1 + TX × 0.3 + CK × 0.6; cập nhật DiemTongKet, XepLoai và TrangThai.',
+        output: 'Kết quả học tập chính thức được đóng sổ.',
         relatedTables: ['LOAI_DIEM', 'DIEM', 'KET_QUA_HOC_TAP'],
         highlightColor: 'var(--color-emerald)'
       }
@@ -98,24 +120,24 @@ export const WORKFLOWS = [
       },
       {
         id: 'step_b3',
-        lane: 'Hệ thống SMTA',
-        title: '3. Nhập Điểm Thi Lại & Áp Trần Điểm',
-        desc: 'Nhập điểm bài thi lại vào bảng DIEM, áp dụng mức trần công nhận 6.9 theo quy chế.',
+        lane: 'Giảng viên giảng dạy',
+        title: '3. Giảng Viên Nhập Điểm Thi Lại',
+        desc: 'Giảng viên phụ trách nhập điểm thi lại, gắn đúng DOT_THI; hệ thống giữ điểm thực tế để Phòng Đào tạo kiểm tra.',
         input: 'Điểm bài thi lại thực tế (8.0), Mức trần quy định (6.9)',
-        processing: 'Lưu điểm thi thực tế vào DIEM; tính lại DiemTongKet và XepLoai sau thi lại trong KET_QUA_HOC_TAP.',
-        output: 'Cập nhật kết quả sau thi lại.',
-        relatedTables: ['DIEM', 'KET_QUA_HOC_TAP'],
+        processing: 'Lưu điểm thực tế vào DIEM với MaDotThi, MaNguoiNhap và TrangThaiDiem = NHAP.',
+        output: 'Điểm thi lại chờ Phòng Đào tạo duyệt.',
+        relatedTables: ['GIANG_VIEN', 'DOT_THI', 'DIEM'],
         highlightColor: 'var(--color-emerald)'
       },
       {
         id: 'step_b4',
         lane: 'Phòng Đào tạo',
-        title: '4. Phân Công Học Lại Ở Khóa Sau (Nếu Trượt)',
-        desc: 'Nếu thi lại lần 2 vẫn không đạt, học viên được xếp vào phân công giảng dạy mới ở kỳ tiếp theo.',
-        input: 'Học viên (MaHV), Phân công giảng dạy kỳ sau (MaPhanCong_moi)',
-        processing: 'Tạo bản ghi KET_QUA_HOC_TAP mới ở kỳ sau với TrangThai = HOC_LAI, bảo lưu lịch sử cũ.',
-        output: 'Một chu trình học tập mới được kích hoạt.',
-        relatedTables: ['HOC_VIEN', 'PHAN_CONG', 'KET_QUA_HOC_TAP'],
+        title: '4. Duyệt Điểm Thi Lại & Phân Công Học Lại Nếu Cần',
+        desc: 'Phòng Đào tạo duyệt/khóa điểm thi lại, cho hệ thống tính lại kết quả; nếu vẫn trượt thì xếp học lại ở kỳ sau.',
+        input: 'DIEM thi lại, Học viên (MaHV), Phân công kỳ sau nếu cần',
+        processing: 'Ghi MaNguoiDuyet, NgayDuyet và DA_KHOA; tính lại kết quả. Nếu không đạt, tạo KET_QUA_HOC_TAP mới ở kỳ sau.',
+        output: 'Kết quả thi lại được công nhận hoặc một chu trình học lại mới được kích hoạt.',
+        relatedTables: ['DIEM', 'HOC_VIEN', 'PHAN_CONG', 'KET_QUA_HOC_TAP'],
         highlightColor: 'var(--color-purple)'
       }
     ]
@@ -154,10 +176,10 @@ export const WORKFLOWS = [
         id: 'step_c3',
         lane: 'Hệ thống SMTA',
         title: '3. Lưu Bản Ghi Điểm & Tính Lại Điểm Tổng Kết',
-        desc: 'Cập nhật điểm mới vào bảng DIEM kèm MaNguoiNhap, tự động tính lại DiemTongKet và XepLoai.',
-        input: 'Điểm phúc khảo mới, Cán bộ thực hiện nhập',
-        processing: 'UPDATE DIEM SET Diem = 5.5, NgayNhap = NOW(), MaNguoiNhap = MaNguoiDuyet; Cập nhật lại KET_QUA_HOC_TAP.',
-        output: 'Kết quả được cập nhật minh bạch, lưu vết người sửa.',
+        desc: 'Phòng Đào tạo cập nhật điểm theo biên bản, giữ nguyên MaNguoiNhap của giảng viên và ghi riêng người duyệt điều chỉnh.',
+        input: 'Điểm phúc khảo mới, biên bản và cán bộ Phòng Đào tạo duyệt',
+        processing: 'UPDATE DIEM SET Diem = 5.5, TrangThaiDiem = DA_KHOA, MaNguoiDuyet = CurrentUser.MaNguoi, NgayDuyet = NOW(); giữ nguyên MaNguoiNhap; tính lại KET_QUA_HOC_TAP.',
+        output: 'Kết quả được cập nhật có truy vết tách biệt người nhập ban đầu và người duyệt điều chỉnh.',
         relatedTables: ['DIEM', 'KET_QUA_HOC_TAP', 'NGUOI'],
         highlightColor: 'var(--color-emerald)'
       }

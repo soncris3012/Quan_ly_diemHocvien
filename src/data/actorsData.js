@@ -24,9 +24,9 @@ export const ACTORS = [
     tagClass: 'tag-purple',
     icon: 'GraduationCap',
     summary: 'Cán bộ trực tiếp giảng dạy và đánh giá quá trình học tập',
-    whatTheyDo: 'Theo dõi danh sách lớp được phân công, ghi nhận điểm chuyên cần (CC), điểm kiểm tra thường xuyên (TX), bài tập lớn cho học viên thuộc phân công giảng dạy của mình.',
+    whatTheyDo: 'Theo dõi lớp được phân công và trực tiếp nhập đầy đủ điểm chuyên cần (CC), thường xuyên (TX), bài tập và cuối kỳ (CK) cho học viên của lớp học phần đó.',
     dataScopeView: 'Mỗi giảng viên có đúng một USER. Từ USER.MaNguoi, hệ thống tìm GIANG_VIEN.MaGV và chỉ hiển thị các lớp học phần có PHAN_CONG.MaGV tương ứng.',
-    dataScopeModify: 'CHỈ ĐƯỢC NHẬP/ĐIỀU CHỈNH CC, TX cho lớp học phần mình được phân công và khi sổ điểm còn mở. Không được nhập lớp của giảng viên khác hoặc điểm thi cuối kỳ.',
+    dataScopeModify: 'ĐƯỢC NHẬP/ĐIỀU CHỈNH CC, TX VÀ CK cho đúng lớp học phần mình được phân công khi TrangThaiDiem = NHAP. Không được nhập lớp khác; không được tự duyệt, khóa hoặc sửa sau khi Phòng Đào tạo khóa.',
     impactedTables: ['USER', 'GIANG_VIEN', 'PHAN_CONG', 'KET_QUA_HOC_TAP', 'DIEM'],
     note: 'Chuỗi kiểm soát bắt buộc: USER.MaNguoi = GIANG_VIEN.MaNguoi → GIANG_VIEN.MaGV = PHAN_CONG.MaGV. DIEM lưu MaNguoiNhap = USER.MaNguoi để truy vết đúng người thao tác.'
   },
@@ -52,11 +52,11 @@ export const ACTORS = [
     tagClass: 'tag-amber',
     icon: 'FileText',
     summary: 'Cơ quan tham mưu quản lý học vụ và khảo thí toàn trường',
-    whatTheyDo: 'Lập quyết định phân công giảng dạy (PHAN_CONG), quản lý danh mục môn học (MON_HOC), tổ chức các đợt thi (DOT_THI), nhập điểm thi cuối kỳ và thực hiện chốt sổ điểm tổng kết.',
+    whatTheyDo: 'Lập phân công, tổ chức đợt thi và quản lý toàn bộ vòng đời điểm: kiểm tra, duyệt, khóa/mở khóa, yêu cầu giảng viên sửa và điều chỉnh theo quyết định hợp lệ.',
     dataScopeView: 'Xem toàn bộ dữ liệu đào tạo, kế hoạch phân công, lớp học phần và điểm số toàn trường.',
-    dataScopeModify: 'Được tạo phân công giảng dạy, mở đợt thi, nhập điểm thi kết thúc môn, tính điểm tổng kết và chốt sổ điểm.',
+    dataScopeModify: 'Không nhập điểm thay giảng viên trong luồng thông thường. Được duyệt, khóa/mở khóa, quản lý điều chỉnh có lý do, tính lại điểm tổng kết và chốt sổ toàn trường.',
     impactedTables: ['KHOA_DAO_TAO', 'MON_HOC', 'PHAN_CONG', 'DOT_THI', 'KET_QUA_HOC_TAP', 'DIEM'],
-    note: 'Là tác nhân điều phối đào tạo và kiểm soát quy chế khảo thí.'
+    note: 'Mọi thao tác quản lý ghi MaNguoiDuyet, NgayDuyet và TrangThaiDiem; điểm gốc vẫn truy vết được MaNguoiNhap là giảng viên.'
   },
   {
     id: 'actor_gd',

@@ -61,12 +61,12 @@ export default function ERDiagram({ showAttributes = true, notation = 'crowsfoot
     .flatMap(relation => [relation.from, relation.to])), [active, relations]);
 
   return (
-    <div className="er-stage" role="group" aria-label="Mô hình ER gồm 23 thực thể và 27 khóa ngoại" onMouseLeave={() => setActive(null)}>
+    <div className="er-stage" role="group" aria-label="Mô hình ER gồm 23 thực thể và 29 khóa ngoại" onMouseLeave={() => setActive(null)}>
       <div className="er-stage__legend">
         <span><i className="er-key er-key--pk">PK</i> Khóa chính</span>
         <span><i className="er-key er-key--fk">FK</i> Khóa ngoại</span>
         <span><b>1</b> — <b>N</b> Quan hệ một–nhiều</span>
-        <span><b>23</b> thực thể · <b>27</b> khóa ngoại</span>
+        <span><b>23</b> thực thể · <b>29</b> khóa ngoại</span>
       </div>
       <div className="er-scroll">
         <svg className="er-svg" viewBox={`0 0 ${CANVAS_W} ${CANVAS_H}`}>

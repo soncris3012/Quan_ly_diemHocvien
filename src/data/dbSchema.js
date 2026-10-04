@@ -438,23 +438,31 @@ export const TABLES = [
     name: 'DIEM',
     groupId: 'grading',
     title: 'Chi Tiết Từng Đầu Điểm Thành Phần',
-    description: 'Lưu từng con điểm cụ thể gắn với kết quả học tập, loại điểm, ngày nhập và người nhập.',
-    justification: 'CHUẨN HÓA CẤP ĐỘ CAO: Mọi lần nhập điểm được lưu bằng MaNguoiNhap. Với giảng viên, hệ thống đối chiếu MaNguoiNhap với GIANG_VIEN.MaNguoi và PHAN_CONG.MaGV trước khi cho ghi.',
+    description: 'Lưu từng đầu điểm do giảng viên nhập (chuyên cần, thường xuyên, cuối kỳ) và trạng thái quản lý/duyệt của Phòng Đào tạo.',
+    justification: 'Tách rõ hai trách nhiệm: Giảng viên được phân công nhập đủ các loại điểm; Phòng Đào tạo quản lý, duyệt, khóa/mở khóa và lưu dấu người duyệt.',
     columns: [
       { name: 'MaDiem', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã điểm chi tiết', domain: 'Duy nhất', example: 'D_001' },
       { name: 'MaKQ', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Gắn liền với Kết quả học tập', domain: 'Tham chiếu KET_QUA_HOC_TAP', example: 'KQ_001', ref: { table: 'KET_QUA_HOC_TAP', column: 'MaKQ' } },
       { name: 'MaLoaiDiem', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Loại điểm (CC, TX, Thi...)', domain: 'Tham chiếu LOAI_DIEM', example: 'LD_CC', ref: { table: 'LOAI_DIEM', column: 'MaLoaiDiem' } },
+      { name: 'MaDotThi', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Đợt thi áp dụng cho điểm cuối kỳ/thi lại', domain: 'NULL với CC, TX; tham chiếu DOT_THI với CK', example: 'DT_001', ref: { table: 'DOT_THI', column: 'MaDotThi' } },
       { name: 'Diem', type: 'DECIMAL(3,1)', key: null, nullable: false, description: 'Giá trị điểm số (0.0 - 10.0)', domain: '0.0 - 10.0', example: '8.5' },
       { name: 'NgayNhap', type: 'DATETIME', key: null, nullable: false, description: 'Thời điểm nhập điểm', domain: 'DateTime', example: '2025-11-20 14:30:00' },
-      { name: 'MaNguoiNhap', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Người thực hiện nhập (Giảng viên / Đào tạo)', domain: 'Tham chiếu NGUOI', example: 'NG_002', ref: { table: 'NGUOI', column: 'MaNguoi' } }
+      { name: 'MaNguoiNhap', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Giảng viên trực tiếp nhập điểm', domain: 'Tham chiếu NGUOI của GIANG_VIEN', example: 'NG_002', ref: { table: 'NGUOI', column: 'MaNguoi' } },
+      { name: 'TrangThaiDiem', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Trạng thái quản lý điểm', domain: 'NHAP, DA_DUYET, DA_KHOA', example: 'DA_DUYET' },
+      { name: 'MaNguoiDuyet', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Cán bộ Phòng Đào tạo duyệt/khóa điểm', domain: 'Tham chiếu NGUOI; NULL khi chưa duyệt', example: 'NG_DT_01', ref: { table: 'NGUOI', column: 'MaNguoi' } },
+      { name: 'NgayDuyet', type: 'DATETIME', key: null, nullable: true, description: 'Thời điểm Phòng Đào tạo duyệt hoặc khóa điểm', domain: 'DateTime hoặc NULL', example: '2025-12-28 09:00:00' }
     ],
     constraints: [
       'PK: MaDiem',
       'FK: MaKQ -> KET_QUA_HOC_TAP(MaKQ)',
       'FK: MaLoaiDiem -> LOAI_DIEM(MaLoaiDiem)',
+      'FK: MaDotThi -> DOT_THI(MaDotThi)',
       'FK: MaNguoiNhap -> NGUOI(MaNguoi)',
+      'FK: MaNguoiDuyet -> NGUOI(MaNguoi)',
       'CHECK: Diem BETWEEN 0.0 AND 10.0',
-      'RLS: Giảng viên chỉ INSERT/UPDATE khi USER.MaNguoi = GIANG_VIEN.MaNguoi và GIANG_VIEN.MaGV = PHAN_CONG.MaGV của MaKQ'
+      'CHECK: TrangThaiDiem IN (NHAP, DA_DUYET, DA_KHOA)',
+      'RLS: Giảng viên chỉ INSERT/UPDATE CC, TX, CK khi thuộc PHAN_CONG của MaKQ và TrangThaiDiem = NHAP',
+      'BUSINESS: Chỉ Phòng Đào tạo được duyệt, khóa/mở khóa hoặc điều chỉnh điểm sau khi khóa'
     ]
   },
   {
@@ -534,8 +542,8 @@ export const INTEGRITY_CONSTRAINTS = [
     title: 'Giảng viên chỉ nhập điểm các lớp mình được phân công',
     type: 'Phân quyền hàng (Row-Level Security)',
     target: 'USER, GIANG_VIEN, PHAN_CONG, KET_QUA_HOC_TAP, DIEM',
-    description: 'Từ tài khoản đang đăng nhập, hệ thống lấy USER.MaNguoi, tìm đúng GIANG_VIEN.MaGV rồi chỉ cho nhập/sửa DIEM của KET_QUA_HOC_TAP thuộc PHAN_CONG mang MaGV đó.',
-    implementation: 'RLS/Stored Procedure kiểm tra USER.MaNguoi = GIANG_VIEN.MaNguoi AND GIANG_VIEN.MaGV = PHAN_CONG.MaGV; từ chối mọi lớp học phần khác.'
+    description: 'Giảng viên được nhập CC, TX và CK nhưng chỉ cho KET_QUA_HOC_TAP thuộc PHAN_CONG của mình và khi điểm chưa khóa. Phòng Đào tạo có quyền duyệt, khóa/mở khóa và quản lý điều chỉnh.',
+    implementation: 'RLS kiểm tra USER → GIANG_VIEN → PHAN_CONG; stored procedure riêng cho ROLE_DT chuyển TrangThaiDiem và ghi MaNguoiDuyet, NgayDuyet.'
   },
   {
     id: 'c8',

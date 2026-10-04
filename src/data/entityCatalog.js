@@ -176,12 +176,12 @@ export const ENTITIES = [
     id: 'ent_diem',
     name: 'Điểm Chi Tiết (DIEM)',
     groupId: 'grading',
-    meaning: 'Chi tiết từng con điểm thành phần được Giảng viên hoặc Phòng Khảo thí nhập vào hệ thống.',
+    meaning: 'Chi tiết điểm CC, TX, CK do giảng viên phụ trách nhập; Phòng Đào tạo quản lý trạng thái duyệt và khóa điểm.',
     identifier: 'Mã điểm (MaDiem [PK])',
-    keyAttributes: ['MaDiem', 'MaKQ', 'MaLoaiDiem', 'Diem', 'NgayNhap', 'MaNguoiNhap'],
-    relationships: 'Gắn với KET_QUA_HOC_TAP và LOAI_DIEM; lưu MaNguoiNhap tham chiếu NGUOI. Nếu người nhập là giảng viên, MaKQ phải thuộc PHAN_CONG của chính MaGV tương ứng.',
-    example: 'Giảng viên Lê Đức Thắng nhập Điểm chuyên cần: 8.5 cho học viên Nguyễn Văn An ngày 20/11/2025.',
-    justification: 'Ghi nhận chi tiết, minh bạch từng đầu điểm, lưu vết thời gian và người nhập bảo đảm tính giải trình.',
+    keyAttributes: ['MaDiem', 'MaKQ', 'MaLoaiDiem', 'MaDotThi', 'Diem', 'MaNguoiNhap', 'TrangThaiDiem', 'MaNguoiDuyet', 'NgayDuyet'],
+    relationships: 'Giảng viên nhập điểm theo PHAN_CONG; CK/thi lại gắn DOT_THI. Phòng Đào tạo duyệt và khóa, lưu MaNguoiDuyet riêng với MaNguoiNhap.',
+    example: 'Giảng viên nhập CK 7.5 ở trạng thái NHAP; Phòng Đào tạo kiểm tra rồi chuyển DA_DUYET và DA_KHOA.',
+    justification: 'Phân tách rõ quyền nhập của giảng viên và quyền quản lý điểm của Phòng Đào tạo, đồng thời truy vết đủ người nhập, người duyệt và đợt thi.',
     tableRef: 'DIEM'
   },
   {
@@ -193,7 +193,7 @@ export const ENTITIES = [
     keyAttributes: ['MaDotThi', 'MaPhanCong', 'TenDotThi', 'LoaiDotThi', 'NgayThi'],
     relationships: 'Thuộc 1 PHAN_CONG; Tổ chức thi cho các học viên thuộc phân công đó.',
     example: 'Đợt thi kết thúc môn CSDL Lần 1 (ngày 25/12/2025); Đợt thi lại Lần 2 (ngày 10/01/2026).',
-    justification: 'Tách bạch khâu giảng dạy của Giảng viên với khâu Khảo thí thi kết thúc môn theo đúng quy chế.',
+    justification: 'Phòng Đào tạo tổ chức đợt thi; giảng viên phụ trách nhập điểm cuối kỳ/thi lại và liên kết điểm với đúng đợt thi.',
     tableRef: 'DOT_THI'
   }
 ];

@@ -35,8 +35,8 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
     },
     {
       issue: 'Giảng viên & Trách nhiệm nhập điểm',
-      why: 'Đề bài ban đầu thiếu thực thể Giảng viên nên chưa xác định được ai trực tiếp giảng dạy và ai chịu trách nhiệm nhập điểm quá trình.',
-      resolution: 'Mỗi GIANG_VIEN dùng đúng một USER qua UNIQUE(MaNguoi). Khi nhập điểm, hệ thống đối chiếu tài khoản → giảng viên → PHAN_CONG và chỉ mở lớp học phần do chính giảng viên phụ trách.'
+      why: 'Khảo sát thực tế xác nhận giảng viên nhập cả điểm thường xuyên, chuyên cần và cuối kỳ; Phòng Đào tạo giữ quyền quản lý điểm.',
+      resolution: 'Giảng viên chỉ nhập CC, TX, CK theo PHAN_CONG. DIEM lưu người nhập và đợt thi; Phòng Đào tạo duyệt, khóa/mở khóa bằng trạng thái và thông tin người duyệt riêng.'
     },
     {
       issue: 'Bảo mật phân quyền quân sự',

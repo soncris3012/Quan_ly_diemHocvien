@@ -104,7 +104,7 @@ C. Đề xuất mô hình cải tiến
 - Kế thừa IS-A: Thực thể cha NGUOI cho cả Học viên và Giảng viên.
 - Phân biệt thi lại trong cùng phân công với học lại ở một phân công mới.
 - Mô hình hóa cơ cấu đơn vị và phạm vi quản lý của tài khoản chỉ huy.
-- Mô hình hóa chốt điểm, phân quyền Giảng viên nhập điểm quá trình và Khảo thí mở đợt thi.
+- Mô hình hóa Giảng viên nhập CC, TX, CK theo PHAN_CONG; Phòng Đào tạo mở đợt thi, duyệt, khóa/mở khóa và quản lý điều chỉnh điểm.
 - Giữ điểm thi thực tế trong DIEM, phân biệt với điểm tổng kết được công nhận trong KET_QUA_HOC_TAP.
 - Mỗi bảng bổ sung phải có lý do nghiệp vụ; tránh mở rộng ngoài phạm vi.
 D. Trình bày kết quả: Tóm tắt bài toán, Ma trận tác nhân, Quy trình nghiệp vụ, Danh sách thực thể, ER khái niệm, Mô hình quan hệ 23 bảng (R1 – R23), Từ điển dữ liệu, Ràng buộc, So sánh 2 bản và 6 tình huống kiểm chứng.`;

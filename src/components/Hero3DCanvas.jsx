@@ -78,7 +78,7 @@ export default function Hero3DCanvas({ onNodeSelect }) {
 
   return <div className="hero-canvas-container">
     <div className="hero-canvas-heading"><span className="badge-military"><Sparkles size={13}/> KIẾN TRÚC DỮ LIỆU 3D</span><span><Box size={13}/> Rê chuột để đổi góc nhìn · Chọn một khối để khám phá</span></div>
-    <div className="hero-canvas-status"><b>23</b> THỰC THỂ <i/> <b>27</b> KHÓA NGOẠI <i/> <b>3NF</b> CHUẨN HÓA</div>
+    <div className="hero-canvas-status"><b>23</b> THỰC THỂ <i/> <b>29</b> KHÓA NGOẠI <i/> <b>3NF</b> CHUẨN HÓA</div>
     <canvas ref={canvasRef} aria-label="Mô hình không gian ba chiều của kiến trúc cơ sở dữ liệu" />
   </div>;
 }

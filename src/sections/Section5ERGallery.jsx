@@ -236,7 +236,7 @@ export default function Section5ERGallery({ onOpenInspector, onSelectTable }) {
           >
             <span className="tag tag-amber" style={{ fontSize: '0.62rem' }}>CHI TIẾT ĐIỂM (R22)</span>
             <div style={{ fontWeight: 700, color: 'var(--color-amber)', fontSize: '0.85rem' }}>DIEM (GV Nhập)</div>
-            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaDiem [PK], Diem, MaNguoiNhap</div>}
+            {showAttributes && <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>MaDiem [PK], MaDotThi, Diem, MaNguoiNhap, TrangThaiDiem, MaNguoiDuyet</div>}
           </div>
 
           <div 

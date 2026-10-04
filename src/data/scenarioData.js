@@ -7,7 +7,7 @@ export const SCENARIOS = [
     title: 'Tình huống 1: Giảng Viên Dạy & Đánh Giá Điểm Chuẩn',
     badge: 'Đạt chuẩn',
     badgeClass: 'tag-emerald',
-    description: 'Giảng viên TS. Lê Đức Thắng được phân công dạy CSDL, nhập điểm CC = 8.0, TX = 7.0; Học viên thi cuối kỳ đạt 6.0.',
+    description: 'Giảng viên TS. Lê Đức Thắng được phân công dạy CSDL, nhập CC = 8.0, TX = 7.0 và CK = 6.0; Phòng Đào tạo kiểm tra, duyệt và khóa bộ điểm.',
     highlightTables: ['USER', 'GIANG_VIEN', 'PHAN_CONG', 'LOAI_DIEM', 'DIEM', 'KET_QUA_HOC_TAP'],
     mockData: {
       student: { id: 'HV001', name: 'Nguyễn Văn An', class: 'CNTT2_K58' },
@@ -22,10 +22,10 @@ export const SCENARIOS = [
         finalGrade: 6.5,
         status: 'HOAN_THANH',
         rank: 'Khá',
-        formulaStr: '8.0 × 0.1 (CC do GV nhập) + 7.0 × 0.3 (TX do GV nhập) + 6.0 × 0.6 (Thi cuối kỳ) = 6.5'
+        formulaStr: '8.0 × 0.1 (CC) + 7.0 × 0.3 (TX) + 6.0 × 0.6 (CK) — đều do GV nhập; Phòng Đào tạo duyệt/khóa = 6.5'
       }
     },
-    explanation: 'Giảng viên đăng nhập bằng tài khoản duy nhất gv_lethang. Hệ thống ánh xạ USER.MaNguoi = NG_002 sang GIANG_VIEN.MaGV = GV001, xác nhận PHAN_CONG PC_CSDL_01 thuộc GV001 rồi mới cho nhập; DIEM lưu MaNguoiNhap = NG_002. Mọi lớp học phần khác đều bị từ chối.'
+    explanation: 'Tài khoản gv_lethang được ánh xạ đến GV001 và PHAN_CONG PC_CSDL_01 nên được nhập CC, TX, CK; DIEM lưu MaNguoiNhap = NG_002. Phòng Đào tạo duyệt/khóa bằng MaNguoiDuyet và NgayDuyet; lớp khác vẫn bị từ chối.'
   },
 
   {

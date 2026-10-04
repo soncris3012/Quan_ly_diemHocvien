@@ -20,7 +20,7 @@ export default function SystemSelector({ onSelect }) {
           <span className="system-choice__code">SMTA</span>
           <h2>Quản Lý Điểm Học Viên</h2>
           <p>Phân công giảng dạy, điểm thành phần, thi lại, học lại và phân quyền học vụ.</p>
-          <div className="system-choice__stats"><span>23 thực thể</span><span>27 khóa ngoại</span><span>10 chuyên mục</span></div>
+          <div className="system-choice__stats"><span>23 thực thể</span><span>29 khóa ngoại</span><span>10 chuyên mục</span></div>
           <strong>Truy cập SMTA <ArrowRight size={18} /></strong>
         </button>
 
