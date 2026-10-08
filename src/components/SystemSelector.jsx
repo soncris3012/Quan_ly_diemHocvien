@@ -29,8 +29,8 @@ export default function SystemSelector({ onSelect }) {
           <div className="system-choice__icon"><Activity size={38} /></div>
           <span className="system-choice__code">XMTA</span>
           <h2>Quản Lý Kiểm Tra Thể Lực</h2>
-          <p>Cơ cấu đơn vị, quân nhân, bốn môn, tiêu chuẩn xếp loại, thi vét và chỉ đạo rèn luyện.</p>
-          <div className="system-choice__stats"><span>8 quan hệ</span><span>3NF / BCNF</span><span>10 chuyên mục</span></div>
+          <p>Cơ cấu đơn vị, quân nhân, môn theo từng đợt, tiêu chuẩn theo tuổi/giới tính, thi vét và báo cáo.</p>
+          <div className="system-choice__stats"><span>9 quan hệ</span><span>12 liên kết</span><span>3NF / BCNF</span></div>
           <strong>Truy cập XMTA <ArrowRight size={18} /></strong>
         </button>
       </section>
