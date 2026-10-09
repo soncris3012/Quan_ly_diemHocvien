@@ -53,15 +53,15 @@ export default function WelcomeModal({ system = 'smta' }) {
       onClick={() => setIsOpen(false)}
     >
       <div 
-        className={`card welcome-modal-card ${isXmta ? 'welcome-modal-card--xmta-cover' : ''}`}
+        className="card welcome-modal-card"
         style={{
-          maxWidth: isXmta ? 1120 : 560,
+          maxWidth: 560,
           width: '100%',
           background: '#0D1525',
           borderColor: 'rgba(56, 189, 248, 0.45)',
           boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9), 0 0 35px rgba(56, 189, 248, 0.25)',
           borderRadius: 16,
-          padding: isXmta ? 12 : 28,
+          padding: 28,
           position: 'relative',
           animation: 'fadeIn 0.3s ease-out'
         }}
@@ -70,7 +70,6 @@ export default function WelcomeModal({ system = 'smta' }) {
         <div className="welcome-modal-grid" aria-hidden="true" />
         <div className="welcome-modal-orb welcome-modal-orb--one" aria-hidden="true" />
         <div className="welcome-modal-orb welcome-modal-orb--two" aria-hidden="true" />
-        {isXmta && <div className="welcome-xmta-cover"><img src="/xmta-cover.png" alt="Ảnh bìa dự án Cơ sở dữ liệu quản lý điểm và kiểm tra thể lực" /></div>}
         {/* Nút đóng */}
         <button 
           onClick={() => setIsOpen(false)}
@@ -91,22 +90,22 @@ export default function WelcomeModal({ system = 'smta' }) {
         </button>
 
         {/* Header Huy Hiệu */}
-        {!isXmta && <div className="welcome-modal-header" style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
+        <div className="welcome-modal-header" style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14 }}>
           <div className="welcome-academy-logo">
             <img src="/smta-logo.png" alt="Logo Học viện Kỹ thuật Quân sự" />
           </div>
           <div>
             <span className="badge-military" style={{ fontSize: '0.72rem' }}>
-              SMTA v2.0 • HỌC VIỆN KỸ THUẬT QUÂN SỰ
+              {isXmta ? 'XMTA v1.0' : 'SMTA v2.0'} • HỌC VIỆN KỸ THUẬT QUÂN SỰ
             </span>
             <h3 id="welcome-title" style={{ fontSize: '1.48rem', color: '#fff', marginTop: 5, fontWeight: 800, lineHeight: 1.28 }}>
-              Dự án Cơ sở dữ liệu quản lý điểm Học viên quân sự MTA
+              {isXmta ? 'Dự án Cơ sở dữ liệu quản lý kết quả kiểm tra thể lực MTA' : 'Dự án Cơ sở dữ liệu quản lý điểm Học viên quân sự MTA'}
             </h3>
           </div>
-        </div>}
+        </div>
 
         {/* Thông tin nhóm 519 */}
-        {!isXmta && <div className="welcome-members" style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 12, padding: '16px 20px', margin: '18px 0' }}>
+        <div className="welcome-members" style={{ background: 'rgba(56, 189, 248, 0.08)', border: '1px solid rgba(56, 189, 248, 0.3)', borderRadius: 12, padding: '16px 20px', margin: '18px 0' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--color-blue)', fontWeight: 700, fontSize: '0.95rem', marginBottom: 8 }}>
             <Users size={18} />
             THÀNH VIÊN
@@ -114,10 +113,10 @@ export default function WelcomeModal({ system = 'smta' }) {
           <p style={{ color: '#fff', fontSize: '1.05rem', fontWeight: 600, margin: 0, letterSpacing: '0.02em' }}>
             Sơn, Bảo, Quyết, Hùng, Khánh
           </p>
-        </div>}
+        </div>
 
         {/* Nút hành động */}
-        <div className={isXmta ? 'welcome-xmta-actions' : ''} style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: isXmta ? 12 : 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 20 }}>
           <button 
             onClick={() => setIsOpen(false)}
             className="btn btn-primary welcome-cta"

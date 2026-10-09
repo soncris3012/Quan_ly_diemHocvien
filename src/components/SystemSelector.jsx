@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowRight, Activity, GraduationCap, ShieldCheck } from 'lucide-react';
 
 export default function SystemSelector({ onSelect }) {
+  const [showCover, setShowCover] = useState(true);
+
+  if (showCover) return (
+    <main className="portal-cover">
+      <div className="portal-cover__frame">
+        <img src="/xmta-cover.png" alt="Ảnh bìa Cơ sở dữ liệu quản lý điểm và kiểm tra thể lực" />
+        <button className="btn btn-primary portal-cover__cta" onClick={() => setShowCover(false)}>
+          Khám Phá Ngay <ArrowRight size={19} />
+        </button>
+      </div>
+    </main>
+  );
+
   return (
     <main className="system-gateway">
       <div className="system-gateway__halo" />
