@@ -7,6 +7,7 @@ import PresentationController from './components/PresentationController';
 import SearchModal from './components/SearchModal';
 import WelcomeModal from './components/WelcomeModal';
 import SystemSelector from './components/SystemSelector';
+import PetAssistant from './components/PetAssistant';
 import XmtaApp from './xmta/XmtaApp';
 
 import Section1Overview from './sections/Section1Overview';
@@ -326,6 +327,5 @@ export default function App() {
     setSystem(value);
   };
   if (!system) return <SystemSelector onSelect={selectSystem} />;
-  if (system === 'xmta') return <XmtaApp onBack={() => selectSystem(null)} />;
-  return <SmtaWorkspace onBack={() => selectSystem(null)} />;
+  return <>{system === 'xmta' ? <XmtaApp onBack={() => selectSystem(null)} /> : <SmtaWorkspace onBack={() => selectSystem(null)} />}<PetAssistant system={system}/></>;
 }
