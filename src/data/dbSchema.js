@@ -69,9 +69,10 @@ export const TABLES = [
       { name: 'LoaiDonVi', type: 'VARCHAR(30)', key: null, nullable: false, description: 'Cấp bậc đơn vị', domain: 'TIEU_DOAN, DAI_DOI, KHOA', example: 'TIEU_DOAN' },
       { name: 'MaDonViCha', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Đơn vị cấp trên (Quan hệ đệ quy)', domain: 'Tham chiếu DON_VI', example: null, ref: { table: 'DON_VI', column: 'MaDonVi' } },
       { name: 'NgayThanhLap', type: 'DATE', key: null, nullable: true, description: 'Ngày thành lập hoặc tổ chức lại đơn vị', domain: 'Date hoặc NULL nếu chưa xác minh', example: '2022-09-21' },
-      { name: 'SoQuyetDinh', type: 'NVARCHAR(50)', key: null, nullable: true, description: 'Số quyết định thành lập hoặc tổ chức lại', domain: 'Văn bản có dấu', example: '3683/QĐ-BQP' }
+      { name: 'SoQuyetDinh', type: 'NVARCHAR(50)', key: null, nullable: true, description: 'Số quyết định thành lập hoặc tổ chức lại', domain: 'Văn bản có dấu', example: '3683/QĐ-BQP' },
+      { name: 'TinhTrangDuLieu', type: 'VARCHAR(30)', key: null, nullable: false, description: 'Mức độ đã truy hồi danh sách của đơn vị', domain: 'DA_TRUY_HOI, CHUA_TRUY_HOI_DANH_SACH', example: 'DA_TRUY_HOI' }
     ],
-    constraints: ['PK: MaDonVi', 'FK: MaDonViCha -> DON_VI(MaDonVi)', 'CHECK: MaDonViCha <> MaDonVi', 'SOURCE: NgayThanhLap và SoQuyetDinh chỉ công bố khi đã đối chiếu tài liệu']
+    constraints: ['PK: MaDonVi', 'FK: MaDonViCha -> DON_VI(MaDonVi)', 'CHECK: MaDonViCha <> MaDonVi', 'CHECK: TinhTrangDuLieu IN (DA_TRUY_HOI, CHUA_TRUY_HOI_DANH_SACH)', 'SOURCE: Không tự sinh nhân sự cho đơn vị chưa truy hồi danh sách']
   },
   {
     id: 'BO_MON',

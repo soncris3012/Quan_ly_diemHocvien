@@ -36,10 +36,24 @@ export const REAL_CLASS = {
 };
 
 export const INSTITUTE_UNITS = [
-  ['BM_HTTT', 'Bộ môn Hệ thống thông tin', 9],
-  ['BM_KHMT', 'Bộ môn Khoa học máy tính', 11],
-  ['BM_CNPM', 'Bộ môn Công nghệ phần mềm', 11],
-  ['BM_ATTT_MANG', 'Bộ môn An toàn thông tin – Công nghệ mạng', 18],
-  ['TT_TUD_TH', 'Trung tâm Toán ứng dụng và Tin học', 18]
+  ['BM_HTTT', 'Bộ môn Hệ thống thông tin', 9, 'Đã truy hồi'],
+  ['BM_KHMT', 'Bộ môn Khoa học máy tính', 11, 'Đã truy hồi'],
+  ['BM_CNPM', 'Bộ môn Công nghệ phần mềm', 11, 'Đã truy hồi'],
+  ['BM_ATTT_MANG', 'Bộ môn An toàn thông tin – Công nghệ mạng', 18, 'Đã truy hồi'],
+  ['PHONG_KHTH', 'Phòng Kế hoạch tổng hợp', 5, 'Đã truy hồi'],
+  ['PHONG_TVCGCN', 'Phòng Tư vấn chuyển giao công nghệ', 3, 'Đã truy hồi'],
+  ['TT_TUD_TH', 'Trung tâm Toán ứng dụng và Tin học', 13, 'Đã truy hồi'],
+  ['TT_MAY_TIN', 'Trung tâm Máy tính', 0, 'Chưa có danh sách'],
+  ['TTNCXS_ATTT', 'Trung tâm NCXS về An toàn thông tin', 0, 'Chưa có danh sách']
 ];
+
+export const INSTITUTE_SOURCE_SUMMARY = {
+  source: 'Kỷ yếu 2026 của Viện CNTT&TT do người dùng tra cứu',
+  leadership: 3,
+  retrievedPersonnel: 70,
+  retrievedAssignments: 73,
+  missingEmail: 3,
+  emailNeedsReview: 4,
+  note: 'Ngày về Khoa/Viện được giữ đúng độ chính xác của nguồn (năm hoặc tháng/năm), không tự bổ sung ngày.'
+};
 

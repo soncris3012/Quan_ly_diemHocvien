@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Database, Download } from 'lucide-react';
-import { INSTITUTE_UNITS, REAL_CLASS } from '../data/realSurveyData';
+import { INSTITUTE_SOURCE_SUMMARY, INSTITUTE_UNITS, REAL_CLASS } from '../data/realSurveyData';
 
 const SQL_PREVIEW = `-- SQL Server · dữ liệu khảo sát thực tế
 USE [SMTA_KHAO_SAT_2026];
@@ -34,7 +34,7 @@ export default function Section11SqlData() {
       <div>
         <div className="section-tag"><Database size={15}/> CSDL CHUẨN HÓA · SQL SERVER</div>
         <h1 className="section-title">Cơ Sở Dữ Liệu Quản Lý Điểm</h1>
-        <p className="section-desc">Cấu trúc bảng và nghiệp vụ được hoàn thiện từ file SQL tham khảo. Tên người và thông tin nhân sự trong nguồn chưa được xác minh nên chỉ dùng làm dữ liệu đối chiếu, không khẳng định là danh sách chính thức.</p>
+        <p className="section-desc">Cấu trúc bảng và nghiệp vụ được hoàn thiện từ file SQL tham khảo, phiếu điểm CNTT2/c160 và dữ liệu tra cứu Kỷ yếu 2026. Mỗi bản ghi giữ nguồn, mức độ truy hồi và trạng thái cần đối chiếu riêng.</p>
       </div>
       <a className="sql-download-button" href="/sql/SMTA_KhaoSat2026_SQLServer.sql" download>
         <Download size={19}/><span><b>Tải file SQL</b><small>SQL Server · UTF-8</small></span>
@@ -43,11 +43,11 @@ export default function Section11SqlData() {
 
     <div className="real-sql-grid">
       <section className="card">
-        <header className="real-card-head"><div><span>NGUỒN THAM KHẢO A</span><h2>Cơ cấu đơn vị và cán bộ</h2></div><b>Chưa xác minh danh tính</b></header>
+        <header className="real-card-head"><div><span>NGUỒN THAM KHẢO A</span><h2>Cơ cấu đơn vị và cán bộ</h2></div><b>Kỷ yếu 2026</b></header>
         <div className="institute-unit-list">
-          {INSTITUTE_UNITS.map(([code, name, count]) => <article key={code}><span>{code}</span><div><strong>{name}</strong><small>{count} dòng phân công cán bộ trong nguồn</small></div><b>{count}</b></article>)}
+          {INSTITUTE_UNITS.map(([code, name, count, status]) => <article key={code}><span>{code}</span><div><strong>{name}</strong><small>{count ? `${count} hồ sơ · ${status}` : status}</small></div><b>{count || '—'}</b></article>)}
         </div>
-        <p className="real-data-footnote">Cách bố trí được giữ lại: một hồ sơ con người duy nhất, chức vụ và đơn vị được quản lý theo phân công. Tên trong nguồn chỉ là dữ liệu tham khảo và có thể thay thế mà không đổi cấu trúc CSDL.</p>
+        <p className="real-data-footnote"><b>{INSTITUTE_SOURCE_SUMMARY.retrievedPersonnel} người / {INSTITUTE_SOURCE_SUMMARY.retrievedAssignments} dòng đơn vị được truy hồi</b>, gồm {INSTITUTE_SOURCE_SUMMARY.leadership} cán bộ Ban Chỉ huy. {INSTITUTE_SOURCE_SUMMARY.note} Email thiếu hoặc có miền bất thường được gắn cờ để đối chiếu, không tự sửa. Trung tâm Máy tính và TTNCXS ATTT không được tự sinh danh sách khi nguồn chưa có.</p>
       </section>
 
       <section className="card sql-preview-card">
