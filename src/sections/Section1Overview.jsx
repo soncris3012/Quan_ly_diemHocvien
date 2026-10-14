@@ -92,7 +92,7 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
           <div>
             <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', textTransform: 'uppercase' }}>Giai Đoạn Thiết Kế</div>
             <div style={{ fontWeight: 700, color: '#fff' }}>Khái Niệm & Quan Hệ</div>
-            <div style={{ fontSize: '0.8rem', color: 'var(--color-muted)' }}>Chưa triển khai SQL / Backend</div>
+            <div style={{ fontSize: '0.8rem', color: 'var(--color-emerald)' }}>Đã bổ sung bộ dữ liệu SQL Server</div>
           </div>
         </div>
 
@@ -138,7 +138,7 @@ export default function Section1Overview({ onStartPresentation, onSelectSection,
         <div className="alert-box alert-blue" style={{ margin: 0 }}>
           <Info size={20} style={{ flexShrink: 0, marginTop: 2 }} />
           <div>
-            <strong>Lưu ý về phạm vi hệ thống:</strong> Website hoạt động như một <em>bản báo cáo học thuật tương tác</em> bằng dữ liệu giả lập. Các thao tác nhập điểm, chốt sổ, mở khóa và phân quyền trên giao diện là mô phỏng trực quan để giải thích kiến trúc CSDL ở giai đoạn tiền SQL, không phải mã nguồn ứng dụng hoàn chỉnh.
+            <strong>Lưu ý về phạm vi hệ thống:</strong> Website là một <em>bản báo cáo học thuật tương tác</em>. Mô hình nghiệp vụ vẫn là mô phỏng, nhưng mục Dữ liệu SQL thực tế đã dùng danh sách khảo sát của Viện CNTT và Truyền thông cùng phiếu điểm CNTT2/c160; các trường nguồn để trống được giữ <code>NULL</code>, không tự tạo điểm.
           </div>
         </div>
       </div>

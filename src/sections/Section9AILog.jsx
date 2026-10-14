@@ -84,7 +84,7 @@ export default function Section9AILog() {
   };
 
   const masterPrompt = `Bạn đóng vai trò người hướng dẫn phân tích và thiết kế cơ sở dữ liệu cho đề tài “Quản lý điểm học viên quân sự”.
-Tôi đang ở giai đoạn phân tích nghiệp vụ, vẽ ER và chuyển sang mô hình quan hệ. Chưa triển khai SQL, backend hoặc hệ thống thực tế.
+Tôi đang ở giai đoạn phân tích nghiệp vụ, vẽ ER và chuyển sang mô hình quan hệ. Hãy rà soát mô hình trước khi tạo bộ dữ liệu SQL Server từ dữ liệu khảo sát thực tế.
 Dữ liệu tôi cung cấp gồm:
 1. Mô tả bài toán.
 2. Bản phân tích ban đầu.

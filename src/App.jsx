@@ -21,6 +21,7 @@ import Section7DataDictionary from './sections/Section7DataDictionary';
 import Section8Scenarios from './sections/Section8Scenarios';
 import Section9AILog from './sections/Section9AILog';
 import Section10Conclusion from './sections/Section10Conclusion';
+import Section11SqlData from './sections/Section11SqlData';
 
 import { TABLES } from './data/dbSchema';
 import { ENTITIES } from './data/entityCatalog';
@@ -202,6 +203,8 @@ function SmtaWorkspace({ onBack }) {
         return <Section9AILog />;
       case 'sec_conclusion':
         return <Section10Conclusion onSelectSection={handleSelectSection} />;
+      case 'sec_sql_data':
+        return <Section11SqlData />;
       default:
         return <Section1Overview onStartPresentation={startPresentation} onSelectSection={handleSelectSection} />;
     }

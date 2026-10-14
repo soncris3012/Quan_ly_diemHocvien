@@ -1,5 +1,5 @@
 // src/components/Navigation.jsx
-// Thanh điều hướng bên trái với 10 chuyên mục, thanh tiến trình và nút chế độ báo cáo
+// Thanh điều hướng bên trái với 11 chuyên mục, thanh tiến trình và nút chế độ báo cáo
 import React from 'react';
 import { 
   Compass, 
@@ -14,7 +14,8 @@ import {
   FileCheck,
   Play,
   RotateCcw,
-  Search
+  Search,
+  DatabaseZap
 } from 'lucide-react';
 
 export const SECTIONS = [
@@ -27,7 +28,8 @@ export const SECTIONS = [
   { id: 'sec_dictionary', num: '07', title: 'Từ Điển Dữ Liệu', icon: BookOpen, badge: '12 Ràng buộc' },
   { id: 'sec_scenarios', num: '08', title: 'Kiểm Chứng Tình Huống', icon: CheckCircle2, badge: '6 Kịch bản' },
   { id: 'sec_ai_log', num: '09', title: 'Nhật Ký Sử Dụng AI', icon: Terminal, badge: 'Prompting' },
-  { id: 'sec_conclusion', num: '10', title: 'Kết Luận & Mở Rộng', icon: FileCheck, badge: 'Đánh giá' }
+  { id: 'sec_conclusion', num: '10', title: 'Kết Luận & Mở Rộng', icon: FileCheck, badge: 'Đánh giá' },
+  { id: 'sec_sql_data', num: '11', title: 'Dữ Liệu SQL Thực Tế', icon: DatabaseZap, badge: 'Tải SQL Server' }
 ];
 
 export default function Navigation({ 
