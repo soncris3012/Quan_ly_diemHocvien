@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Database, Download, FileSpreadsheet, ShieldCheck, Users } from 'lucide-react';
+import { Database, Download } from 'lucide-react';
 import { INSTITUTE_UNITS, REAL_CLASS } from '../data/realSurveyData';
 
 const SQL_PREVIEW = `-- SQL Server · dữ liệu khảo sát thực tế
@@ -40,18 +40,6 @@ export default function Section11SqlData() {
         <Download size={19}/><span><b>Tải file SQL</b><small>SQL Server · UTF-8</small></span>
       </a>
     </div>
-
-    <div className="real-data-metrics">
-      <article><Users/><strong>24</strong><span>học viên đúng theo phiếu</span></article>
-      <article><FileSpreadsheet/><strong>01</strong><span>phiếu điểm CNTT2/c160</span></article>
-      <article><Database/><strong>23</strong><span>bảng nghiệp vụ lõi chuẩn hóa</span></article>
-      <article><ShieldCheck/><strong>10–30–60</strong><span>trọng số CC · TX · Thi</span></article>
-    </div>
-
-    <section className="card real-source-note">
-      <div><CheckCircle2 size={20}/><strong>Nguyên tắc nhập dữ liệu trung thực</strong></div>
-      <p>Tên học phần, giảng viên, ngày thi, số tín chỉ, hình thức thi và toàn bộ điểm trên phiếu gốc đang để trống. Script giữ các trường này là <code>NULL</code>, không tự suy đoán hay tạo điểm giả. Tên học viên được giữ nguyên theo văn bản nguồn, kể cả dạng viết tắt “Ng”.</p>
-    </section>
 
     <div className="real-sql-grid">
       <section className="card">
