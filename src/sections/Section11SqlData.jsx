@@ -44,7 +44,7 @@ export default function Section11SqlData() {
     <div className="real-data-metrics">
       <article><Users/><strong>24</strong><span>học viên đúng theo phiếu</span></article>
       <article><FileSpreadsheet/><strong>01</strong><span>phiếu điểm CNTT2/c160</span></article>
-      <article><Database/><strong>05</strong><span>bộ môn và trung tâm</span></article>
+      <article><Database/><strong>23</strong><span>bảng nghiệp vụ lõi chuẩn hóa</span></article>
       <article><ShieldCheck/><strong>10–30–60</strong><span>trọng số CC · TX · Thi</span></article>
     </div>
 
@@ -65,7 +65,7 @@ export default function Section11SqlData() {
       <section className="card sql-preview-card">
         <header className="real-card-head"><div><span>DATASET B</span><h2>Script chạy trực tiếp trên SQL Server</h2></div><button onClick={copyPreview}>{copied ? 'Đã sao chép' : 'Sao chép'}</button></header>
         <pre><code>{SQL_PREVIEW}</code></pre>
-        <ul><li>Tự tạo database và 8 bảng dữ liệu khảo sát.</li><li>Dùng <code>MERGE</code> để chạy lại không sinh bản ghi trùng.</li><li>Có khóa chính, khóa ngoại, UNIQUE và CHECK điểm 0–10.</li><li>Có view tái tạo phiếu điểm lớp CNTT2.</li></ul>
+        <ul><li>23 bảng lõi, lớp dữ liệu nguồn và nhật ký thay đổi điểm.</li><li>RBAC cho Học viên, Giảng viên, Phòng Đào tạo và Chỉ huy.</li><li>Mỗi giảng viên một tài khoản ở trạng thái chờ kích hoạt.</li><li>24 học viên × 3 đầu điểm ở trạng thái chờ nhập.</li><li>Thủ tục nhập, duyệt, khóa/mở khóa và tính điểm tổng kết.</li><li>View tái tạo bảng điểm CNTT2/c160.</li></ul>
       </section>
     </div>
 
