@@ -1,5 +1,5 @@
 // src/data/dbSchema.js
-// Bộ 23 bảng quan hệ chuẩn mực R1 -> R23 tích hợp đầy đủ Giảng viên, Phân công và Điểm số
+// Bộ 23 bảng quan hệ chuẩn mực R1 -> R23 tích hợp Giảng viên, Phân công, nguồn khảo sát và Điểm số
 
 export const SCHEMA_GROUPS = {
   org: {
@@ -67,9 +67,11 @@ export const TABLES = [
       { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'PK', nullable: false, description: 'Mã định danh đơn vị', domain: 'Duy nhất', example: 'DV_D1' },
       { name: 'TenDonVi', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên phiên hiệu đơn vị', domain: 'Văn bản', example: 'Tiểu đoàn 1' },
       { name: 'LoaiDonVi', type: 'VARCHAR(30)', key: null, nullable: false, description: 'Cấp bậc đơn vị', domain: 'TIEU_DOAN, DAI_DOI, KHOA', example: 'TIEU_DOAN' },
-      { name: 'MaDonViCha', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Đơn vị cấp trên (Quan hệ đệ quy)', domain: 'Tham chiếu DON_VI', example: null, ref: { table: 'DON_VI', column: 'MaDonVi' } }
+      { name: 'MaDonViCha', type: 'VARCHAR(20)', key: 'FK', nullable: true, description: 'Đơn vị cấp trên (Quan hệ đệ quy)', domain: 'Tham chiếu DON_VI', example: null, ref: { table: 'DON_VI', column: 'MaDonVi' } },
+      { name: 'NgayThanhLap', type: 'DATE', key: null, nullable: true, description: 'Ngày thành lập hoặc tổ chức lại đơn vị', domain: 'Date hoặc NULL nếu chưa xác minh', example: '2022-09-21' },
+      { name: 'SoQuyetDinh', type: 'NVARCHAR(50)', key: null, nullable: true, description: 'Số quyết định thành lập hoặc tổ chức lại', domain: 'Văn bản có dấu', example: '3683/QĐ-BQP' }
     ],
-    constraints: ['PK: MaDonVi', 'FK: MaDonViCha -> DON_VI(MaDonVi)', 'CHECK: MaDonViCha <> MaDonVi']
+    constraints: ['PK: MaDonVi', 'FK: MaDonViCha -> DON_VI(MaDonVi)', 'CHECK: MaDonViCha <> MaDonVi', 'SOURCE: NgayThanhLap và SoQuyetDinh chỉ công bố khi đã đối chiếu tài liệu']
   },
   {
     id: 'BO_MON',
@@ -102,8 +104,10 @@ export const TABLES = [
       { name: 'QueQuan', type: 'NVARCHAR(200)', key: null, nullable: true, description: 'Quê quán', domain: 'Địa chỉ', example: 'Hà Nội' },
       { name: 'SoDienThoai', type: 'VARCHAR(15)', key: null, nullable: true, description: 'Số điện thoại liên lạc', domain: 'Số điện thoại', example: '0987654321' },
       { name: 'Email', type: 'VARCHAR(100)', key: null, nullable: true, description: 'Hòm thư điện tử quân sự', domain: 'Email', example: 'an.nv@mta.edu.vn' }
+      ,{ name: 'NguonDuLieu', type: 'NVARCHAR(200)', key: null, nullable: true, description: 'Tài liệu hoặc đợt khảo sát cung cấp hồ sơ', domain: 'Tên nguồn dữ liệu', example: 'Danh sách khảo sát do nhóm cung cấp' }
+      ,{ name: 'TrangThaiXacMinh', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Mức độ xác minh danh tính', domain: 'CHUA_XAC_MINH, DA_XAC_MINH', example: 'CHUA_XAC_MINH' }
     ],
-    constraints: ['PK: MaNguoi']
+    constraints: ['PK: MaNguoi', 'CHECK: TrangThaiXacMinh IN (CHUA_XAC_MINH, DA_XAC_MINH)', 'BUSINESS: Không dùng hồ sơ CHUA_XAC_MINH để khẳng định danh tính chính thức']
   },
   {
     id: 'USER',
@@ -276,8 +280,10 @@ export const TABLES = [
       { name: 'TenLop', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Tên lớp', domain: 'Văn bản', example: 'Lớp Công nghệ thông tin 2 - K58' },
       { name: 'MaDonVi', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Đại đội quản lý', domain: 'Tham chiếu DON_VI', example: 'DV_C1', ref: { table: 'DON_VI', column: 'MaDonVi' } },
       { name: 'MaKhoaDT', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Thuộc khóa học', domain: 'Tham chiếu KHOA_DAO_TAO', example: 'K58', ref: { table: 'KHOA_DAO_TAO', column: 'MaKhoaDT' } }
+      ,{ name: 'HeDaoTao', type: 'NVARCHAR(100)', key: null, nullable: false, description: 'Hệ đào tạo của lớp', domain: 'Đại học – Quân sự, Dân sự...', example: 'Đại học – Quân sự' }
+      ,{ name: 'QuanSoTheoPhieu', type: 'SMALLINT', key: null, nullable: true, description: 'Quân số ghi trên phiếu hoặc danh sách nguồn', domain: '> 0 hoặc NULL', example: '24' }
     ],
-    constraints: ['PK: MaLop', 'FK: MaDonVi -> DON_VI(MaDonVi)', 'FK: MaKhoaDT -> KHOA_DAO_TAO(MaKhoaDT)']
+    constraints: ['PK: MaLop', 'FK: MaDonVi -> DON_VI(MaDonVi)', 'FK: MaKhoaDT -> KHOA_DAO_TAO(MaKhoaDT)', 'CHECK: QuanSoTheoPhieu IS NULL OR QuanSoTheoPhieu > 0']
   },
   {
     id: 'HOC_VIEN',
@@ -322,6 +328,9 @@ export const TABLES = [
       { name: 'HocVi', type: 'NVARCHAR(50)', key: null, nullable: false, description: 'Học vị chuyên môn', domain: 'Thạc sĩ, Tiến sĩ, PGS, GS', example: 'Tiến sĩ' },
       { name: 'ChuyenMon', type: 'NVARCHAR(150)', key: null, nullable: false, description: 'Lĩnh vực nghiên cứu/giảng dạy', domain: 'Văn bản', example: 'Hệ thống cơ sở dữ liệu lớn' },
       { name: 'TrangThai', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Tình trạng công tác', domain: 'DANG_CONG_TAC, NGHI_CHE_DO', example: 'DANG_CONG_TAC' }
+      ,{ name: 'QuanHam', type: 'NVARCHAR(40)', key: null, nullable: true, description: 'Quân hàm theo nguồn cán bộ', domain: 'Văn bản hoặc NULL', example: 'Thượng tá' }
+      ,{ name: 'ChucDanh', type: 'NVARCHAR(60)', key: null, nullable: true, description: 'Học hàm, chức danh giảng dạy và học vị', domain: 'PGS. TS, GVC. TS...', example: 'GVC. TS' }
+      ,{ name: 'ChucVuNguon', type: 'NVARCHAR(150)', key: null, nullable: true, description: 'Chức vụ ghi nhận tại thời điểm khảo sát', domain: 'Văn bản tham khảo', example: 'Chủ nhiệm Bộ môn' }
     ],
     constraints: [
       'PK: MaGV',
@@ -380,6 +389,7 @@ export const TABLES = [
       { name: 'MaHocKy', type: 'VARCHAR(20)', key: 'FK', nullable: false, description: 'Học kỳ triển khai', domain: 'Tham chiếu HOC_KY', example: 'HK1_2025', ref: { table: 'HOC_KY', column: 'MaHocKy' } },
       { name: 'NhomHoc', type: 'VARCHAR(20)', key: null, nullable: false, description: 'Mã phân nhóm (nhóm 1, nhóm 2)', domain: 'Văn bản', example: 'Nhóm 01' },
       { name: 'SoTiet', type: 'INT', key: null, nullable: false, description: 'Số tiết được giao giảng dạy', domain: '> 0', example: '45' }
+      ,{ name: 'TrangThaiPhanCong', type: 'VARCHAR(30)', key: null, nullable: false, description: 'Mức hoàn thiện và hiệu lực phân công', domain: 'CHO_BO_SUNG, HIEU_LUC, KET_THUC', example: 'HIEU_LUC' }
     ],
     constraints: [
       'PK: MaPhanCong',
@@ -387,7 +397,9 @@ export const TABLES = [
       'FK: MaGV -> GIANG_VIEN(MaGV)',
       'FK: MaMonHoc -> MON_HOC(MaMonHoc)',
       'FK: MaLop -> LOP_HOC(MaLop)',
-      'FK: MaHocKy -> HOC_KY(MaHocKy)'
+      'FK: MaHocKy -> HOC_KY(MaHocKy)',
+      'CHECK: TrangThaiPhanCong IN (CHO_BO_SUNG, HIEU_LUC, KET_THUC)',
+      'BUSINESS: Chỉ phân công HIEU_LUC mới cho phép giảng viên nhập điểm'
     ]
   },
 

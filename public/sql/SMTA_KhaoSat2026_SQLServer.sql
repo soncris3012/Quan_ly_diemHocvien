@@ -1,8 +1,9 @@
 /*
   SMTA - DU LIEU KHAO SAT THUC TE 2026
   He quan tri: Microsoft SQL Server 2019+
-  Nguon 1: Ky yeu 2026 - Vien Cong nghe thong tin va Truyen thong, MTA
-  Nguon 2: Phieu diem lop CNTT2/c160, khoa 60 (24 hoc vien)
+  Nguon tham khao 1: Danh sach co cau va can bo do nguoi dung cung cap
+  Nguon tham khao 2: Phieu diem lop CNTT2/c160, khoa 60 (24 ban ghi)
+  Danh tinh trong nguon chua duoc xac minh, khong coi la danh sach chinh thuc.
 
   Nguyen tac trung thuc du lieu:
   - Cac truong mon hoc, giang vien, ngay thi, so tin chi, hinh thuc thi va diem
@@ -342,10 +343,10 @@ GO
    Cac bang dbo o tren giu du lieu nguon; core la CSDL van hanh chuan hoa. */
 IF SCHEMA_ID(N'core') IS NULL EXEC(N'CREATE SCHEMA core');
 GO
-IF OBJECT_ID(N'core.DON_VI',N'U') IS NULL CREATE TABLE core.DON_VI(MaDonVi VARCHAR(30) PRIMARY KEY,TenDonVi NVARCHAR(200) NOT NULL,LoaiDonVi VARCHAR(30) NOT NULL,MaDonViCha VARCHAR(30) NULL,FOREIGN KEY(MaDonViCha) REFERENCES core.DON_VI(MaDonVi),CHECK(MaDonViCha IS NULL OR MaDonViCha<>MaDonVi));
+IF OBJECT_ID(N'core.DON_VI',N'U') IS NULL CREATE TABLE core.DON_VI(MaDonVi VARCHAR(30) PRIMARY KEY,TenDonVi NVARCHAR(200) NOT NULL,LoaiDonVi VARCHAR(30) NOT NULL,MaDonViCha VARCHAR(30) NULL,NgayThanhLap DATE NULL,SoQuyetDinh NVARCHAR(50) NULL,FOREIGN KEY(MaDonViCha) REFERENCES core.DON_VI(MaDonVi),CHECK(MaDonViCha IS NULL OR MaDonViCha<>MaDonVi));
 IF OBJECT_ID(N'core.KHOA_DAO_TAO',N'U') IS NULL CREATE TABLE core.KHOA_DAO_TAO(MaKhoaDT VARCHAR(20) PRIMARY KEY,TenKhoaDT NVARCHAR(100) NOT NULL,NamBatDau INT NULL,NamKetThuc INT NULL,CHECK(NamKetThuc IS NULL OR NamBatDau IS NULL OR NamKetThuc>=NamBatDau));
 IF OBJECT_ID(N'core.LOP_HOC',N'U') IS NULL CREATE TABLE core.LOP_HOC(MaLop VARCHAR(30) PRIMARY KEY,TenLop NVARCHAR(120) NOT NULL,MaDonVi VARCHAR(30) NOT NULL,MaKhoaDT VARCHAR(20) NOT NULL,HeDaoTao NVARCHAR(100) NOT NULL,QuanSoTheoPhieu INT NULL,FOREIGN KEY(MaDonVi) REFERENCES core.DON_VI(MaDonVi),FOREIGN KEY(MaKhoaDT) REFERENCES core.KHOA_DAO_TAO(MaKhoaDT));
-IF OBJECT_ID(N'core.NGUOI',N'U') IS NULL CREATE TABLE core.NGUOI(MaNguoi VARCHAR(30) PRIMARY KEY,HoTen NVARCHAR(120) NOT NULL,NgaySinh DATE NULL,GioiTinh NVARCHAR(10) NULL,QueQuan NVARCHAR(200) NULL,SoDienThoai VARCHAR(15) NULL,Email VARCHAR(150) NULL UNIQUE);
+IF OBJECT_ID(N'core.NGUOI',N'U') IS NULL CREATE TABLE core.NGUOI(MaNguoi VARCHAR(30) PRIMARY KEY,HoTen NVARCHAR(120) NOT NULL,NgaySinh DATE NULL,GioiTinh NVARCHAR(10) NULL,QueQuan NVARCHAR(200) NULL,SoDienThoai VARCHAR(15) NULL,Email VARCHAR(150) NULL UNIQUE,NguonDuLieu NVARCHAR(200) NULL,TrangThaiXacMinh VARCHAR(20) NOT NULL DEFAULT 'CHUA_XAC_MINH',CHECK(TrangThaiXacMinh IN('CHUA_XAC_MINH','DA_XAC_MINH')));
 IF OBJECT_ID(N'core.[USER]',N'U') IS NULL CREATE TABLE core.[USER](MaUser VARCHAR(40) PRIMARY KEY,TenDangNhap VARCHAR(60) NOT NULL UNIQUE,MatKhauHash VARCHAR(255) NULL,TrangThai VARCHAR(20) NOT NULL,MaNguoi VARCHAR(30) NOT NULL UNIQUE,FOREIGN KEY(MaNguoi) REFERENCES core.NGUOI(MaNguoi),CHECK(TrangThai IN('CHO_KICH_HOAT','HOAT_DONG','KHOA')));
 IF OBJECT_ID(N'core.ROLE',N'U') IS NULL CREATE TABLE core.ROLE(MaRole VARCHAR(20) PRIMARY KEY,TenRole NVARCHAR(80) NOT NULL UNIQUE,MoTa NVARCHAR(300) NULL);
 IF OBJECT_ID(N'core.PERMISSION',N'U') IS NULL CREATE TABLE core.PERMISSION(MaPermission VARCHAR(50) PRIMARY KEY,TenPermission NVARCHAR(120) NOT NULL,MoTa NVARCHAR(300) NULL);
@@ -368,14 +369,14 @@ IF OBJECT_ID(N'core.DIEM',N'U') IS NULL CREATE TABLE core.DIEM(MaDiem VARCHAR(50
 GO
 
 BEGIN TRANSACTION;
-MERGE core.DON_VI t USING(SELECT MaDonVi,TenDonVi,LoaiDonVi,MaDonViCha FROM dbo.DON_VI)s ON t.MaDonVi=s.MaDonVi WHEN MATCHED THEN UPDATE SET TenDonVi=s.TenDonVi,LoaiDonVi=s.LoaiDonVi,MaDonViCha=s.MaDonViCha WHEN NOT MATCHED THEN INSERT VALUES(s.MaDonVi,s.TenDonVi,s.LoaiDonVi,s.MaDonViCha);
+MERGE core.DON_VI t USING(SELECT MaDonVi,TenDonVi,LoaiDonVi,MaDonViCha,NgayThanhLap,SoQuyetDinh FROM dbo.DON_VI)s ON t.MaDonVi=s.MaDonVi WHEN MATCHED THEN UPDATE SET TenDonVi=s.TenDonVi,LoaiDonVi=s.LoaiDonVi,MaDonViCha=s.MaDonViCha,NgayThanhLap=s.NgayThanhLap,SoQuyetDinh=s.SoQuyetDinh WHEN NOT MATCHED THEN INSERT VALUES(s.MaDonVi,s.TenDonVi,s.LoaiDonVi,s.MaDonViCha,s.NgayThanhLap,s.SoQuyetDinh);
 MERGE core.KHOA_DAO_TAO t USING(VALUES('K60',N'Khóa 60 Đại học Quân sự',NULL,NULL))s(Ma,Ten,BD,KT) ON t.MaKhoaDT=s.Ma WHEN NOT MATCHED THEN INSERT VALUES(s.Ma,s.Ten,s.BD,s.KT);
 MERGE core.LOP_HOC t USING(VALUES('CNTT2_K60',N'Lớp Công nghệ thông tin 2 – Khóa 60','VIEN_CNTT_TT','K60',N'Đại học – Quân sự',24))s(Ma,Ten,DV,Khoa,He,QS) ON t.MaLop=s.Ma WHEN MATCHED THEN UPDATE SET QuanSoTheoPhieu=s.QS WHEN NOT MATCHED THEN INSERT VALUES(s.Ma,s.Ten,s.DV,s.Khoa,s.He,s.QS);
 MERGE core.NGANH t USING(VALUES('NG_CNTT',N'Công nghệ thông tin'))s(Ma,Ten)ON t.MaNganh=s.Ma WHEN NOT MATCHED THEN INSERT VALUES(s.Ma,s.Ten);
 MERGE core.CHUYEN_NGANH t USING(VALUES('CN_CNTT2',N'Công nghệ thông tin 2','NG_CNTT'))s(Ma,Ten,Nganh)ON t.MaChuyenNganh=s.Ma WHEN NOT MATCHED THEN INSERT VALUES(s.Ma,s.Ten,s.Nganh);
 MERGE core.CAP_BAC t USING(VALUES('CB_CHUA_CAP_NHAT',N'Chưa có trong phiếu nguồn',0))s(Ma,Ten,TT)ON t.MaCapBac=s.Ma WHEN NOT MATCHED THEN INSERT VALUES(s.Ma,s.Ten,s.TT);
 MERGE core.CHUC_VU t USING(VALUES('CV_HOC_VIEN',N'Học viên',N'Phiếu nguồn không cung cấp chức vụ lớp'))s(Ma,Ten,MT)ON t.MaChucVu=s.Ma WHEN NOT MATCHED THEN INSERT VALUES(s.Ma,s.Ten,s.MT);
-MERGE core.NGUOI t USING(SELECT 'NG_'+MaHocVien MaNguoi,HoTen,NgaySinh FROM dbo.HOC_VIEN UNION ALL SELECT 'NG_'+MaCanBo,HoTen,NULL FROM dbo.CAN_BO)s ON t.MaNguoi=s.MaNguoi WHEN MATCHED THEN UPDATE SET HoTen=s.HoTen,NgaySinh=s.NgaySinh WHEN NOT MATCHED THEN INSERT(MaNguoi,HoTen,NgaySinh)VALUES(s.MaNguoi,s.HoTen,s.NgaySinh);
+MERGE core.NGUOI t USING(SELECT 'NG_'+MaHocVien MaNguoi,HoTen,NgaySinh,N'Phiếu điểm CNTT2/c160 do người dùng cung cấp' Nguon FROM dbo.HOC_VIEN UNION ALL SELECT 'NG_'+MaCanBo,HoTen,NULL,N'Danh sách cán bộ tham khảo do người dùng cung cấp' FROM dbo.CAN_BO)s ON t.MaNguoi=s.MaNguoi WHEN MATCHED THEN UPDATE SET HoTen=s.HoTen,NgaySinh=s.NgaySinh,NguonDuLieu=s.Nguon WHEN NOT MATCHED THEN INSERT(MaNguoi,HoTen,NgaySinh,NguonDuLieu,TrangThaiXacMinh)VALUES(s.MaNguoi,s.HoTen,s.NgaySinh,s.Nguon,'CHUA_XAC_MINH');
 MERGE core.HOC_VIEN t USING(SELECT MaHocVien,'NG_'+MaHocVien MaNguoi,MaLop FROM dbo.HOC_VIEN)s ON t.MaHV=s.MaHocVien WHEN NOT MATCHED THEN INSERT VALUES(s.MaHocVien,s.MaNguoi,s.MaLop,'CN_CNTT2','CB_CHUA_CAP_NHAT','CV_HOC_VIEN',NULL,'DANG_HOC');
 MERGE core.BO_MON t USING(SELECT MaDonVi,TenDonVi FROM dbo.DON_VI WHERE LoaiDonVi IN('BO_MON','TRUNG_TAM'))s ON t.MaBoMon=s.MaDonVi WHEN MATCHED THEN UPDATE SET TenBoMon=s.TenDonVi WHEN NOT MATCHED THEN INSERT VALUES(s.MaDonVi,s.TenDonVi,s.MaDonVi);
 ;WITH C AS(SELECT cb.*,pc.MaDonVi,pc.ChucVu,ROW_NUMBER()OVER(PARTITION BY cb.MaCanBo ORDER BY pc.LaChucVuChinh DESC,pc.MaDonVi)rn FROM dbo.CAN_BO cb JOIN dbo.PHAN_CONG_CAN_BO pc ON pc.MaCanBo=cb.MaCanBo WHERE pc.MaDonVi<>'VIEN_CNTT_TT') MERGE core.GIANG_VIEN t USING(SELECT*FROM C WHERE rn=1)s ON t.MaGV='GV_'+s.MaCanBo WHEN MATCHED THEN UPDATE SET QuanHam=s.QuanHam,HocVi=s.HocHamHocVi,ChucVuNguon=s.ChucVu WHEN NOT MATCHED THEN INSERT VALUES('GV_'+s.MaCanBo,'NG_'+s.MaCanBo,s.MaDonVi,s.QuanHam,s.HocHamHocVi,s.ChucVu,N'Theo đơn vị trong Kỷ yếu 2026','DANG_CONG_TAC');
@@ -389,7 +390,7 @@ MERGE core.HOC_KY t USING(VALUES('HK_CNTT2_C160',NULL,NULL,NULL,NULL,'CHO_BO_SUN
 MERGE core.PHAN_CONG t USING(VALUES('PC_CNTT2_C160',NULL,'MH_CNTT2_C160','CNTT2_K60','HK_CNTT2_C160','CNTT2/c160',NULL,'CHO_BO_SUNG_GIANG_VIEN'))s(Ma,GV,MH,Lop,HK,Nhom,Tiet,TT)ON t.MaPhanCong=s.Ma WHEN NOT MATCHED THEN INSERT VALUES(s.Ma,s.GV,s.MH,s.Lop,s.HK,s.Nhom,s.Tiet,s.TT);
 MERGE core.LOAI_DIEM t USING(VALUES('LD_CC',N'Chuyên cần',0.10),('LD_TX',N'Thường xuyên',0.30),('LD_CK',N'Cuối kỳ',0.60))s(Ma,Ten,TS)ON t.MaLoaiDiem=s.Ma WHEN MATCHED THEN UPDATE SET TrongSo=s.TS WHEN NOT MATCHED THEN INSERT VALUES(s.Ma,s.Ten,s.TS);
 MERGE core.KET_QUA_HOC_TAP t USING(SELECT 'KQ_'+MaHV MaKQ,MaHV FROM core.HOC_VIEN WHERE MaLop='CNTT2_K60')s ON t.MaKQ=s.MaKQ WHEN NOT MATCHED THEN INSERT VALUES(s.MaKQ,s.MaHV,'PC_CNTT2_C160',NULL,NULL,'CHO_BO_SUNG');
-MERGE core.DIEM t USING(SELECT 'D_'+k.MaHV+'_'+l.MaLoaiDiem MaDiem,k.MaKQ,l.MaLoaiDiem FROM core.KET_QUA_HOC_TAP k CROSS JOIN core.LOAI_DIEM l WHERE k.MaPhanCong='PC_CNTT2_C160')s ON t.MaDiem=s.MaDiem WHEN NOT MATCHED THEN INSERT VALUES(s.MaDiem,s.MaKQ,s.MaLoaiDiem,NULL,NULL,NULL,NULL,'CHO_NHAP',NULL,NULL);
+/* Không tạo trước dòng DIEM rỗng. Bản ghi DIEM chỉ sinh khi giảng viên thực sự nhập điểm. */
 COMMIT;
 GO
 
@@ -423,7 +424,7 @@ GO
 
 /* Giang vien chi nhap CC/TX/CK cho lop duoc phan cong va diem chua khoa. */
 CREATE OR ALTER PROCEDURE core.sp_NhapDiem
- @MaUser VARCHAR(40),@MaKQ VARCHAR(40),@MaLoaiDiem VARCHAR(20),@Diem DECIMAL(3,1)
+ @MaUser VARCHAR(40),@MaKQ VARCHAR(40),@MaLoaiDiem VARCHAR(20),@Diem DECIMAL(3,1),@MaDotThi VARCHAR(30)=NULL
 AS
 BEGIN
  SET NOCOUNT ON; SET XACT_ABORT ON;
@@ -433,12 +434,17 @@ BEGIN
  SELECT @MaGV=MaGV FROM core.GIANG_VIEN WHERE MaNguoi=@MaNguoi;
  SELECT @MaPhanCong=MaPhanCong FROM core.KET_QUA_HOC_TAP WHERE MaKQ=@MaKQ;
  IF NOT EXISTS(SELECT 1 FROM core.USER_ROLE WHERE MaUser=@MaUser AND MaRole='ROLE_GV')
-    OR NOT EXISTS(SELECT 1 FROM core.PHAN_CONG WHERE MaPhanCong=@MaPhanCong AND MaGV=@MaGV)
+    OR NOT EXISTS(SELECT 1 FROM core.PHAN_CONG WHERE MaPhanCong=@MaPhanCong AND MaGV=@MaGV AND TrangThai='HIEU_LUC')
     THROW 52002,N'Giảng viên không được phân công lớp học phần này.',1;
  IF EXISTS(SELECT 1 FROM core.DIEM WHERE MaKQ=@MaKQ AND MaLoaiDiem=@MaLoaiDiem AND TrangThaiDiem='DA_KHOA')
     THROW 52003,N'Điểm đã khóa; chỉ Phòng Đào tạo được mở khóa.',1;
- UPDATE core.DIEM SET Diem=@Diem,NgayNhap=SYSDATETIME(),MaNguoiNhap=@MaNguoi,TrangThaiDiem='NHAP'
- WHERE MaKQ=@MaKQ AND MaLoaiDiem=@MaLoaiDiem;
+ MERGE core.DIEM AS target
+ USING(SELECT @MaKQ MaKQ,@MaLoaiDiem MaLoaiDiem,@MaDotThi MaDotThi) AS source
+ ON target.MaKQ=source.MaKQ AND target.MaLoaiDiem=source.MaLoaiDiem
+    AND ISNULL(target.MaDotThi,'')=ISNULL(source.MaDotThi,'')
+ WHEN MATCHED THEN UPDATE SET Diem=@Diem,NgayNhap=SYSDATETIME(),MaNguoiNhap=@MaNguoi,TrangThaiDiem='NHAP'
+ WHEN NOT MATCHED THEN INSERT(MaDiem,MaKQ,MaLoaiDiem,MaDotThi,Diem,NgayNhap,MaNguoiNhap,TrangThaiDiem)
+ VALUES(CONCAT('D_',@MaKQ,'_',@MaLoaiDiem),@MaKQ,@MaLoaiDiem,@MaDotThi,@Diem,SYSDATETIME(),@MaNguoi,'NHAP');
 END;
 GO
 
